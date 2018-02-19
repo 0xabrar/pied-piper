@@ -102,23 +102,25 @@ Ouroboros functions as an edge service. Because Ouroboros endpoints will be acce
 
 Here are the starting endpoints for Ouroboros: 
 
-GET /api/ticket
-GET /api/ticket/{ticket_id}
-POST /api/ticket/
-PUT /api/ticket/{ticket_id}/state
-PUT /api/ticket/{ticket_id}/student
-POST /api/ticket/{ticket_id}/notes
-PUT /api/ticket/{ticket_id}/notes/{note_id}
-
-DELETE /api/ticket/{ticket_id}/notes/{note_id}
-PUT /api/user/create
-GET /api/user/{user_type}/{user_id}
-GET /api/user/type/{type}
-
-PUT /api/gapf/submit
-GET /api/gapf/{faculty_id}
-GET /api/gapf/status/{faculty_id}
-GET /api/gapf/all
+| Endpoint                                       | Description                                                       |
+|------------------------------------------------|-------------------------------------------------------------------|
+| GET /api/ticket                                | Get all ticket objects.                                           |
+| GET /api/ticket/{ticket_id}                    | Get ticket with ticket_id.                                        |
+| POST /api/ticket/                              | Create an empty ticket in initial state and return ticket object. |
+| PUT /api/ticket/{ticket_id}/state              | Update state of ticket and return ticket object.                  |
+| PUT /api/ticket/{ticket_id}/student            | Assign student to ticket and return ticket object.                |
+| POST /api/ticket/{ticket_id}/notes             | Add a note to a ticket and return ticket object.                  |
+| PUT /api/ticket/{ticket_id}/notes/{note_id}    | Update a note and return ticket object.                           |
+| DELETE /api/ticket/{ticket_id}/notes/{note_id} | Delete a note and return ticket object.                           |
+|                                                |                                                                   |
+| PUT/api/user/create                            | Create a user with some information.                              |
+| GET/api/user/{user_type}/{user_id}             | Get a user with specific type and ID.                             |
+| GET/api/user/type/{type}                       | Get all users of a specific type.                                 |
+|                                                |                                                                   |
+| PUT/api/gapf/submit                            | Submit a GAPF.                                                    |
+| GET/api/gapf/{faculty_id}                      | Get GAPF information about a specific faculty member.             |
+| GET/api/gapf/status/{faculty_id}               | Get GAPF status of a specific faculty member.                     |
+| GET/api/gapf/all                               | Get all GAPF status information.                                  |
 
 
 Because we're opting to use JSON/HTTP for our Thrift specification instead of binary data, the format specified in each of the internal services will convert to JSON. This means that request and response data for network requests are defined in the Thrift files. The Thrift files serve as our main specification, and so the duplicate information has been left out from the REST endpoints. 
