@@ -100,6 +100,26 @@ service Populous {
 ### Ouroboros
 Ouroboros functions as an edge service. Because Ouroboros endpoints will be accessible from outside the internal network, we are using REST endpoints instead of Thrift. Ouroboros is meant to apply some middleware functionality to the endpoints, and then just call relevant internal services to return data without modification.
 
+Here are the starting endpoints for Ouroboros: 
+
+GET /api/ticket
+GET /api/ticket/{ticket_id}
+POST /api/ticket/
+PUT /api/ticket/{ticket_id}/state
+PUT /api/ticket/{ticket_id}/student
+POST /api/ticket/{ticket_id}/notes
+PUT /api/ticket/{ticket_id}/notes/{note_id}
+
+DELETE /api/ticket/{ticket_id}/notes/{note_id}
+PUT /api/user/create
+GET /api/user/{user_type}/{user_id}
+GET /api/user/type/{type}
+
+PUT /api/gapf/submit
+GET /api/gapf/{faculty_id}
+GET /api/gapf/status/{faculty_id}
+GET /api/gapf/all
+
 
 Because we're opting to use JSON/HTTP for our Thrift specification instead of binary data, the format specified in each of the internal services will convert to JSON. This means that request and response data for network requests are defined in the Thrift files. The Thrift files serve as our main specification, and so the duplicate information has been left out from the REST endpoints. 
 
