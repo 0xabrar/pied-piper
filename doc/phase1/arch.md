@@ -35,7 +35,8 @@ Our product is managed on the Google Cloud Platform [Kubernetes Engine](https://
 Each service has its own database. This bounds the context and domain of each service. In order to retrieve data, all services must communicate with each other over networks. This allows service owners to update their internal data models without compromising on the guarantees they provide service users.
 
 ![Database Separation](https://github.com/csc302-winter-2018/proj-Pied_Piper/tree/master/doc/phase1/figure2.png)
-Each of the services will use a [MongoDB](https://www.mongodb.com/) database.
+
+Each of the services will use a MongoDB database. We decided to use MongoDB because our team was interested in learning more about it. It seemed simpler to use because we would be interacting with objects instead of writing SQL queries. And MongoDB allows us to be more flexible with our data models.
 
 #### Considered Alternatives
 
