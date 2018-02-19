@@ -37,10 +37,10 @@ include "populous.thrift"
 namespace js javelin 
 
 enum TicketState {
-    GRANTED,
-    REQUEST,
-    PENDING,
-    REFUSED,
+    GRANTED
+    REQUEST
+    PENDING
+    REFUSED
     ACCEPTED
 }
 
