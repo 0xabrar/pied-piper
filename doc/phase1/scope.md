@@ -4,7 +4,7 @@ Our team is interested in learning more about system design, and we are focusing
 #### P0 Goals
 - Allow users to submit GAPF application info (excluding attachments).
 - Allow budget director and grad office staff to view GAPF application status.
-- Allow all actor interactions with tickets to change ticket state according to the - specified use cases.
+- Allow all actor interactions with tickets to change ticket state according to the - [specified use cases](https://docs.google.com/document/d/e/2PACX-1vRdfsGC_jykP4Z4tyqzFIFeB_pqnMDgi3MyGEfxtrQq3YMc6nCaC9Q-7-Crll_RBDU7PkZyfPMYywD0/pub).
 - Allow users to add notes to tickets.
 - Create a ticket dashboard which allows actors to see all tickets.
 
