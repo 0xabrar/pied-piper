@@ -29,18 +29,25 @@ Our team will make use of code reviews to ensure that we prevent any bad code fr
 
 #### Work Division
 **Frontend:** David, Calvin, Abrar, and Pratiman
+
 **User Service:** Jesse and David
+
 **Ticket Service:** Lucas and Jesse
+
 **GAPF Service:** Vanshil and Abrar
-**API Gateway:** Abrar will setup the original service. Everyone will be responsible for adding their own APIs to the API gateway. 
+
+**API Gateway:** Abrar will setup the original service. Everyone will be responsible for adding their own APIs to the API gateway.
+
 **Repo Man:** Everyone will be responsible for handling merge conflicts related to their own pull requests.
+
 **TDD Person:** Everyone will write their own test cases.
+
 **CI Person:** Everyone is responsible for ensuring that their code changes pass continuous integration tests.
 
 #### Messaging
 We will be using Slack as the team’s messaging platform since this offers us with the ability to have multiple channels of communications among different teams (i.e. frontend vs. backend). Discord will be used to communicate with our team lead/TA, Landy
 
 #### Tracking Progress
-We will use burndown charts for tracking our progress, which is also include in the GitHub Milestones. 
+We will use burndown charts for tracking our progress, which is also included in the GitHub Milestones. 
 
 
