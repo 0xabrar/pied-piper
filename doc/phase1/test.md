@@ -1,0 +1,2 @@
+# Test
+Everyone will write tests for their own code (backend). We will not be writing tests for the frontend. Tests will use Jest. We will use TravisCI in order to run tests on every pull request. Team members are expected to run local tests before submitting a pull request. We will only be writing unit tests. There are no integration or end-to-end tests.
