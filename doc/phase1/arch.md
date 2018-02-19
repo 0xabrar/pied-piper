@@ -1,7 +1,8 @@
 # Arch
 Our system uses a single service for the web frontend, and the backend is split into multiple services based on domain. All network requests from the frontend, Scythe, pass through the API Gateway, Ouroboros. Ouroboros handles authentication and authorization, along with providing other middleware,  for HTTP requests and sends off tasks to appropriate microservices to return data to the frontend.
 
-![Services Overview](https://github.com/csc302-winter-2018/proj-Pied_Piper/tree/master/doc/phase1/figure1.png)
+![Services Overview](figure1.png)
+
 Requests related to ticket functionality are routed to Javelin, our ticket service, while tickets related to GAPF functionality are routed to Trident, our GAPF service. Both of these services are dependent on Populous, our applicant and faculty service.
 
 #### Thrift
@@ -34,7 +35,8 @@ Our product is managed on the Google Cloud Platform [Kubernetes Engine](https://
 
 Each service has its own database. This bounds the context and domain of each service. In order to retrieve data, all services must communicate with each other over networks. This allows service owners to update their internal data models without compromising on the guarantees they provide service users.
 
-![Database Separation](https://github.com/csc302-winter-2018/proj-Pied_Piper/tree/master/doc/phase1/figure2.png)
+
+![Database Separation](figure2.png)
 
 Each of the services will use a MongoDB database. We decided to use MongoDB because our team was interested in learning more about it. It seemed simpler to use because we would be interacting with objects instead of writing SQL queries. And MongoDB allows us to be more flexible with our data models.
 
