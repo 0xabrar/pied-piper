@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "users.proto";
+
+package trident;
+
+// Interface exported by the server.
+service Trident {
+  // Accept a Faculty and return the GAPF associated with that Faculty.
+  rpc GetGAPF(Faculty) returns (GAPF) {}
+}
+
+message GAPF {
+  int32 facultyId = 1;
+  bool submitted = 2;
+  int32 budgetRequested = 3;
+  bool active = 4;
+}
+
+message GAPFStatusList {
+  message GAPFStatus {
+    Faculty faculty = 1;
+    bool submitted = 2;
+  }
+  repeated GAPFStatus statuses = 1;
+}
