@@ -65,11 +65,13 @@ app.use(bodyParser.json());
 //
 // Authentication
 // -----------------------------------------------------------------------------
-app.use(expressJwt({
-  secret: config.auth.jwt.secret,
-  credentialsRequired: false,
-  getToken: req => req.cookies.id_token,
-}));
+app.use(
+  expressJwt({
+    secret: config.auth.jwt.secret,
+    credentialsRequired: false,
+    getToken: req => req.cookies.id_token,
+  }),
+);
 // Error handler for express-jwt
 app.use((err, req, res, next) => {
   // eslint-disable-line no-unused-vars
@@ -148,10 +150,12 @@ app.get('*', async (req, res, next) => {
       // I should not use `history` on server.. but how I do redirection? follow universal-router
     });
 
-    store.dispatch(setRuntimeVariable({
-      name: 'initialNow',
-      value: Date.now(),
-    }));
+    store.dispatch(
+      setRuntimeVariable({
+        name: 'initialNow',
+        value: Date.now(),
+      }),
+    );
 
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html
@@ -174,7 +178,9 @@ app.get('*', async (req, res, next) => {
     }
 
     const data = { ...route };
-    data.children = ReactDOM.renderToString(<App context={context}>{route.component}</App>);
+    data.children = ReactDOM.renderToString(
+      <App context={context}>{route.component}</App>,
+    );
     data.styles = [{ id: 'css', cssText: [...css].join('') }];
     data.scripts = [assets.vendor.js];
     if (route.chunks) {
@@ -204,13 +210,15 @@ pe.skipPackage('express');
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(pe.render(err));
-  const html = ReactDOM.renderToStaticMarkup(<Html
-    title="Internal Server Error"
-    description={err.message}
-    styles={[{ id: 'css', cssText: errorPageStyle._getCss() }]}
-  >
-    {ReactDOM.renderToString(<ErrorPageWithoutStyle error={err} />)}
-                                             </Html>);
+  const html = ReactDOM.renderToStaticMarkup(
+    <Html
+      title="Internal Server Error"
+      description={err.message}
+      styles={[{ id: 'css', cssText: errorPageStyle._getCss() }]}
+    >
+      {ReactDOM.renderToString(<ErrorPageWithoutStyle error={err} />)}
+    </Html>,
+  );
   res.status(err.status || 500);
   res.send(`<!doctype html>${html}`);
 });
