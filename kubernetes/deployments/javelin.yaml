@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javelin 
+  labels:
+     name: javelin 
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: javelin 
+  template:
+    metadata:
+      labels:
+        name: javelin 
+    spec:
+      containers:
+      - name: javelin 
+        image: abrarisme/javelin
+        ports:
+        - containerPort: 8080

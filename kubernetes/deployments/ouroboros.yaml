@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ouroboros
+  labels:
+     name: ouroboros
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: ouroboros
+  template:
+    metadata:
+      labels:
+        name: ouroboros 
+    spec:
+      containers:
+      - name: ouroboros 
+        image: abrarisme/ouroboros
+        ports:
+        - containerPort: 8080
+

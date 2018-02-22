@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: populous 
+  labels:
+     name: populous 
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: populous 
+  template:
+    metadata:
+      labels:
+        name: populous 
+    spec:
+      containers:
+      - name: populous 
+        image: abrarisme/populous
+        ports:
+        - containerPort: 8080
