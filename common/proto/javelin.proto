@@ -63,6 +63,7 @@ message TicketList {
 // Faculty information for creating an initial ticket.
 message CreateTicketRequest {
   int32 facultyId = 1;
+  int32 allottedTickets = 2;
 }
 
 // Ticket to retrieve.
