@@ -1,25 +1,31 @@
 syntax = "proto3";
 
-import "users.proto";
+import "populous.proto";
+import "google/protobuf/empty.proto";
 
 package trident;
 
-// Interface exported by the server.
+// Exported interface for the Trident service.
 service Trident {
+  // Submit a GAPF and return the GAPF with any additions from the server.
+  rpc SubmitGAPF(GAPF) returns (GAPF) {}
+
   // Accept a Faculty and return the GAPF associated with that Faculty.
-  rpc GetGAPF(Faculty) returns (GAPF) {}
+  rpc GetGAPF(populous.Faculty) returns (GAPF) {}
+
+  // Retrieve a list of all GAPF status.
+  rpc GetAllGAPFStatus(google.protobuf.Empty) returns (GAPFStatusList) {}
 }
 
 message GAPF {
   int32 facultyId = 1;
-  bool submitted = 2;
-  int32 budgetRequested = 3;
-  bool active = 4;
+  int32 budgetRequested = 2;
+  bool active = 3;
 }
 
 message GAPFStatusList {
   message GAPFStatus {
-    Faculty faculty = 1;
+    populous.Faculty faculty = 1;
     bool submitted = 2;
   }
   repeated GAPFStatus statuses = 1;

@@ -1,5 +1,0 @@
-syntax = "proto3";
-
-message Faculty {
-  int32 facultyId = 1;
-}

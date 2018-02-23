@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+import "populous.proto";
+import "google/protobuf/empty.proto";
+
+package javelin;
+
+// Exported interface for the Javelin service.
+service Javelin {
+  // Retrieve all tickets in the Javelin system. 
+  rpc GetAllTickets(google.protobuf.Empty) returns (TicketList) {}
+
+  // Retrieve a specific ticket based on ticketId.
+  rpc GetTicket(GetTicketRequest) returns (Ticket) {}
+
+  // Create a ticket in INITIAL state for a faculty member.
+  rpc CreateTicket(CreateTicketRequest) returns (Ticket) {}
+
+  // Update a specific ticket to a new state.
+  rpc UpdateTicket(ModifyTicketRequest) returns (Ticket) {}
+
+  // Associate a specific applicant with a Ticket. 
+  rpc AssignStudent(ModifyTicketRequest) returns (Ticket) {}
+
+  // Add a Note to a Ticket.
+  rpc AddNote(ModifyTicketRequest) returns (Ticket) {}
+
+  // Update an existing Note.
+  rpc UpdateNote(ModifyTicketRequest) returns (Ticket) {}
+
+  // Delete an existing Note from a Ticket.
+  rpc DeleteNote(ModifyTicketRequest) returns (Ticket) {}
+}
+
+// Ticket resource.
+message Ticket {
+  int32 ticketId = 1;
+  enum State {
+    INITIAL = 0;
+    GRANTED = 1;
+    REQUESTED = 2;
+    PENDING = 3;
+    REFUSED = 4;
+    ACCEPTED = 5;
+  }
+  State state = 2;
+  populous.Applicant applicant = 3;
+  populous.Faculty faculty = 4;
+  repeated Note notes = 5;
+}
+
+// Note resource attached to Ticket.
+message Note {
+  string text = 1;
+  bool resolved = 2;
+}
+
+// List used for retrieving all tickets.
+message TicketList {
+  repeated Ticket tickets = 1;
+}
+
+// Faculty information for creating an initial ticket.
+message CreateTicketRequest {
+  int32 facultyId = 1;
+}
+
+// Ticket to retrieve.
+message GetTicketRequest {
+  int32 ticketId = 1;
+}
+
+// Request message used specifically for UpdateNote call. 
+message UpdateNoteRequest {
+  int32 noteId = 1;
+  Note note = 2;
+} 
+
+// ModifyTicketRequest used for all requests related to changing ticket state.
+message ModifyTicketRequest {
+  int32 ticketId = 1;
+  oneof change {
+    Ticket.State state = 2;
+    populous.Applicant applicant = 3;
+    Note note = 4;
+    UpdateNoteRequest noteRequest = 5;
+    int32 noteId = 6;
+  }
+}
