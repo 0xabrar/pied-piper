@@ -1,21 +1,19 @@
-import React from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-  increment,
-  incrementAsync,
-  decrement,
-  decrementAsync
-} from '../reducers/counter';
-import Home from '../components/index.js';
+    decrementAsync, increment
+} from '../actions/actionCreators/counter';
+import Home from '../components/home.js';
+import {decrement} from "../actions/actionCreators/counter";
+import {incrementAsync} from "../actions/actionCreators/counter";
 
 
 const mapStateToProps = state => ({
   count: state.counter.count,
   isIncrementing: state.counter.isIncrementing,
   isDecrementing: state.counter.isDecrementing
-})
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   increment,
@@ -23,7 +21,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   decrement,
   decrementAsync,
   changePage: () => push('/about-us')
-}, dispatch)
+}, dispatch);
 
 export default connect(
   mapStateToProps,
