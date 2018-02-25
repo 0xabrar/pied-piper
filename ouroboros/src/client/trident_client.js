@@ -1,36 +1,32 @@
 const path = require('path');
 const grpc = require('grpc');
-const async = require('async');
+const promisify = require('grpc-promisify');
 
 const PROTO_PATH = path.join(__dirname, '/../../../common/proto/trident.proto');
 const { trident } = grpc.load(PROTO_PATH);
 
 const client = new trident.Trident('localhost:50051', grpc.credentials.createInsecure());
+promisify(client);
 
-const runGetGAPF = (callback) => {
+
+const getGAPF = async (facultyId) => {
   const faculty = {
-    facultyId: 409146138,
+    facultyId,
   };
-
-  const gapfCallback = (error, info) => {
-    if (error) {
-      console.log(error);
-      callback(error);
-      return;
-    }
-    console.log(info);
-  };
-  client.getGapf(faculty, gapfCallback);
+  const result = await client.GetGAPF(faculty);
+  return result;
 };
 
-function main() {
-  async.series([
-    runGetGAPF,
-  ]);
-}
+const submitGAPF = async (GAPF) => {
+  const submittedGAPF = await client.SubmitGAPF(GAPF);
+  return submittedGAPF;
+};
 
-if (require.main === module) {
-  main();
-}
+const getAllGAPFStatus = async () => {
+  const allGAPFStatus = await client.GetAllGAPFStatus({});
+  return allGAPFStatus;
+};
 
-exports.runGetGAPF = runGetGAPF;
+exports.GetGAPF = getGAPF;
+exports.SubmitGAPF = submitGAPF;
+exports.GetAllGAPFStatus = getAllGAPFStatus;

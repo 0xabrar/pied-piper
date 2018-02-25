@@ -1,14 +1,14 @@
 syntax = "proto3";
 
 import "populous.proto";
-import "google/protobuf/empty.proto";
+import "empty.proto";
 
 package javelin;
 
 // Exported interface for the Javelin service.
 service Javelin {
   // Retrieve all tickets in the Javelin system. 
-  rpc GetAllTickets(google.protobuf.Empty) returns (TicketList) {}
+  rpc GetAllTickets(Empty) returns (TicketList) {}
 
   // Retrieve a specific ticket based on ticketId.
   rpc GetTicket(GetTicketRequest) returns (Ticket) {}
@@ -20,7 +20,7 @@ service Javelin {
   rpc UpdateTicket(ModifyTicketRequest) returns (Ticket) {}
 
   // Associate a specific applicant with a Ticket. 
-  rpc AssignStudent(ModifyTicketRequest) returns (Ticket) {}
+  rpc AssignApplicant(ModifyTicketRequest) returns (Ticket) {}
 
   // Add a Note to a Ticket.
   rpc AddNote(ModifyTicketRequest) returns (Ticket) {}

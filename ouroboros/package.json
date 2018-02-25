@@ -24,18 +24,19 @@
     "lint": "esw -w src test"
   },
   "dependencies": {
+    "async": "^1.5.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "google-protobuf": "^3.0.0",
+    "grpc": "^1.0.0",
+    "grpc-promisify": "^0.1.0",
     "morgan": "^1.9.0",
     "pug": "^2.0.0-beta11",
     "rimraf": "^2.6.2",
-    "thrift": "^0.11.0",
-    "google-protobuf": "^3.0.0",
-    "grpc": "^1.0.0",
-    "async": "^1.5.2"
+    "thrift": "^0.11.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

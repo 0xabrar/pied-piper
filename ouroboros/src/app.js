@@ -1,7 +1,8 @@
 import express from 'express';
 import logger from 'morgan';
-import bodyParser from 'body-parser';
-import routes from './routes';
+import tridentRoutes from './endpoints/trident';
+import populousRoutes from './endpoints/populous';
+import javelinRoutes from './endpoints/javelin';
 
 const app = express();
 app.disable('x-powered-by');
@@ -9,11 +10,12 @@ app.disable('x-powered-by');
 app.use(logger('dev', {
   skip: () => app.get('env') === 'test',
 }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 
 // Routes
-app.use('/', routes);
+app.use('/gapf', tridentRoutes);
+app.use('/tickets', javelinRoutes);
+app.use('/users', populousRoutes);
 
 // Catch 404 and return 'Not found' message
 app.use((req, res) => {

@@ -4,14 +4,56 @@ const grpc = require('grpc');
 const PROTO_PATH = path.join(__dirname, '/../../common/proto/trident.proto');
 const { trident } = grpc.load(PROTO_PATH);
 
+/**
+ * Call to Mongo client to store the given GAPF document and return the
+ * document with active status.
+ *
+ * @param gapf the GAPF document to submit
+ */
+const submitGAPFBackend = gapf => ({
+  facultyId: gapf.faculty,
+  budgetRequested: gapf.budgetRequested,
+  active: true,
+});
+
+/**
+ * Retrieve the GAPF associated with a specific faculty member.
+ *
+ * @param faculty the Faculty to retrieve information for
+ */
 const retrieveGAPFInfo = faculty => ({
   facultyId: faculty.facultyId,
-  submitted: false,
   budgetRequested: 0,
   active: true,
 });
 
+/**
+ * @returns the Faculty and status associated with all GAPF documents
+ */
+const getAllGAPFStatusBackend = ((empty) => { // eslint-disable-line no-unused-vars
+  const allGAPF = {
+    statuses: [
+      {
+        faculty: {
+          facultyId: 1,
+        },
+        submitted: false,
+      },
+      {
+        faculty: {
+          facultyId: 2,
+        },
+        submitted: true,
+      },
+    ],
+  };
+  return allGAPF;
+});
+
+// gRPC doesn't allow using promises of async/await on the server-side, so callbacks are used
+const submitGAPF = (call, callback) => callback(null, submitGAPFBackend(call.request));
 const getGAPF = (call, callback) => callback(null, retrieveGAPFInfo(call.request));
+const getAllGAPFStatus = (call, callback) => callback(null, getAllGAPFStatusBackend(call.request));
 
 /**
  * Get a new server with the handler functions in this file bound to the methods
@@ -21,7 +63,9 @@ const getGAPF = (call, callback) => callback(null, retrieveGAPFInfo(call.request
 function getServer() {
   const server = new grpc.Server();
   server.addService(trident.Trident.service, {
+    submitGapf: submitGAPF,
     getGapf: getGAPF,
+    getAllGapfStatus: getAllGAPFStatus,
   });
   return server;
 }

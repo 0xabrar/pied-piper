@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "populous.proto";
-import "google/protobuf/empty.proto";
+import "empty.proto";
 
 package trident;
 
@@ -14,7 +14,7 @@ service Trident {
   rpc GetGAPF(populous.Faculty) returns (GAPF) {}
 
   // Retrieve a list of all GAPF status.
-  rpc GetAllGAPFStatus(google.protobuf.Empty) returns (GAPFStatusList) {}
+  rpc GetAllGAPFStatus(Empty) returns (GAPFStatusList) {}
 }
 
 message GAPF {
