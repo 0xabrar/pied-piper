@@ -12,7 +12,7 @@ kubectl delete deployment populous
 sed -i 's?[a-z]*/ouroboros?'"$1"'/ouroboros?' deployments/ouroboros.yaml
 sed -i 's?[a-z]*/trident?'"$1"'/trident?' deployments/trident.yaml
 sed -i 's?[a-z]*/populous?'"$1"'/populous?' deployments/populous.yaml
-sed -i 's?[a-z]*/javelin?'"$1"'/javelin?' deployments/javelie.yaml
+sed -i 's?[a-z]*/javelin?'"$1"'/javelin?' deployments/javelin.yaml
 
 kubectl create -f services/ouroboros.yaml
 kubectl create -f services/populous.yaml
