@@ -18,4 +18,4 @@ spec:
       - name: populous 
         image: abrarisme/populous
         ports:
-        - containerPort: 8080
+        - containerPort: 50052 

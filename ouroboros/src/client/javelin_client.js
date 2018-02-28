@@ -1,4 +1,6 @@
 
+import { SERVICE_NAMES, SERVICE_PORTS, getServiceHost } from '../../common/config';
+
 const path = require('path');
 const grpc = require('grpc');
 const promisify = require('grpc-promisify');
@@ -6,7 +8,11 @@ const promisify = require('grpc-promisify');
 const PROTO_PATH = path.join(__dirname, '/../../../common/proto/javelin.proto');
 const { javelin } = grpc.load(PROTO_PATH);
 
-const client = new javelin.Javelin('localhost:50053', grpc.credentials.createInsecure());
+const javelinIdentifier = SERVICE_NAMES.JAVELIN;
+const javelinHost = getServiceHost(javelinIdentifier);
+const javelinPort = SERVICE_PORTS[javelinIdentifier];
+
+const client = new javelin.Javelin(`${javelinHost}:${javelinPort}`, grpc.credentials.createInsecure());
 promisify(client);
 
 const getAllTickets = async () => {

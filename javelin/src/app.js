@@ -1,3 +1,5 @@
+import { SERVICE_NAMES, SERVICE_PORTS } from '../common/config';
+
 const path = require('path');
 const grpc = require('grpc');
 
@@ -94,10 +96,12 @@ function getServer() {
   return server;
 }
 
+const javelinPort = SERVICE_PORTS[SERVICE_NAMES.JAVELIN];
+
 if (require.main === module) {
   // If this is run as a script, start a server on an unused port
   const routeServer = getServer();
-  routeServer.bind('0.0.0.0:50053', grpc.ServerCredentials.createInsecure());
+  routeServer.bind(`0.0.0.0:${javelinPort}`, grpc.ServerCredentials.createInsecure());
   routeServer.start();
 }
 

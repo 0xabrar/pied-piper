@@ -3,6 +3,7 @@ import logger from 'morgan';
 import tridentRoutes from './endpoints/trident';
 import populousRoutes from './endpoints/populous';
 import javelinRoutes from './endpoints/javelin';
+import { SERVICE_NAMES, SERVICE_PORTS } from '../common/config';
 
 const app = express();
 app.disable('x-powered-by');
@@ -31,5 +32,5 @@ app.use((req, res) => {
   res.type('txt').send('Not found');
 });
 
-const { PORT = 8080 } = process.env;
+const { PORT = SERVICE_PORTS[SERVICE_NAMES.OUROBOROS] } = process.env;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`)); // eslint-disable-line no-console

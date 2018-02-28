@@ -1,4 +1,17 @@
+cd ..
+docker build -f ouroboros/Dockerfile -t "$1"/ouroboros .
+docker push "$1"/ouroboros
 
+docker build -f trident/Dockerfile -t "$1"/trident .
+docker push "$1"/trident
+
+docker build -f populous/Dockerfile -t "$1"/populous .
+docker push "$1"/populous
+
+docker build -f javelin/Dockerfile -t "$1"/javelin .
+docker push "$1"/javelin
+
+cd kubernetes
 kubectl delete service ouroboros
 kubectl delete service trident 
 kubectl delete service javelin

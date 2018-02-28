@@ -1,11 +1,17 @@
+import { SERVICE_NAMES, SERVICE_PORTS, getServiceHost } from '../../common/config';
+
 const path = require('path');
 const grpc = require('grpc');
 const promisify = require('grpc-promisify');
 
-const PROTO_PATH = path.join(__dirname, '/../../../common/proto/trident.proto');
+const PROTO_PATH = path.join(__dirname, '/../../common/proto/trident.proto');
 const { trident } = grpc.load(PROTO_PATH);
 
-const client = new trident.Trident('localhost:50051', grpc.credentials.createInsecure());
+const tridentIdentifier = SERVICE_NAMES.TRIDENT;
+const tridentHost = getServiceHost(tridentIdentifier);
+const tridentPort = SERVICE_PORTS[tridentIdentifier];
+
+const client = new trident.Trident(`${tridentHost}:${tridentPort}`, grpc.credentials.createInsecure());
 promisify(client);
 
 
