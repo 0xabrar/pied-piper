@@ -2,6 +2,7 @@ import { SERVICE_NAMES, SERVICE_PORTS } from '../common/config';
 
 const path = require('path');
 const grpc = require('grpc');
+const mongoose = require('mongoose');
 
 const PROTO_PATH = path.join(__dirname, '/../../common/proto/javelin.proto');
 const { javelin } = grpc.load(PROTO_PATH);
@@ -13,6 +14,13 @@ const stubTicket = {
   faculty: {},
   notes: [],
 };
+
+var mongoURI = 'mongodb://admin:Y70TcYY3BVVKK7zp@cluster0-shard-00-00-sxvcc.mongodb.\
+                net:27017,cluster0-shard-00-01-sxvcc.mongodb.net:27017,cluster0-shard\
+                -00-02-sxvcc.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard\
+                -0&authSource=admin';
+
+mongoose.connect(mongoURI);
 
 /**
  * @returns all Tickets stored in the system
