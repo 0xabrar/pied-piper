@@ -36,5 +36,3 @@ kubectl create -f deployments/ouroboros.yaml
 kubectl create -f deployments/populous.yaml
 kubectl create -f deployments/javelin.yaml
 kubectl create -f deployments/trident.yaml
-
-
