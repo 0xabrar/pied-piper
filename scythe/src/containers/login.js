@@ -14,29 +14,28 @@ class Login extends Component{
     constructor(props) {
         super(props);  
         this.state = {email: '', password: ''};
-        this.onFormSubmit = this.onFormSubmit.bind(this);
     }
 
-    onFormSubmit(event) {
+    onFormSubmit = (event) => {
         console.log('submit')
         event.preventDefault();
     }
 
-    changeEmail(new_email){
+    changeEmail = (new_email) => {
         this.setState({email: new_email})
 
     }
 
-    changePassword(new_password){
+    changePassword = (new_password) => {
         this.setState({password: new_password})
     }
 
     render() {
         return (
         <LoginForm
-            changeEmail = {(new_email=>this.changeEmail(new_email))}
-            changePassword = {(new_pass)=>this.setState({password: new_password})}
-            submitForm = {()=>this.onFormSubmit}
+            changeEmail = {this.changeEmail}
+            changePassword = {this.setState({password: new_password})}
+            submitForm = {this.onFormSubmit}
         />
         
         )
