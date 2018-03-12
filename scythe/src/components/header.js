@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Image, Menu, Container } from 'semantic-ui-react'
-import piedPiperLogo from '../constants/components'
+import {piedPiperLogo} from '../constants/components'
 
 
 class Header extends PureComponent {

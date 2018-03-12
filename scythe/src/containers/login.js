@@ -15,20 +15,15 @@ class Login extends Component{
     constructor(props) {
         super(props);  
         this.state = {email: '', password: ''};
-        this.onFormSubmit = this.onFormSubmit.bind(this);
-        this.changePassword = this.changePassword.bind(this);
-        this.changeEmail = this.changeEmail.bind(this);
     }
 
-    onFormSubmit(event) {
-        
+    onFormSubmit = (event) => {
         event.preventDefault();
         console.log('submit')
     }
 
     changeEmail = (new_email) => {
         this.setState({email: new_email})
-
     }
 
     changePassword = (new_password) => {
@@ -37,27 +32,18 @@ class Login extends Component{
 
     render() {
         return (
-        <LoginForm  functions = {{changeEmail: this.changeEmail,
-        changePassword : this.changePassword,
-        submitForm :this.onFormSubmit}}
+        <LoginForm functions = {{changeEmail: this.changeEmail,
+        changePassword: this.changePassword,
+        submitForm: this.onFormSubmit}}
         />
-        
         )
     }
 }
 
 const mapStateToProps = state => ({
-    count: state.counter.count,
-    isIncrementing: state.counter.isIncrementing,
-    isDecrementing: state.counter.isDecrementing
   });
   
   const mapDispatchToProps = dispatch => bindActionCreators({
-    increment,
-    incrementAsync,
-    decrement,
-    decrementAsync,
-    changePage: () => push('/about-us')
   }, dispatch);
   
   export default connect(
