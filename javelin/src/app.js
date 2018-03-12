@@ -15,10 +15,10 @@ const stubTicket = {
   notes: [],
 };
 
-var mongoURI = 'mongodb://admin:Y70TcYY3BVVKK7zp@cluster0-shard-00-00-sxvcc.mongodb.\
-                net:27017,cluster0-shard-00-01-sxvcc.mongodb.net:27017,cluster0-shard\
-                -00-02-sxvcc.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard\
-                -0&authSource=admin';
+var mongoURI = `mongodb://admin:Y70TcYY3BVVKK7zp@cluster0-shard-00-00-sxvcc.mongodb.` + 
+               `net:27017,cluster0-shard-00-01-sxvcc.mongodb.net:27017,cluster0-shard` + 
+               `-00-02-sxvcc.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard` + 
+               `-0&authSource=admin`; 
 
 mongoose.connect(mongoURI);
 
