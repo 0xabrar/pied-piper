@@ -1,4 +1,5 @@
 import { push } from 'react-router-redux';
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -7,7 +8,7 @@ import {
 import Home from '../components/login.js';
 import {decrement} from "../actions/actionCreators/counter";
 import {incrementAsync} from "../actions/actionCreators/counter";
-import LoginForm from "./components/login";
+import LoginForm from "../components/login";
 
 
 class Login extends Component{
@@ -15,11 +16,14 @@ class Login extends Component{
         super(props);  
         this.state = {email: '', password: ''};
         this.onFormSubmit = this.onFormSubmit.bind(this);
+        this.changePassword = this.changePassword.bind(this);
+        this.changeEmail = this.changeEmail.bind(this);
     }
 
     onFormSubmit(event) {
-        console.log('submit')
+        
         event.preventDefault();
+        console.log('submit')
     }
 
     changeEmail(new_email){
@@ -33,10 +37,9 @@ class Login extends Component{
 
     render() {
         return (
-        <LoginForm
-            changeEmail = {(new_email=>this.changeEmail(new_email))}
-            changePassword = {(new_pass)=>this.setState({password: new_password})}
-            submitForm = {()=>this.onFormSubmit}
+        <LoginForm  functions = {{changeEmail: this.changeEmail,
+        changePassword : this.changePassword,
+        submitForm :this.onFormSubmit}}
         />
         
         )
