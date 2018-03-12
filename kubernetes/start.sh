@@ -1,16 +1,27 @@
 cd ..
-docker build -f ouroboros/Dockerfile -t "$1"/ouroboros .
-docker push "$1"/ouroboros
 
-docker build -f trident/Dockerfile -t "$1"/trident .
-docker push "$1"/trident
+# Remove all node_module in order to (significantly) reduce the Docker build
+# context.
+rm -rf ouroboros/node_modules
+rm -rf trident/node_modules
+rm -rf javelin/node_modules
+rm -rf populous/node_modules
 
-docker build -f populous/Dockerfile -t "$1"/populous .
-docker push "$1"/populous
+# Build local Docker images and push into local registry (localhost:5000 tag
+# specifies local registry).
+docker build -f ouroboros/Dockerfile -t localhost:5000/ouroboros .
+docker push localhost:5000/ouroboros
 
-docker build -f javelin/Dockerfile -t "$1"/javelin .
-docker push "$1"/javelin
+docker build -f trident/Dockerfile -t localhost:5000/trident .
+docker push localhost:5000/trident
 
+docker build -f populous/Dockerfile -t localhost:5000/populous .
+docker push localhost:5000/populous
+
+docker build -f javelin/Dockerfile -t localhost:5000/javelin .
+docker push localhost:5000/javelin
+
+# Delete any existing services and deployments and create new ones.
 cd kubernetes
 kubectl delete service ouroboros
 kubectl delete service trident 
@@ -21,11 +32,6 @@ kubectl delete deployment ouroboros
 kubectl delete deployment javelin
 kubectl delete deployment trident
 kubectl delete deployment populous 
-
-sed -i 's?[a-z]*/ouroboros?'"$1"'/ouroboros?' deployments/ouroboros.yaml
-sed -i 's?[a-z]*/trident?'"$1"'/trident?' deployments/trident.yaml
-sed -i 's?[a-z]*/populous?'"$1"'/populous?' deployments/populous.yaml
-sed -i 's?[a-z]*/javelin?'"$1"'/javelin?' deployments/javelin.yaml
 
 kubectl create -f services/ouroboros.yaml
 kubectl create -f services/populous.yaml

@@ -8,8 +8,7 @@ You'll need to follow a couple of steps of setup in order to run all of your ser
 
 ### Install Docker
 * The [Docker](https://docs.docker.com/install/#supported-platforms) pages have instructions for installation.
-  * Docker for Windows requires Windows 10 Pro, for Windows 10 Home, use [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/)
-* You'll separately need to sign up for [DockerHub](https://hub.docker.com/).
+* Docker for Windows requires Windows 10 Pro, for Windows 10 Home, use [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/)
 
 ### Install Node
 * node version `8.6.0`
@@ -25,23 +24,37 @@ After these steps, you should be OK for running a local deployment using Kuberne
 
 **Windows:** Run Docker (or Docker Toolbox) as Administrator. Omit `sudo` wherever it's used.
 
-### Start minikube
-`minikube start`
+### start minikube
+`minikube start --insecure-registry localhost:5000`
+`eval $(minikube docker-env)` // this may be different on Windows
+`docker run -d -p 5000:5000 --restart=always --name registry registry:2 // only
+need to run once`
+
+**Important note**: You have to run `eval $(minikube docker-env)` on each terminal
+you want to use, since it only sets the environment variables for the current
+shell session. You'll also need to specify the insecure registry flag every
+time you start Minikube.
 
 ### Build Docker images and run local Kubernetes deployments
 
     cd kubernetes
-    sudo ./start.sh <your dockerhub username>
-
-If you run into an error about permissions relating to Docker, you just need to login with `sudo docker login`.
+    ./start.sh  // check inside this file
 
 ### Run Ouroboros endpoints
 * Get your local cluster IP using `minikube ip`.   
 * `curl http://<minikube-ip>:31000/<your-endpoint>`
 * We use `31000` for the port, because that's the exposed port for the `Ouroboros` service.
 
+### Run updated service of service on Kubernetes
+
+    // make changes inside service repo
+    cd kubernetes
+    ./update.sh <your-service-name>
+
 # Run without Kubernetes
 For now, you can opt to run your services without Kubernetes. 
+
+*Note:* This only works if you're working on the backend. If you want to query the backend from the frontend, you'll need to use Kubernetes.
 
 ### Run relevant internal services
     // run in different shells or tmux/screen
@@ -61,3 +74,9 @@ Make sure you delete the common folder copy in your service directory before mak
 
 ### Curl Ouroboros endpoints
     curl http://localhost:8080/<your-endpoint>
+
+# Frontend
+
+In order to run on the frontend, you'll need to include a Google Chrome addon
+that allows you to query the Minikube IP while running from localhost. Add
+[allow-control-allow-origin](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en).

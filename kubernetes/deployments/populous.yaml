@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - name: populous 
-        image: abrarisme/populous
+        image: localhost:5000/populous
         ports:
         - containerPort: 50052 
+        imagePullPolicy: IfNotPresent
