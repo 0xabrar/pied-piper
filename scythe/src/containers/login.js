@@ -26,12 +26,12 @@ class Login extends Component{
         console.log('submit')
     }
 
-    changeEmail(new_email){
+    changeEmail = (new_email) => {
         this.setState({email: new_email})
 
     }
 
-    changePassword(new_password){
+    changePassword = (new_password) => {
         this.setState({password: new_password})
     }
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Button, Form, Grid, Header, Image, Segment } from 'semantic-ui-react'
 
 import piedPiperLogo from '../constants/components'
-// const piedPiperLogo = `https://png.icons8.com/color/1600/pied-piper.png`;
 
 class LoginForm extends React.Component  {
             
@@ -53,5 +52,4 @@ class LoginForm extends React.Component  {
 }
 
 export default LoginForm;
-
 
