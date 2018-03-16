@@ -1,0 +1,11 @@
+[ignore]
+.*/node_modules/protobufjs/.*
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+module.system=haste
+[strict]

@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import { Router } from "express";
 
-const tridentClient = require('../client/trident_client');
+const tridentClient = require("../client/trident_client");
 
 const routes = Router();
 
@@ -13,7 +13,7 @@ const routes = Router();
  *  budgetRequested: int
  * }
  */
-routes.post('/submit', async (request, result) => {
+routes.post("/submit", async (request, result) => {
   const gapf = request.body;
   gapf.facultyId = parseInt(gapf.facultyId, 10);
   gapf.budgetRequested = parseInt(gapf.budgetRequested, 10);
@@ -28,14 +28,14 @@ routes.post('/submit', async (request, result) => {
  * Get the GAPF associated with a specific faculty member based on
  * their facultyId.
  */
-routes.get('/get/:facultyId', async (request, result) => {
+routes.get("/get/:facultyId", async (request, result) => {
   let { facultyId } = request.params;
   facultyId = parseInt(facultyId, 10);
   const response = await tridentClient.GetGAPF(facultyId);
   result.json(response);
 });
 
-routes.get('/all', async (request, result) => {
+routes.get("/all", async (request, result) => {
   const response = await tridentClient.GetAllGAPFStatus();
   result.json(response);
 });
