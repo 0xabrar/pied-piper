@@ -1,5 +1,5 @@
 import express from "express";
-import logger from "morgan";
+import logger from "./logger";
 import tridentRoutes from "./endpoints/trident";
 import populousRoutes from "./endpoints/populous";
 import javelinRoutes from "./endpoints/javelin";
@@ -7,12 +7,7 @@ import { SERVICE_NAMES, SERVICE_PORTS } from "../common/config";
 
 const app = express();
 app.disable("x-powered-by");
-
-app.use(
-  logger("dev", {
-    skip: () => app.get("env") === "test"
-  })
-);
+logger.info("Starting Ouroboros");
 app.use(express.json());
 
 // Routes

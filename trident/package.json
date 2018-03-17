@@ -20,7 +20,8 @@
     "babel-preset-env": "^1.6.1",
     "grpc": "^1.0.0",
     "mongoose": "^5.0.7",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "winston": "^3.0.0-rc3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
