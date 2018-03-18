@@ -3,10 +3,6 @@ import PropType from "prop-types";
 import { Route } from "react-router";
 import Header from "../header";
 
-DefaultLayout.propTypes = {
-  component: PropType.element
-};
-
 const DefaultLayout = ({ component: Component, ...rest }) => {
   return (
     <Route
@@ -19,6 +15,10 @@ const DefaultLayout = ({ component: Component, ...rest }) => {
       )}
     />
   );
+};
+
+DefaultLayout.propTypes = {
+  component: PropType.func
 };
 
 export default DefaultLayout;

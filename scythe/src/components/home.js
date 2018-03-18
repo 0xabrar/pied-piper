@@ -1,17 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-Home.propTypes = {
-  count: PropTypes.number,
-  increment: PropTypes.func,
-  incrementAsync: PropTypes.func,
-  decrement: PropTypes.func,
-  decrementAsync: PropTypes.func,
-  isIncrementing: PropTypes.bool,
-  isDecrementing: PropTypes.bool,
-  changePage: PropTypes.func
-};
-
 const Home = props => (
   <div>
     <h1>Home</h1>
@@ -42,5 +31,16 @@ const Home = props => (
     </p>
   </div>
 );
+
+Home.propTypes = {
+  count: PropTypes.number,
+  increment: PropTypes.func,
+  incrementAsync: PropTypes.func,
+  decrement: PropTypes.func,
+  decrementAsync: PropTypes.func,
+  isIncrementing: PropTypes.bool,
+  isDecrementing: PropTypes.bool,
+  changePage: PropTypes.func
+};
 
 export default Home;

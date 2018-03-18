@@ -3,12 +3,6 @@ import PropType from "prop-types";
 import { Button, Form, Grid, Header, Image, Segment } from "semantic-ui-react";
 import { piedPiperLogo } from "../constants/components";
 
-LoginForm.propTypes = {
-  submitForm: PropType.func,
-  changeEmail: PropType.func,
-  changePassword: PropType.func
-};
-
 class LoginForm extends Component {
   render() {
     return (
@@ -61,5 +55,11 @@ class LoginForm extends Component {
     );
   }
 }
+
+LoginForm.propTypes = {
+  submitForm: PropType.func,
+  changeEmail: PropType.func,
+  changePassword: PropType.func
+};
 
 export default LoginForm;

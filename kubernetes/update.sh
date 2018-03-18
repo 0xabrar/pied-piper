@@ -1,3 +1,5 @@
+eval $(minikube docker-env)
+
 cd .. 
 docker build -f "$1"/Dockerfile -t localhost:5000/"$1" .
 docker push localhost:5000/"$1"

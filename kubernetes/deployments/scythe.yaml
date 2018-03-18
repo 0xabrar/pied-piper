@@ -1,23 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ouroboros
+  name: scythe 
   labels:
-     name: ouroboros
+     name: scythe 
 spec:
   replicas: 3
   selector:
     matchLabels:
-      name: ouroboros
+      name: scythe 
   template:
     metadata:
       labels:
-        name: ouroboros 
+        name: scythe 
     spec:
       containers:
-      - name: ouroboros 
-        image: localhost:5000/ouroboros
+      - name: scythe 
+        image: localhost:5000/scythe
         ports:
-        - containerPort: 31000 
+        - containerPort: 3000
         imagePullPolicy: IfNotPresent
-

@@ -1,10 +1,10 @@
 import { push } from "react-router-redux";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { decrementAsync, increment } from "../actions/actionCreators/counter";
+import { decrementAsync, increment } from "../actions/thunk/counter";
 import Home from "../components/home.js";
-import { decrement } from "../actions/actionCreators/counter";
-import { incrementAsync } from "../actions/actionCreators/counter";
+import { decrement } from "../actions/thunk/counter";
+import { incrementAsync } from "../actions/thunk/counter";
 
 const mapStateToProps = state => ({
   count: state.counter.count,

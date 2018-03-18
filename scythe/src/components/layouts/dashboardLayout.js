@@ -4,10 +4,6 @@ import DefaultLayout from "./defaultLayout";
 import Sidebar from "../sidebar";
 import { Grid } from "semantic-ui-react";
 
-DashboardLayout.propTypes = {
-  component: PropType.element
-};
-
 const DashboardLayout = ({ component: Component, ...rest }) => {
   return (
     <DefaultLayout
@@ -24,6 +20,10 @@ const DashboardLayout = ({ component: Component, ...rest }) => {
       )}
     />
   );
+};
+
+DashboardLayout.propTypes = {
+  component: PropType.func
 };
 
 export default DashboardLayout;

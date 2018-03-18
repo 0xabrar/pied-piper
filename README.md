@@ -32,15 +32,10 @@ After these steps, you should be OK for running a local deployment using Kuberne
 ```bash
 minikube start --insecure-registry localhost:5000
 
-eval $(minikube docker-env)
-
 docker run -d -p 5000:5000 --restart=always --name registry registry:2 # only need to run once
 ```
 
-**Important note**: You have to run `eval $(minikube docker-env)` on each terminal
-you want to use, since it only sets the environment variables for the current
-shell session. You'll also need to specify the insecure registry flag every
-time you start Minikube.
+**Important note**: You'll need to specifiy `--insecure-registry localhost:5000` every time you start Minikube.
 
 **Important note 2**: You only need to run these commands to deploy the services in `start.sh` once the docker images have been built. No need to run `start.sh` again, but if you need to reflect the new changes in your repository run `update.sh` instead. This is only the case if you haven't cleared the minikube files in `~/.minikube`
 
@@ -70,7 +65,7 @@ For doing a quick sanity check that your service is able to run without errors (
 
 # Run without Kubernetes
 
-For now, you can opt to run your services without Kubernetes.
+You can try to run Kubernetes in localhost, but this approach is mainly not supported.
 
 _Note:_ This only works if you're working on the backend. If you want to query the backend from the frontend, you'll need to use Kubernetes.
 
@@ -93,15 +88,27 @@ Make sure you delete the common folder copy in your service directory before mak
 
 ### Curl Ouroboros endpoints
 
-    curl http://localhost:8080/<your-endpoint>
+    curl http://localhost:31000/<your-endpoint>
 
 # Developer Workflow
 
 ### Frontend
 
-In order to run on the frontend, you'll need to include a Google Chrome addon
+In order to run the frontend on `localhost`, you'll need to include a Google Chrome addon
 that allow you to query the Minikube IP while running from localhost. Add
 [allow-control-allow-origin](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en).
+
+You'll also need to set a `.env` file inside of the `scythe` package.
+
+```bash
+cd scythe
+touch .env()
+
+# insert into .env file
+REACT_APP_MINIKUBE_IP=<minikube_ip>
+```
+
+You'll need to get your Minikube IP using `minikube ip`. This environment variables lets React know how to query the backend (gives the cluster IP).
 
 There's a couple of other Chrome addons that help with React/Redux development.
 

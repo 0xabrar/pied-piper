@@ -6,10 +6,6 @@ import { connect } from "react-redux";
 import { Route } from "react-router";
 import Header from "../components/header";
 
-DashboardContainer.propTypes = {
-  component: PropType.element
-};
-
 const DashboardContainer = ({ component: Component, ...rest }) => {
   return (
     <Route
@@ -22,6 +18,10 @@ const DashboardContainer = ({ component: Component, ...rest }) => {
       )}
     />
   );
+};
+
+DashboardContainer.propTypes = {
+  component: PropType.func
 };
 
 const mapStateToProps = state => ({
