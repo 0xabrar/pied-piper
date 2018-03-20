@@ -1,4 +1,5 @@
 import { Router } from "express";
+import logger from "../logger";
 
 const tridentClient = require("../client/trident_client");
 
@@ -10,16 +11,44 @@ const routes = Router();
  * body:
  * {
  *  facultyId: int,
- *  budgetRequested: int
+ *  created: int,
+ *  lastModified: int
+ *  documents: Array(string, string, int)
  * }
  */
 routes.post("/submit", async (request, result) => {
+  logger.info("Received call to /gapf/submit endpoint");
   const gapf = request.body;
-  gapf.facultyId = parseInt(gapf.facultyId, 10);
-  gapf.budgetRequested = parseInt(gapf.budgetRequested, 10);
 
-  const response = await tridentClient.SubmitGAPF(gapf);
-  result.json(response);
+  // convert relevant request strings into integers
+  gapf.facultyId = parseInt(gapf.facultyId, 10);
+  gapf.created = parseInt(gapf.created, 10);
+  gapf.lastModified = parseInt(gapf.lastModified, 10);
+  if (gapf.documents !== undefined) {
+    gapf.documents = gapf.documents.map(doc => {
+      return {
+        name: doc.name,
+        link: doc.link,
+        attachedDate: parseInt(doc.attachedDate, 10)
+      };
+    });
+  }
+
+  try {
+    logger.info("Calling to Ticket Service with gapf body: %j", gapf);
+    const response = await tridentClient.SubmitGAPF(gapf);
+    logger.info("Received response from Ticket Service: %j", response);
+    logger.info("Exiting /gapf/submit endpoint");
+    result.json(response);
+  } catch (err) {
+    logger.error(
+      "Received error from submitting to Ticket Service: ",
+      err.message
+    );
+    // TODO: should add middleware later on to handle errors
+    result.status(500);
+    result.json({});
+  }
 });
 
 /**
@@ -36,7 +65,7 @@ routes.get("/get/:facultyId", async (request, result) => {
 });
 
 routes.get("/all", async (request, result) => {
-  const response = await tridentClient.GetAllGAPFStatus();
+  const response = await tridentClient.GetAllGAPF();
   result.json(response);
 });
 

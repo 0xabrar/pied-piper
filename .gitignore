@@ -28,3 +28,10 @@ yarn-error.log*
 # Misc
 .DS_Store
 .env
+
+# ignore common files
+trident/common
+ouroboros/common
+javelin/common
+populous/common
+scythe/src/common

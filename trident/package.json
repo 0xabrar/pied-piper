@@ -11,6 +11,8 @@
     "start": "node dist/app.js",
     "clean": "rimraf dist",
     "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
+    "test": "jest",
+    "coverage": "jest --coverage",
     "lint": "eslint src/** --fix",
     "flow": "flow"
   },
@@ -19,7 +21,9 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "grpc": "^1.0.0",
-    "mongoose": "^5.0.7",
+    "mockingoose": "^2.9.1",
+    "mongoose": "^5.0.10",
+    "protobufjs": "^6.8.6",
     "rimraf": "^2.6.2",
     "winston": "^3.0.0-rc3"
   },

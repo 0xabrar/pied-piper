@@ -34,11 +34,11 @@ const submitGAPF = async GAPF => {
   return submittedGAPF;
 };
 
-const getAllGAPFStatus = async () => {
-  const allGAPFStatus = await client.GetAllGAPFStatus({});
+const getAllGAPF = async () => {
+  const allGAPFStatus = await client.GetAllGAPF({});
   return allGAPFStatus;
 };
 
 exports.GetGAPF = getGAPF;
 exports.SubmitGAPF = submitGAPF;
-exports.GetAllGAPFStatus = getAllGAPFStatus;
+exports.GetAllGAPF = getAllGAPF;
