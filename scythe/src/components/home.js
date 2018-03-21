@@ -6,7 +6,7 @@ const Home = props => (
         <p>Count: {props.count}</p>
 
         <p>
-            <button onClick={props.increment} disabled={props.isIncrementing}>Increment</button>
+            <button onClick={props.increment} disabled={props.is22Incrementing}>Increment</button>
             <button onClick={props.incrementAsync} disabled={props.isIncrementing}>Increment Async</button>
         </p>
 

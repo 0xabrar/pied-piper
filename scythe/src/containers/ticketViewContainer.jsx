@@ -1,18 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Header } from 'semantic-ui-react'
-import NoteContainer from './NoteContainer.jsx'
+import TicketHeader from '../components/TicketHeader'
+import NoteContainer from '../components/NoteContainer'
 
 const style = {
 	root: {
 		width: "100%"
-	},
-	status: {
-		PENDING: {
-			color: "yellow"
-		},
-		GRANTED: {
-			color: "green"
-		}
 	},
 	applicantInfo: {
 		root: {
@@ -28,11 +22,24 @@ const style = {
 
 
 class TicketViewContainer extends React.Component{
+  constructor(props){
+  	super(props)
+    this.handleDelete = this.handleDelete.bind(this)
+    this.handleResolve = this.handleResolve.bind(this)
+
+  }
+	handleDelete(index) {
+		this.props.deleteComment(index)
+	}
+	handleResolve(index){
+		this.props.resolveComment(index)
+	}
+
 	render() {
 		return (
 			<div style={style.root}>
 				<TicketHeader ticketNumber={this.props.ticket.number} status={""}/>
-				<ApplicantInfo aID={this.props.ticket.applicant.applicantId} applicant={this.props.ticket.applicant} />
+				<ApplicantInfo info={this.props.ticket.applicant.personalInfo} applicant={this.props.ticket.applicant} />
 				<NoteContainer notes={this.props.ticket.comments} />
 			</div>
 		)
@@ -40,17 +47,10 @@ class TicketViewContainer extends React.Component{
 }
 
 
-const TicketHeader = (props) => {
-	return (
-		<div style={style.ticketHeader}>
-			<Header as='h1'>{'Ticket #' + props.ticketNumber}</Header>
-			<Header as='h2' style={style.status[props.status]}>{props.status}</Header>
-		</div>
-	)
-}
+
 
 const ApplicantInfo = (props) => {
-	if(!props.aID){
+	if(!props.applicant){
 		return(
 			<div>
 				<Header as='h2'>Applicant</Header>
@@ -63,14 +63,20 @@ const ApplicantInfo = (props) => {
 			<div>
 				<Header as='h2'>Applicant</Header>
 				<div style={style.applicantInfo.root}>
-					<p><span style={style.applicantInfo.propertyName}>Applicant ID: </span> {props.aID}</p>
-					<p><span style={style.applicantInfo.propertyName}>Name: </span>{props.applicant.firstName + ' ' + props.applicant.lastName}</p>
-					<p><span style={style.applicantInfo.propertyName}>Phone: </span>{props.applicant.phoneNumber}</p>
-					<p><span style={style.applicantInfo.propertyName}>Email: </span>{props.applicant.email}</p>
+					<p><span style={style.applicantInfo.propertyName}>Applicant ID: </span> {props.applicant.applicantId}</p>
+					<p><span style={style.applicantInfo.propertyName}>Name: </span>{props.info.firstName + ' ' + props.info.lastName}</p>
+					<p><span style={style.applicantInfo.propertyName}>Phone: </span>{props.info.phoneNumber}</p>
+					<p><span style={style.applicantInfo.propertyName}>Email: </span>{props.info.email}</p>
 				</div>
 			</div>
 		)
 	}
 }
 
-export default TicketViewContainer
+const mapStateToProps = (state) => ({
+	ticket: state.selectedTicket
+});
+
+export default connect(
+	mapStateToProps
+)(TicketViewContainer)

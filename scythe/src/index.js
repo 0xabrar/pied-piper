@@ -8,6 +8,7 @@ import App from './app'
 import 'sanitize.css/sanitize.css'
 import './index.css'
 
+
 const target = document.querySelector('#root')
 
 render(

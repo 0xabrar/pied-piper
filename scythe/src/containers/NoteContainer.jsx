@@ -1,36 +1,77 @@
 import React from 'react'
-import { Header, List, Button, Icon } from 'semantic-ui-react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import {addNoteThunk} from '../actions/thunk/notes.js'
+import { Input, Button, List, Header, Icon } from 'semantic-ui-react'
 
-class NoteContainer extends React.Component {
-  render() {
-    return (
-      <List divided relaxed verticalAlign='middle'>
-				<Header as='h2'>Notes</Header>
-        {this.props.notes.map((note, i) => {
-          return (<Note key={i} />)
-        })}
-      </List>
-    )
-  }
+const NoteContainer = (props) => {
+	return (
+		<List divided relaxed verticalAlign='middle'>
+			<Header as='h2'>Notes</Header>
+			<AddNote addNoteFunc={props.addNote}/>
+			{props.notes.map((note, i) => {
+				return (<Note key={i} note={note} handleDelete={props.handleDelete} handleResolve={props.handleResolve} disabled={note.resolved || !props.UIEnabled}/>)
+			})}
+		</List>
+	)
+}
+
+class AddNote extends React.Component {
+	constructor(props){
+		super(props)
+		this.state = {inputText: ''}
+		this.handleTextChange = this.handleTextChange.bind(this)
+		this.handleSubmit = this.handleSubmit.bind(this)
+	}
+	handleTextChange(e) {
+		this.setState({inputText: e.target.value})
+	}
+	handleSubmit(e){
+		this.props.addNoteFunc(this.state.inputText)
+		console.log(this.props)
+	}
+	render () {
+		return (
+			<List.Item>
+				<Input placeholder='Enter a new note here...' onChange={this.handleTextChange}/>
+				<Button onClick={this.handleSubmit}><Icon name='plus'/></Button>
+			</List.Item>
+		)
+	}
 }
 
 class Note extends React.Component {
-  render() {
-    return (
-      <List.Item>
+	render() {
+		return (
+			<List.Item>
 				<List.Content floated='right'>
-					<Button icon size='tiny' data-tooltip="Edit"><Icon name='pencil' /></Button>
-					<Button icon size='tiny' data-tooltip="Delete"><Icon name='cancel' /></Button>
-					<Button icon size='tiny' data-tooltip="Resolve"><Icon name='checkmark' /></Button>
+					{/* TODO: Implement add, edit */}
+					<Button icon size='tiny' data-tooltip="Edit" onClick={() => this.props.handleEdit(this.props.key)} disabled={this.props.disabled}><Icon name='pencil'/></Button>
+					<Button icon size='tiny' data-tooltip="Delete" onClick={() => this.props.handleDelete(this.props.key)} disabled={this.props.disabled}><Icon name='pencil'/></Button>
+					<Button icon size='tiny' data-tooltip="Resolve" onClick={() => this.props.handleResolve(this.props.key)} disabled={this.props.disabled}><Icon name='checkmark' /></Button>
 				</List.Content>
 				<List.Icon name='sticky note outline' size='large' />
 				<List.Content>
-					<List.Header as='h4'>This is an example note.</List.Header>
-					<List.Description as='p'>Created 10/10/2010 @ 10:39am</List.Description>
+					<List.Header as='h4'>{this.props.note.text}</List.Header>
+					<List.Description as='p'>{this.props.note.created}</List.Description>
 				</List.Content>
 			</List.Item>
-    )
-  }
+		)
+	}
 }
 
-export default NoteContainer
+const mapStateToProps = (state) => ({
+	notes: state.selectedTicket.notes,
+	UIEnabled: state.selectedTicket.UIEnabled
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators(
+	{
+		addNote: addNoteThunk
+	}
+	, dispatch);
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(NoteContainer)
