@@ -1,13 +1,7 @@
-import {ADD_NOTE, UPDATE_NOTE, RESOLVE_NOTE, DELETE_NOTE, ENABLE_NOTES, DISABLE_NOTES, CONFIRM_ADD_NOTE} from "../../constants/actions";
+import { UPDATE_NOTE, RESOLVE_NOTE , ENABLE_NOTES, DISABLE_NOTES, CONFIRM_ADD_NOTE, CONFIRM_DELETE_NOTE} from "../../constants/actions";
 
 
 
-export const addNote = (text) => {
-	return{
-		type: ADD_NOTE,
-		text
-	}
-}
 
 /*export const updateNote = (text, index) => {
 	return({
@@ -47,5 +41,12 @@ export const confirmAddNote = (text) => {
 	return {
 		type: CONFIRM_ADD_NOTE,
 		text
+	}
+}
+
+export const confirmDeleteNote = (index) => {
+	return {
+		type: CONFIRM_DELETE_NOTE,
+		index
 	}
 }

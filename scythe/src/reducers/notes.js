@@ -1,7 +1,8 @@
-import {ADD_NOTE, DELETE_NOTE, RESOLVE_NOTE, ENABLE_NOTES, DISABLE_NOTES, CONFIRM_ADD_NOTE} from "../constants/actions";
+import {ADD_NOTE, CONFIRM_DELETE_NOTE, RESOLVE_NOTE, ENABLE_NOTES, DISABLE_NOTES, CONFIRM_ADD_NOTE} from "../constants/actions";
 
 const defaultState = {
 	ticketNumber: 12345,
+	status: "PENDING",
 	applicant: {
 		applicantId: 12345,
 		personalInfo: {
@@ -27,23 +28,6 @@ const defaultState = {
 
 const selectedTicket = (state = defaultState, action) => {
 	switch (action.type) {
-		case ADD_NOTE:
-			console.log("Add note reducer: adding note")
-			return {
-				...state,
-				selectedTicket: {
-					...state.selectedTicket,
-					notes: [...state.selectedTicket.notes, createNote(action.text)]
-				}
-			}
-
-		/*case DELETE_NOTE:
-			return {
-				...state,
-				//TODO: Use [...fruits.slice(0, 2), ...fruits.slice(3)]
-				selectedTicket: state.selectedTicket.notes.remove(action.index)
-			};
-
 		case RESOLVE_NOTE: {
 			return {
 				...state,
@@ -52,7 +36,7 @@ const selectedTicket = (state = defaultState, action) => {
 					notes: resolveNote(state.selectedTicket.notes, action.index)
 				}
 			}
-		}*/
+		}
 
 		case ENABLE_NOTES:
 			return {
@@ -64,13 +48,20 @@ const selectedTicket = (state = defaultState, action) => {
 			return {
 				...state,
 				UIEnabled: false
-			}
+		}
 
 		case CONFIRM_ADD_NOTE:
 			return {
 				...state,
 				notes: [...state.notes, createNote(action.text)]
 			}
+
+		case CONFIRM_DELETE_NOTE: {
+			return {
+				...state,
+				notes: state.notes.filter((note, i) => i !== action.index)
+			}
+		}
 
 		default:
 			return state

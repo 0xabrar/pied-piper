@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Header } from 'semantic-ui-react'
 import TicketHeader from '../components/TicketHeader'
-import NoteContainer from '../components/NoteContainer'
+import NoteContainer from '../containers/NoteContainer'
 
 const style = {
 	root: {
@@ -22,23 +22,11 @@ const style = {
 
 
 class TicketViewContainer extends React.Component{
-  constructor(props){
-  	super(props)
-    this.handleDelete = this.handleDelete.bind(this)
-    this.handleResolve = this.handleResolve.bind(this)
-
-  }
-	handleDelete(index) {
-		this.props.deleteComment(index)
-	}
-	handleResolve(index){
-		this.props.resolveComment(index)
-	}
 
 	render() {
 		return (
 			<div style={style.root}>
-				<TicketHeader ticketNumber={this.props.ticket.number} status={""}/>
+				<TicketHeader ticketNumber={this.props.ticket.ticketNumber} status={this.props.ticket.status}/>
 				<ApplicantInfo info={this.props.ticket.applicant.personalInfo} applicant={this.props.ticket.applicant} />
 				<NoteContainer notes={this.props.ticket.comments} />
 			</div>

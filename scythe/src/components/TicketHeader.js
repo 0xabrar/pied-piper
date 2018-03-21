@@ -4,11 +4,13 @@ import { Header } from 'semantic-ui-react'
 
 const style = {
 	status: {
-		PENDING: {
-			color: "yellow"
+		"PENDING": {
+			color: "yellow",
+			float: "right"
 		},
-		GRANTED: {
-			color: "green"
+		"GRANTED": {
+			color: "green",
+			float: "right"
 		}
 	}
 }
@@ -22,13 +24,4 @@ const TicketHeader = (props) => {
 	)
 }
 
-const mapStateToProps = (state) => {
-	return {
-		ticketNumber: 123 //state.selectedTicket.ticketNumber
-	}
-}
-
-
-export default connect(
-	mapStateToProps
-)(TicketHeader)
+export default TicketHeader

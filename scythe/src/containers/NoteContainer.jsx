@@ -10,7 +10,7 @@ const NoteContainer = (props) => {
 			<Header as='h2'>Notes</Header>
 			<AddNote addNoteFunc={props.addNote}/>
 			{props.notes.map((note, i) => {
-				return (<Note key={i} note={note} handleDelete={props.handleDelete} handleResolve={props.handleResolve} disabled={note.resolved || !props.UIEnabled}/>)
+				return (<Note key={i} index={i} note={note} handleDelete={props.handleDelete} handleResolve={props.handleResolve} disabled={note.resolved || !props.UIEnabled}/>)
 			})}
 		</List>
 	)
@@ -41,14 +41,29 @@ class AddNote extends React.Component {
 }
 
 class Note extends React.Component {
+	constructor(props){
+		super(props)
+		this.handleEdit = this.handleEdit.bind(this)
+		this.handleDelete = this.handleDelete.bind(this)
+		this.handleResolve = this.handleResolve.bind(this)
+	}
+	handleEdit(){
+
+	}
+	handleDelete(){
+
+	}
+	handleResolve(){
+
+	}
 	render() {
 		return (
 			<List.Item>
 				<List.Content floated='right'>
 					{/* TODO: Implement add, edit */}
-					<Button icon size='tiny' data-tooltip="Edit" onClick={() => this.props.handleEdit(this.props.key)} disabled={this.props.disabled}><Icon name='pencil'/></Button>
-					<Button icon size='tiny' data-tooltip="Delete" onClick={() => this.props.handleDelete(this.props.key)} disabled={this.props.disabled}><Icon name='pencil'/></Button>
-					<Button icon size='tiny' data-tooltip="Resolve" onClick={() => this.props.handleResolve(this.props.key)} disabled={this.props.disabled}><Icon name='checkmark' /></Button>
+					<Button icon size='tiny' data-tooltip="Edit" onClick={() => this.props.handleEdit(this.props.index)} disabled={this.props.disabled}><Icon name='pencil'/></Button>
+					<Button icon size='tiny' data-tooltip="Delete" onClick={() => this.props.handleDelete(this.props.index)} disabled={this.props.disabled}><Icon name='delete'/></Button>
+					<Button icon size='tiny' data-tooltip="Resolve" onClick={() => this.props.handleResolve(this.props.index)} disabled={this.props.disabled}><Icon name='checkmark' /></Button>
 				</List.Content>
 				<List.Icon name='sticky note outline' size='large' />
 				<List.Content>
