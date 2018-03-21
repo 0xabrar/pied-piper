@@ -25,39 +25,39 @@ const client = new populous.Populous(
 promisify(client);
 
 const addFaculty = async faculty => {
-  const response = await client.AddFaculty(faculty);
+  const response = client.AddFaculty(faculty);
   return response;
 };
 
 const getFaculty = async getFacultyRequest => {
-  const response = await client.GetFaculty(getFacultyRequest);
+  const response = client.GetFaculty(getFacultyRequest);
   return response;
 };
 
-const updateFaculty = async faculty => {
-  const response = await client.UpdateFaculty(faculty);
+const getAllFaculty = async () => {
+  const response = client.GetAllFaculty({});
   return response;
 };
 
 const addApplicant = async applicant => {
-  const response = await client.AddFaculty(applicant);
+  const response = client.AddApplicant(applicant);
   return response;
 };
 
 const getApplicant = async getApplicantRequest => {
-  const response = await client.GetApplicant(getApplicantRequest);
+  const response = client.GetApplicant(getApplicantRequest);
   return response;
 };
 
-const updateApplicant = async applicant => {
-  const response = await client.UpdateApplicant(applicant);
+const getAllApplicants = async () => {
+  const response = client.GetAllApplicants({});
   return response;
 };
 
 exports.AddFaculty = addFaculty;
 exports.GetFaculty = getFaculty;
-exports.UpdateFaculty = updateFaculty;
+exports.GetAllFaculty = getAllFaculty;
 
 exports.AddApplicant = addApplicant;
 exports.GetApplicant = getApplicant;
-exports.UpdateApplicant = updateApplicant;
+exports.GetAllApplicants = getAllApplicants;
