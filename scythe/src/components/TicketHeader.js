@@ -3,9 +3,13 @@ import { connect } from 'react-redux'
 import { Header } from 'semantic-ui-react'
 
 const style = {
+	ticketHeader: {
+		display: "grid",
+		gridTemplateColumns: "1fr 1fr"
+	},
 	status: {
 		"PENDING": {
-			color: "yellow",
+			color: "#00000",
 			float: "right"
 		},
 		"GRANTED": {
@@ -19,7 +23,7 @@ const TicketHeader = (props) => {
 	return (
 		<div style={style.ticketHeader}>
 			<Header as='h1'>{'Ticket #' + props.ticketNumber}</Header>
-			<Header as='h2' style={style.status[props.status]}>{props.status}</Header>
+			<Header as='h1' style={style.status[props.status]}>{props.status}</Header>
 		</div>
 	)
 }

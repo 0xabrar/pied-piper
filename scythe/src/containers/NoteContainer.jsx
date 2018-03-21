@@ -1,16 +1,31 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import {addNoteThunk} from '../actions/thunk/notes.js'
 import { Input, Button, List, Header, Icon } from 'semantic-ui-react'
+import {deleteNoteThunk, resolveNoteThunk, addNoteThunk} from "../actions/thunk/notes";
+
+const style = {
+	disabledNote: {
+		color: 'grey'
+	},
+	enabledNote: {}
+
+}
 
 const NoteContainer = (props) => {
 	return (
 		<List divided relaxed verticalAlign='middle'>
 			<Header as='h2'>Notes</Header>
 			<AddNote addNoteFunc={props.addNote}/>
-			{props.notes.map((note, i) => {
-				return (<Note key={i} index={i} note={note} handleDelete={props.handleDelete} handleResolve={props.handleResolve} disabled={note.resolved || !props.UIEnabled}/>)
+			{props.ticket.notes.map((note, i) => {
+				return (<Note key={i}
+											index={i}
+											note={note}
+											ticket={props.ticket}
+											resolveNoteFunc={props.resolveNote}
+											deleteNoteFunc={props.deleteNote}
+											disabled={note.resolved || !props.UIEnabled}
+				/>)
 			})}
 		</List>
 	)
@@ -28,12 +43,12 @@ class AddNote extends React.Component {
 	}
 	handleSubmit(e){
 		this.props.addNoteFunc(this.state.inputText)
-		console.log(this.props)
+		this.setState({inputText: ''})
 	}
 	render () {
 		return (
 			<List.Item>
-				<Input placeholder='Enter a new note here...' onChange={this.handleTextChange}/>
+				<Input placeholder='Enter a new note here...' value={this.state.inputText} onChange={this.handleTextChange}/>
 				<Button onClick={this.handleSubmit}><Icon name='plus'/></Button>
 			</List.Item>
 		)
@@ -43,31 +58,27 @@ class AddNote extends React.Component {
 class Note extends React.Component {
 	constructor(props){
 		super(props)
-		this.handleEdit = this.handleEdit.bind(this)
+		//this.handleEdit = this.handleEdit.bind(this)
 		this.handleDelete = this.handleDelete.bind(this)
 		this.handleResolve = this.handleResolve.bind(this)
 	}
-	handleEdit(){
-
+	handleResolve() {
+		this.props.resolveNoteFunc(this.props.index, this.props.note, this.props.ticket)
 	}
-	handleDelete(){
-
-	}
-	handleResolve(){
-
+	handleDelete() {
+		this.props.deleteNoteFunc(this.props.index, this.props.note, this.props.ticket)
 	}
 	render() {
 		return (
 			<List.Item>
 				<List.Content floated='right'>
-					{/* TODO: Implement add, edit */}
-					<Button icon size='tiny' data-tooltip="Edit" onClick={() => this.props.handleEdit(this.props.index)} disabled={this.props.disabled}><Icon name='pencil'/></Button>
-					<Button icon size='tiny' data-tooltip="Delete" onClick={() => this.props.handleDelete(this.props.index)} disabled={this.props.disabled}><Icon name='delete'/></Button>
-					<Button icon size='tiny' data-tooltip="Resolve" onClick={() => this.props.handleResolve(this.props.index)} disabled={this.props.disabled}><Icon name='checkmark' /></Button>
+					<Button icon size='tiny' data-tooltip="Edit" onClick={() => {}} disabled={this.props.disabled}><Icon name='pencil'/></Button>
+					<Button icon size='tiny' data-tooltip="Delete" onClick={this.handleDelete} disabled={this.props.disabled}><Icon name='delete'/></Button>
+					<Button icon size='tiny' data-tooltip="Resolve" onClick={this.handleResolve} disabled={this.props.disabled}><Icon name='checkmark' /></Button>
 				</List.Content>
 				<List.Icon name='sticky note outline' size='large' />
 				<List.Content>
-					<List.Header as='h4'>{this.props.note.text}</List.Header>
+					<List.Header style={this.props.disabled? style.disabledNote : {}} as='h4'>{this.props.note.text}</List.Header>
 					<List.Description as='p'>{this.props.note.created}</List.Description>
 				</List.Content>
 			</List.Item>
@@ -76,13 +87,15 @@ class Note extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-	notes: state.selectedTicket.notes,
+	ticket: state.selectedTicket,
 	UIEnabled: state.selectedTicket.UIEnabled
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
 	{
-		addNote: addNoteThunk
+		addNote: addNoteThunk,
+		resolveNote: resolveNoteThunk,
+		deleteNote: deleteNoteThunk
 	}
 	, dispatch);
 
