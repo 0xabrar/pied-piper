@@ -6,9 +6,9 @@ metadata:
     name: javelin 
 spec:
   ports:
-  - port: 80 
+  - port: 50053 
     protocol: TCP
-    targetPort: 8080 
+    targetPort: 50053 
   selector:
     name: javelin 
   type: ClusterIP

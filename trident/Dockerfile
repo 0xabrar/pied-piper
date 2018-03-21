@@ -1,8 +1,11 @@
+# build context is parent directory
 FROM node:alpine
-EXPOSE 8080 
+EXPOSE 8080
 
-COPY package*.json ./
+COPY trident/package*.json ./ 
 RUN npm install
 
-COPY . .
+COPY trident .
+COPY common common/
+
 CMD ["npm", "start", "-s"]

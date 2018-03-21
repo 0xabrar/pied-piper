@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - name: javelin 
-        image: abrarisme/javelin
+        image: localhost:5000/javelin
         ports:
-        - containerPort: 8080
+        - containerPort: 50053 
+        imagePullPolicy: IfNotPresent

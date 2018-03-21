@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - name: trident 
-        image: abrarisme/trident
+        image: localhost:5000/trident
         ports:
-        - containerPort: 8080
+        - containerPort: 50051 
+        imagePullPolicy: IfNotPresent 

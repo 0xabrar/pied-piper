@@ -6,9 +6,9 @@ metadata:
     name: ouroboros
 spec:
   ports:
-  - port: 80 
+  - port: 31000 
     protocol: TCP
-    targetPort: 8080 
+    targetPort: 31000 
     nodePort: 31000
   selector:
     name: ouroboros

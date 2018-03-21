@@ -1,9 +1,7 @@
+import { Router } from "express";
 
-import { Router } from 'express';
-
-const populousClient = require('../client/populous_client');
+const populousClient = require("../client/populous_client");
 
 const routes = Router();
-
 
 export default routes;

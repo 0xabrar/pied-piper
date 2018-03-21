@@ -1,8 +1,11 @@
+# build context is parent directory
 FROM node:alpine
-EXPOSE 8080 
+EXPOSE 8080
 
-COPY package*.json ./
+COPY javelin/package*.json ./ 
 RUN npm install
 
-COPY . .
+COPY javelin .
+COPY common common/
+
 CMD ["npm", "start", "-s"]

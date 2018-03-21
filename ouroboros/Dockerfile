@@ -1,8 +1,11 @@
+# build context is parent directory
 FROM node:alpine
-EXPOSE 8080 
+EXPOSE 8080
 
-COPY package*.json ./
+COPY ouroboros/package*.json ./ 
 RUN npm install
 
-COPY . .
+COPY ouroboros .
+COPY common common/
+
 CMD ["npm", "start", "-s"]

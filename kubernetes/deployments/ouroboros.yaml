@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: ouroboros 
-        image: abrarisme/ouroboros
+        image: localhost:5000/ouroboros
         ports:
-        - containerPort: 8080
+        - containerPort: 31000 
+        imagePullPolicy: IfNotPresent
 

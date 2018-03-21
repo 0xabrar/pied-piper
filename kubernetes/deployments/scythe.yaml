@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scythe 
+  labels:
+     name: scythe 
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: scythe 
+  template:
+    metadata:
+      labels:
+        name: scythe 
+    spec:
+      containers:
+      - name: scythe 
+        image: localhost:5000/scythe
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: IfNotPresent

@@ -1,11 +1,15 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom'
-import TicketViewContainer from "./containers/ticketViewContainer";
+import GAPFListContainer from "./containers/gapfList";
+import TicketListContainer from "./containers/ticketList";
+import Login from "./containers/login";
 
 const App = () => (
   <div>
     <main>
-      <TicketViewContainer />
+			<Route path="/login" component={Login} />
+			<DashboardLayout path="/tickets" component={TicketListContainer} />
+			<DashboardLayout path="/gapf" component={GAPFListContainer} />
     </main>
   </div>
 )

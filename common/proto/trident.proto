@@ -14,19 +14,28 @@ service Trident {
   rpc GetGAPF(populous.Faculty) returns (GAPF) {}
 
   // Retrieve a list of all GAPF status.
-  rpc GetAllGAPFStatus(Empty) returns (GAPFStatusList) {}
+  rpc GetAllGAPF(Empty) returns (GAPFList) {}
 }
 
 message GAPF {
   int32 facultyId = 1;
-  int32 budgetRequested = 2;
-  bool active = 3;
+  int32 created = 2; // UNIX timestamps should be int64, but long is 
+  int32 lastModified = 3; // not well supported in Javascript
+  GAPFStatus status = 4;
+  repeated Document attachedDocuments = 5;
 }
 
-message GAPFStatusList {
-  message GAPFStatus {
-    populous.Faculty faculty = 1;
-    bool submitted = 2;
-  }
-  repeated GAPFStatus statuses = 1;
+enum GAPFStatus {
+  SUBMITTED = 0;
+  BUDGET_ALLOCATED = 1;
+}
+
+message Document {
+  string name = 1;
+  string link = 2;
+  int32 attachedDate = 3;
+}
+
+message GAPFList {
+  repeated GAPF applications = 1;
 }

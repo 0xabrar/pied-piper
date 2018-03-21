@@ -1,15 +1,16 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'react-router-redux'
-import store, { history } from './store'
-import App from './app'
-
-import 'sanitize.css/sanitize.css'
-import './index.css'
-
+import "sanitize.css/sanitize.css";
+import "semantic-ui-css/semantic.min.css";
+import React from "react";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { ConnectedRouter } from "react-router-redux";
+import { Route } from "react-router";
+import store, { history } from "./store";
+import dotenv from "dotenv";
+dotenv.load();
 
 const target = document.querySelector('#root')
+
 
 render(
   <Provider store={store}>
@@ -20,4 +21,4 @@ render(
     </ConnectedRouter>
   </Provider>,
   target
-)
+);
