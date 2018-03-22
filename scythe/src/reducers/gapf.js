@@ -1,4 +1,4 @@
-import { GET_ALL_GAPF } from "../constants/actions";
+import { GET_ALL_GAPF } from '../constants/actions';
 
 const initialState = {};
 
@@ -7,7 +7,7 @@ export default (state = initialState, action) => {
     case GET_ALL_GAPF:
       const result = {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
       return result;
 

@@ -1,5 +1,5 @@
 {
-  "name": "scythe",
+  "name": "grad-app-system",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "dotenv": "^5.0.1",
+    "envify": "^4.1.0",
     "flow-bin": "^0.67.1",
     "history": "^4.7.2",
     "prop-types": "^15.6.1",
