@@ -28,7 +28,7 @@ class TicketViewContainer extends React.Component{
 			<div style={style.root}>
 				<TicketHeader ticketNumber={this.props.ticket.ticketNumber} status={this.props.ticket.status}/>
 				<ApplicantInfo info={this.props.ticket.applicant.personalInfo} applicant={this.props.ticket.applicant} />
-				<NoteContainer notes={this.props.ticket.comments} />
+				<NoteContainer />
 			</div>
 		)
 	}

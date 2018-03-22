@@ -37,7 +37,7 @@ const getServiceHost = (service) => {
 
   // quick hack to use cluster IP with localhost Scythe (allows localhost development)
   if (service === SERVICE_NAMES.OUROBOROS) {
-    console.log(process.env.REACT_APP_MINIKUBE_IP)
+    console.log(process.env.REACT_APP_MINIKUBE_IP);
     return process.env.REACT_APP_MINIKUBE_IP;
   }
   return '0.0.0.0';

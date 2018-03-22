@@ -28,8 +28,6 @@ const defaultState = {
 
 const selectedTicket = (state = defaultState, action) => {
   switch (action.type) {
-
-
     case ENABLE_NOTES:
       return {
         ...state,
@@ -58,8 +56,8 @@ const selectedTicket = (state = defaultState, action) => {
     case CONFIRM_RESOLVE_NOTE: {
       return {
         ...state,
-        notes: [...state.notes.filter((note, i) => i !== action.index), getResolvedNote(action.note)]
-      }
+        notes: [...state.notes.filter((note, i) => i !== action.index), getResolvedNote(action.note)],
+      };
     }
 
     default:
@@ -73,12 +71,10 @@ const createNote = text => ({
   resolved: false,
 });
 
-export const getResolvedNote = (note) => {
-	return {
-		...note,
-		resolved: true
-	}
-}
+export const getResolvedNote = note => ({
+  ...note,
+  resolved: true,
+});
 
 export default selectedTicket;
 

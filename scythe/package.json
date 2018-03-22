@@ -35,21 +35,5 @@
     "eject": "react-scripts eject",
     "lint": "eslint src/** --fix",
     "flow": "flow"
-  },
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "plugins": [
-      "import"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 2017,
-      "sourceType": "module"
-    },
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "eslint:recommended"
-    ]
   }
 }
