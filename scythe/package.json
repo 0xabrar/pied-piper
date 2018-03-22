@@ -11,8 +11,8 @@
     "react-scripts": "^1.0.17"
   },
   "dependencies": {
-    "envify": "^4.1.0",
     "dotenv": "^5.0.1",
+    "envify": "^4.1.0",
     "flow-bin": "^0.67.1",
     "history": "^4.7.2",
     "prop-types": "^15.6.1",
@@ -25,7 +25,6 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "sanitize.css": "^5.0.0",
-    "whatwg-fetch": "^2.0.3",
     "semantic-ui-css": "^2.3.0",
     "semantic-ui-react": "^0.78.3"
   },

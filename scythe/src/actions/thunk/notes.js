@@ -3,7 +3,6 @@ import { enableNotes, disableNotes, confirmAddNote, confirmDeleteNote, confirmRe
 import { ouroborosEndpoint } from "../../constants/services";
 import {getResolvedNote} from "../../reducers/notes";
 
-require('whatwg-fetch')
 
 export const addNoteThunk = text => async (dispatch) => {
   try {
