@@ -4,9 +4,11 @@ const Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
 
-const Note = new Schema({
-  text: String,
-  resolved: Boolean,
+var Note = new Schema({
+    text: String,
+    created: Date,
+    lastModified: Date,
+    resolved: Boolean,
 });
 
 module.exports = mongoose.model('Note', Note, 'Notes');

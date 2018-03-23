@@ -1,4 +1,5 @@
-import { SERVICE_NAMES, SERVICE_PORTS } from '../common/config';
+import { SERVICE_NAMES, SERVICE_PORTS, MONGO_CONFIG } from '../common/config';
+import logger from "./logger";
 
 const path = require('path');
 const grpc = require('grpc');
@@ -7,82 +8,230 @@ const mongoose = require('mongoose');
 const PROTO_PATH = path.join(__dirname, '/../../common/proto/javelin.proto');
 const { javelin } = grpc.load(PROTO_PATH);
 
-const stubTicket = {
-  ticketId: 1,
-  state: 'INITIAL',
-  applicant: {},
-  faculty: {},
-  notes: [],
-};
+const Ticket = require('./models/ticket.js');
+const Note = require('./models/note.js')
 
-var mongoURI = `mongodb://admin:Y70TcYY3BVVKK7zp@cluster0-shard-00-00-sxvcc.mongodb.` + 
-               `net:27017,cluster0-shard-00-01-sxvcc.mongodb.net:27017,cluster0-shard` + 
-               `-00-02-sxvcc.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard` + 
-               `-0&authSource=admin`; 
+mongoose.connect(MONGO_CONFIG.HOST);
 
-mongoose.connect(mongoURI);
+const formatNote = (note) => {
+  return {
+    noteId: note._id.toString(),
+    text: note.text,
+    resolved: note.resolved,
+    created: note.created.getTime(),
+    lastModified: note.lastModified.getTime(),
+  };
+}
+
+const formatTicket = (ticket) => {
+  return {
+    ticketId: ticket._id.toString(),
+    state: ticket.state,
+    facultyId: ticket.facultyId,
+    applicantId: ticket.applicantId,
+    created: ticket.created.getTime(),
+    lastModified: ticket.lastModified.getTime(),
+    notes: ticket.notes.map(formatNote)
+  }
+}
 
 /**
  * @returns all Tickets stored in the system
  */
-const getAllTicketsBackend = ((empty) => { // eslint-disable-line no-unused-vars
-  return [stubTicket];
+export const getAllTicketsBackend = ((empty, callback) => { // eslint-disable-line no-unused-vars
+  logger.info("Enter getAllTicketsBackend");
+  Ticket.find().populate('notes').exec(function(err, tickets) {
+    if (err) { 
+      logger.error("Error: %j", err);
+      callback(err, null);
+    }
+    logger.info("DB response with data: %j", tickets);
+    let payload = tickets.map(formatTicket);
+    logger.info("Response payload data: %j", payload);
+    callback(null, payload);
+  });
 });
 
 /**
  * @returns the Ticket associated with a specific GetTicketRequest
  */
-const getTicketBackend = ((getTicketRequest) => {
-  const { ticketId } = getTicketRequest;
-  return stubTicket;
+export const getTicketBackend = ((getTicketRequest, callback) => {
+  logger.info("Enter getTicketBackend with request body %j", getTicketRequest);
+  Ticket.findOne({_id: getTicketRequest.ticketId}).populate('notes').exec(function(err, ticket) {
+    if (err){
+      logger.error("Error: %j", err);
+      callback(err, null);
+    }
+    logger.info("DB response with data: %j", ticket);
+    let payload = formatTicket(ticket);
+    logger.info("Response payload data: %j", payload);
+    callback(null, payload);
+  });
 });
 
 /**
  * @returns the created Ticket
  */
-const createTicketBackend = ((createTicketRequest) => {
-  const { facultyId, allottedTickets } = createTicketRequest;
-  return stubTicket;
+export const createTicketBackend = ((createTicketRequest, callback) => {
+  logger.info("Enter createTicketBackend with request body %j", createTicketRequest);
+  let now = Math.round((new Date()).getTime()/1000);
+  let tickets = [];
+  for (let i = 0; i < createTicketRequest.allottedTickets; i++){
+    tickets.push(new Ticket({
+      state: 'INITIAL',
+      facultyId: createTicketRequest.facultyId,
+      applicantId: "",
+      created: now,
+      lastModified: now,
+      notes: []
+    }));
+  }
+  logger.info("Tickets to be added to Ticket collection %j", tickets);
+  Ticket.insertMany(tickets, (err, newTickets) => {
+    if (err){
+      logger.error("Error: %j", err);
+      callback(err, null);
+    }
+    logger.info("DB response with data: %j", newTickets);
+    let payload = newTickets.map(formatTicket);
+    logger.info("Response payload data: %j", payload);
+    callback(null, payload);
+  });
 });
 
 /**
  * @returns the Ticket associated with a specific GetTicketRequest
  */
-const updateTicketBackend = ((modifyTicketRequest) => {
-  const { ticketId, state} = modifyTicketRequest;
-  return stubTicket;
+export const updateTicketBackend = ((modifyTicketRequest, callback) => {
+  logger.info("Enter updateTicketBackend with request body %j", modifyTicketRequest);
+  let now = Math.round((new Date()).getTime()/1000);
+  Ticket.findOneAndUpdate({_id: modifyTicketRequest.ticketId}, 
+    {state: modifyTicketRequest.state, lastModified: now}, {new: true}).populate('notes').exec(function(err, ticket) {
+      if (err){
+        logger.error("Error: %j", err);
+        callback(err, null);
+      }
+      logger.info("DB response with data: %j", ticket);
+      let payload = formatTicket(ticket);
+      logger.info("Response payload data: %j", payload);
+      callback(null, payload);
+  });
 });
 
-const assignStudentBackend = ((modifyTicketRequest) => {
-  const { ticketId, applicant } = modifyTicketRequest;
-  return stubTicket;
+/**
+ * @returns an error or success message
+ */
+export const deleteTicketBackend = ((deleteTicketRequest, callback) => {
+  logger.info("Enter deleteTicketBackend with request body %j", deleteTicketRequest);
+  Ticket.findOneAndRemove({_id: deleteTicketRequest.ticketId}, (err) => {
+    if (err){
+      logger.error("Error: %j", err);
+      callback(err, null);
+    }
+    let payload = {message: ("Ticket " + deleteTicketRequest.ticketId + " successfully removed")};
+    logger.info("Response payload data: %j", payload);
+    callback(null, payload);
+  });
 });
 
-const addNoteBackend = ((modifyTicketRequest) => {
-  const { ticketId, note } = modifyTicketRequest;
-  return stubTicket;
+/**
+ * @returns the Ticket associated with a specific modifyTicketRequest
+ */
+export const assignApplicantBackend = ((modifyTicketRequest, callback) => {
+  logger.info("Enter assignApplicantBackend with request body %j", modifyTicketRequest);
+  let now = Math.round((new Date()).getTime()/1000);
+  Ticket.findOneAndUpdate({_id: modifyTicketRequest.ticketId}, 
+      {applicantId: modifyTicketRequest.applicantId, lastModified: now}, {new: true}).populate('notes').exec(function(err, ticket) {
+        if (err){
+          logger.error("Error: %j", err);
+          callback(err, null);
+        }
+        logger.info("DB response with data: %j", ticket);
+        let payload = formatTicket(ticket);
+        logger.info("Response payload data: %j", payload);
+        callback(null, payload);
+  });
 });
 
-const updateNoteBackend = ((modifyTicketRequest) => {
-  const { ticketId, noteRequest } = modifyTicketRequest;
-  return stubTicket;
+/**
+ * @returns the Ticket associated with a specific addNoteRequest
+ */
+export const addNoteBackend = ((addNoteRequest, callback) => {
+  logger.info("Enter addNoteBackend with request body %j", addNoteRequest);
+  let now = Math.round((new Date()).getTime()/1000);
+  var newNote = new Note({
+    text: addNoteRequest.text,
+    created: now,
+    lastModified: now,
+    resolved: false
+  });
+  logger.info("Note to be added to Note collection %j", newNote);
+  newNote.save((err, note) => {
+    if (err){
+      logger.error("Error: %j", err);
+      callback(err, null);
+    } else {
+      logger.info("DB response with data: %j", note);
+      Ticket.findOneAndUpdate({_id: addNoteRequest.ticketId}, 
+          {$push: {notes: note._id}, lastModified: now}, {new: true}).populate('notes').exec(function(err, ticket) {
+            if (err){
+              logger.error("Error: %j", err);
+              callback(err, null);
+            }
+            logger.info("DB response with data: %j", ticket);
+            let payload = formatTicket(ticket);
+            logger.info("Response payload data: %j", payload);
+            callback(null, payload);
+      }
+    )};
+  });
 });
 
-const deleteNoteBackend = ((modifyTicketRequest) => {
-  const { ticketId, noteId } = modifyTicketRequest;
-  return stubTicket;
+/**
+ * @returns the Note associated with a specific updateNoteRequest
+ */
+export const updateNoteBackend = ((updateNoteRequest, callback) => {
+  logger.info("Enter updateNoteBackend with request body %j", updateNoteRequest);
+  let now = Math.round((new Date()).getTime()/1000);
+  Note.findOneAndUpdate({_id: updateNoteRequest.noteId}, 
+      {resolved: updateNoteRequest.resolved, lastModified: now}, {new: true}, (err, note) => {
+        if (err){
+          logger.error("Error: %j", err);
+          callback(err, null);
+        }
+        logger.info("DB response with data: %j", note);
+        let payload = formatNote(note);
+        logger.info("Response payload data: %j", payload);
+        callback(null, payload);
+  });
 });
 
+/**
+ * @returns an error or success message
+ */
+export const deleteNoteBackend = ((deleteNoteRequest, callback) => {
+  logger.info("Enter updateNoteBackend with request body %j", deleteNoteRequest);
+  Note.findOneAndRemove({_id: deleteNoteRequest.noteId}, function(err){
+    if (err){
+      logger.error("Error: %j", err);
+      callback(err, null);
+    }
+    let payload = {message: ("Note " + deleteNoteRequest.noteId + " successfully removed")};
+    logger.info("Response payload data: %j", payload);
+    callback(null, payload);
+  });
+});
 
 // gRPC doesn't allow using promises of async/await on the server-side, so callbacks are used
-const getAllTickets = (call, callback) => callback(null, getAllTicketsBackend(call.request));
-const getTicket = (call, callback) => callback(null, getTicketBackend(call.request));
-const createTicket = (call, callback) => callback(null, createTicketBackend(call.request));
-const updateTicket = (call, callback) => callback(null, updateTicketBackend(call.request));
-const assignStudent = (call, callback) => callback(null, assignStudentBackend(call.request));
-const addNote = (call, callback) => callback(null, addNoteBackend(call.request));
-const updateNote = (call, callback) => callback(null, updateNoteBackend(call.request));
-const deleteNote = (call, callback) => callback(null, deleteNoteBackend(call.request));
+const getAllTickets = (call, callback) => getAllTicketsBackend(call.request, callback);
+const getTicket = (call, callback) => getTicketBackend(call.request, callback);
+const createTicket = (call, callback) => createTicketBackend(call.request, callback);
+const updateTicket = (call, callback) => updateTicketBackend(call.request, callback);
+const deleteTicket = (call, callback) => deleteTicketBackend(call.request, callback);
+const assignApplicant = (call, callback) => assignApplicantBackend(call.request, callback);
+const addNote = (call, callback) => addNoteBackend(call.request, callback);
+const updateNote = (call, callback) => updateNoteBackend(call.request, callback);
+const deleteNote = (call, callback) => deleteNoteBackend(call.request, callback);
 
 /**
  * Get a new server with the handler functions in this file bound to the methods
@@ -96,7 +245,8 @@ function getServer() {
     getTicket,
     createTicket,
     updateTicket,
-    assignStudent,
+    deleteTicket,
+    assignApplicant,
     addNote,
     updateNote,
     deleteNote,

@@ -19,22 +19,25 @@ service Javelin {
   // Update a specific ticket to a new state.
   rpc UpdateTicket(ModifyTicketRequest) returns (Ticket) {}
 
+  // Delete a specific ticket
+  rpc DeleteTicket(DeleteTicketRequest) returns (DeleteMessage) {}
+
   // Associate a specific applicant with a Ticket. 
   rpc AssignApplicant(ModifyTicketRequest) returns (Ticket) {}
 
   // Add a Note to a Ticket.
-  rpc AddNote(ModifyTicketRequest) returns (Ticket) {}
+  rpc AddNote(AddNoteRequest) returns (Ticket) {}
 
   // Update an existing Note.
-  rpc UpdateNote(ModifyTicketRequest) returns (Ticket) {}
+  rpc UpdateNote(UpdateNoteRequest) returns (Note) {}
 
   // Delete an existing Note from a Ticket.
-  rpc DeleteNote(ModifyTicketRequest) returns (Ticket) {}
+  rpc DeleteNote(DeleteNoteRequest) returns (DeleteMessage) {}
 }
 
 // Ticket resource.
 message Ticket {
-  int32 ticketId = 1;
+  string ticketId = 1;
   enum State {
     INITIAL = 0;
     GRANTED = 1;
@@ -44,15 +47,24 @@ message Ticket {
     ACCEPTED = 5;
   }
   State state = 2;
-  populous.Applicant applicant = 3;
-  populous.Faculty faculty = 4;
+  string applicantId = 3;
+  string facultyId = 4;
   repeated Note notes = 5;
+  int64 created = 6;
+  int64 lastModified = 7;
 }
 
 // Note resource attached to Ticket.
 message Note {
-  string text = 1;
-  bool resolved = 2;
+  string ticketId = 1;
+  string text = 2;
+  bool resolved = 3;
+  int64 created = 4;
+  int64 lastModified = 5;
+}
+
+message DeleteMessage {
+  string message = 1;
 }
 
 // List used for retrieving all tickets.
@@ -62,29 +74,46 @@ message TicketList {
 
 // Faculty information for creating an initial ticket.
 message CreateTicketRequest {
-  int32 facultyId = 1;
-  int32 allottedTickets = 2;
+  string facultyId = 1;
 }
 
 // Ticket to retrieve.
 message GetTicketRequest {
-  int32 ticketId = 1;
+  string ticketId = 1;
+}
+
+// Ticket to retrieve.
+message DeleteTicketRequest {
+  string ticketId = 1;
+}
+
+// Note to Add
+message AddNoteRequest {
+  string ticketId = 1;
+  string text = 2;
 }
 
 // Request message used specifically for UpdateNote call. 
 message UpdateNoteRequest {
-  int32 noteId = 1;
-  Note note = 2;
+  string ticketId = 1;
+  string noteId = 2;
+  bool resolved = 3;
 } 
+
+// Request message used to delete note
+message DeleteNoteRequest {
+  string ticketId = 1;
+  string noteId = 2;
+}
 
 // ModifyTicketRequest used for all requests related to changing ticket state.
 message ModifyTicketRequest {
-  int32 ticketId = 1;
+  string ticketId = 1;
   oneof change {
     Ticket.State state = 2;
-    populous.Applicant applicant = 3;
+    string applicantId = 3;
     Note note = 4;
     UpdateNoteRequest noteRequest = 5;
-    int32 noteId = 6;
+    string noteId = 6;
   }
 }
