@@ -6,7 +6,7 @@ import logger from "./logger";
 // $FlowFixMe
 import { loadSync } from "protobufjs";
 
-import { SERVICE_NAMES, SERVICE_PORTS } from "../common/config";
+import { SERVICE_NAMES, SERVICE_PORTS, MONGO_CONFIG } from "../common/config";
 import { GAPFApplication } from "./model/gapfApplication";
 import {
   createSubmitGAPFObject,
@@ -46,12 +46,7 @@ type CallbackType = {
 };
 
 // Make initial connection to Mongo Atlas on service startup
-var mongoURI =
-  `mongodb://admin:Y70TcYY3BVVKK7zp@cluster0-shard-00-00-sxvcc.mongodb.` +
-  `net:27017,cluster0-shard-00-01-sxvcc.mongodb.net:27017,cluster0-shard` +
-  `-00-02-sxvcc.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard` +
-  `-0&authSource=admin`;
-mongoose.connect(mongoURI);
+mongoose.connect(MONGO_CONFIG.HOST);
 
 /**
  * Call to Mongo client to store the given GAPF document and return the submitted document.
