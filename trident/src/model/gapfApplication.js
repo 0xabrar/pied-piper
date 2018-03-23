@@ -32,6 +32,10 @@ GAPFApplicationSchema.static("submit", function(gapf, callback) {
   );
 });
 
+GAPFApplicationSchema.static("all", function(callback) {
+  return this.find({}, callback);
+});
+
 const GAPFApplication = mongoose.model(
   "GAPFApplication",
   GAPFApplicationSchema

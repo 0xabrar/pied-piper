@@ -58,15 +58,29 @@ routes.post("/submit", async (request, result) => {
  * their facultyId.
  */
 routes.get("/get/:facultyId", async (request, result) => {
+  logger.info("Received called to /gapf/get/:facultyId endpoint");
   let { facultyId } = request.params;
   facultyId = parseInt(facultyId, 10);
-  const response = await tridentClient.GetGAPF(facultyId);
-  result.json(response);
+  try {
+    const response = await tridentClient.GetGAPF(facultyId);
+    logger.info("Exiting /gapf/get/:facultyId endpoint");
+    result.json(response);
+  } catch (error) {
+    logger.err("Received error from calling Ticket Service: %j", err.message);
+    result.json({});
+  }
 });
 
 routes.get("/all", async (request, result) => {
-  const response = await tridentClient.GetAllGAPF();
-  result.json(response);
+  logger.info("Received call to /gapf/all endpoint");
+  try {
+    const response = await tridentClient.GetAllGAPF();
+    logger.info("Exiting /gapf/all endpoint");
+    result.json(response);
+  } catch (error) {
+    logger.err("Received error from calling Ticket Service: %j", err.message);
+    result.json({});
+  }
 });
 
 export default routes;

@@ -11,7 +11,7 @@ service Trident {
   rpc SubmitGAPF(GAPF) returns (GAPF) {}
 
   // Accept a Faculty and return the GAPF associated with that Faculty.
-  rpc GetGAPF(populous.Faculty) returns (GAPF) {}
+  rpc GetGAPF(GetGAPFRequest) returns (GAPF) {}
 
   // Retrieve a list of all GAPF status.
   rpc GetAllGAPF(Empty) returns (GAPFList) {}
@@ -38,4 +38,8 @@ message Document {
 
 message GAPFList {
   repeated GAPF applications = 1;
+}
+
+message GetGAPFRequest {
+  int32 facultyId = 1;
 }
