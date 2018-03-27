@@ -1,7 +1,7 @@
 import React from "react";
 import PropType from "prop-types";
 import DefaultLayout from "./defaultLayout";
-import Sidebar from "../sidebar";
+import Sidebar from "../../containers/sidebar";
 import { Grid } from "semantic-ui-react";
 
 const DashboardLayout = ({ component: Component, ...rest }) => {

@@ -6,7 +6,7 @@ import { getAllGAPFThunk } from "../actions/thunk/gapf";
 import { getGAPFState } from "../reducers/index";
 
 class GAPFListContainer extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.getAllGAPF();
   }
 
