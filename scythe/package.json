@@ -16,7 +16,6 @@
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-dropzone": "^4.2.9",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -25,8 +24,7 @@
     "redux-thunk": "^2.2.0",
     "sanitize.css": "^5.0.0",
     "semantic-ui-css": "^2.3.0",
-    "semantic-ui-react": "^0.78.3",
-    "superagent": "^3.8.2"
+    "semantic-ui-react": "^0.78.3"
   },
   "scripts": {
     "start": "react-scripts start",
