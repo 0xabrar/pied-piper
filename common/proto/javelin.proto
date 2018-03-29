@@ -7,7 +7,7 @@ package javelin;
 
 // Exported interface for the Javelin service.
 service Javelin {
-  // Retrieve all tickets in the Javelin system. 
+  // Retrieve all tickets in the Javelin system.
   rpc GetAllTickets(Empty) returns (TicketList) {}
 
   // Retrieve a specific ticket based on ticketId.
@@ -22,7 +22,7 @@ service Javelin {
   // Delete a specific ticket
   rpc DeleteTicket(DeleteTicketRequest) returns (DeleteMessage) {}
 
-  // Associate a specific applicant with a Ticket. 
+  // Associate a specific applicant with a Ticket.
   rpc AssignApplicant(ModifyTicketRequest) returns (Ticket) {}
 
   // Add a Note to a Ticket.
@@ -56,11 +56,12 @@ message Ticket {
 
 // Note resource attached to Ticket.
 message Note {
-  string ticketId = 1;
-  string text = 2;
-  bool resolved = 3;
-  int64 created = 4;
-  int64 lastModified = 5;
+  string noteId = 1;
+  string ticketId = 2;
+  string text = 3;
+  bool resolved = 4;
+  int64 created = 5;
+  int64 lastModified = 6;
 }
 
 message DeleteMessage {
@@ -93,12 +94,12 @@ message AddNoteRequest {
   string text = 2;
 }
 
-// Request message used specifically for UpdateNote call. 
+// Request message used specifically for UpdateNote call.
 message UpdateNoteRequest {
   string ticketId = 1;
   string noteId = 2;
   bool resolved = 3;
-} 
+}
 
 // Request message used to delete note
 message DeleteNoteRequest {

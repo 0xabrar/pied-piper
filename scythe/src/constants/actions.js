@@ -4,6 +4,13 @@ export const UPDATE_LINK = "UPDATE_LINK";
 export const UPLOAD_SUCCESS = "UPLOAD_SUCCESS";
 export const UPLOAD_FAIL = "UPLOAD_FAIL";
 
+export const GET_ALL_TICKETS = 'GET_ALL_TICKETS';
+export const ADD_TICKETS = 'ADD_TICKETS';
+export const GET_TICKET = 'GET_TICKET';
+export const UPDATE_TICKET = 'UPDATE_TICKET';
+export const DELETE_TICKET = 'DELETE_TICKET';
+
+
 export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const RESOLVE_NOTE = 'RESOLVE_NOTE';
 export const DISABLE_NOTES = 'DISABLE_NOTES';

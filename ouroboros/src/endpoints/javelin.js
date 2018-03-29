@@ -1,4 +1,5 @@
 import { Router } from "express";
+ import logger from "../logger";
 
 const javelinClient = require("../client/javelin_client");
 
@@ -6,18 +7,25 @@ const routes = Router();
 
 /**
  * GET /tickets
- * 
+ *
  * Gets a list of all tickets
  */
 routes.get('/', async (request, result) => {
-    const response = await javelinClient.GetAllTickets();
-    result.status(200);
-    result.json(response);
+    try{
+      const response = await javelinClient.GetAllTickets();
+      result.status(200);
+      result.json(response)
+    }
+    catch (err){
+      logger.error(`[Ticket Service] ${err.message}`);
+      result.status(400);
+      result.json({error: err.message});
+    }
 });
 
 /**
  * POST /tickets
- * 
+ *
  * Create allottedTickets new tickets in INITIAL state with given facultyId
  */
 routes.post('/', async (request, result) => {
@@ -35,7 +43,7 @@ routes.post('/', async (request, result) => {
 
 /**
  * GET /tickets/:ticketId
- * 
+ *
  * Gets a ticket with ticketId
  */
 routes.get('/:ticketId', async (request, result) => {
@@ -47,7 +55,7 @@ routes.get('/:ticketId', async (request, result) => {
 
 /**
  * PUT /tickets/:ticketId
- * 
+ *
  * Update state, applicant or note of ticket with ticketId
  */
 routes.put('/:ticketId', async (request, result) => {
@@ -86,7 +94,7 @@ routes.put('/:ticketId', async (request, result) => {
 
 /**
  * DELETE /tickets/:ticketId
- * 
+ *
  * Delete ticket with ticketId
  */
 routes.delete('/:ticketId', async (request, result) => {
@@ -99,7 +107,7 @@ routes.delete('/:ticketId', async (request, result) => {
 
 /**
  * PUT /tickets/:ticketId/notes/:noteId
- * 
+ *
  * Modify a note with noteId that belongs to a ticket with ticketId
  */
 routes.put('/:ticketId/notes/:noteId', async (request, result) => {
@@ -117,7 +125,7 @@ routes.put('/:ticketId/notes/:noteId', async (request, result) => {
 
 /**
  * DELETE /tickets/:ticketId/notes/:noteId
- * 
+ *
  * Delete a note with noteId that belongs to a ticket with ticketId
  */
 routes.delete('/:ticketId/notes/:noteId', async (request, result) => {

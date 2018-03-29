@@ -4,9 +4,25 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Table } from "semantic-ui-react";
 
+import { getAllTicketsThunk } from "../actions/thunk/tickets";
+import { getTicketState } from "../reducers/index";
+
 // TODO: this is replaced by code in another branch
 class TicketListContainer extends Component {
+  componentWillMount() {
+    this.props.getAllTickets();
+  }
+
   render() {
+    const tickets = this.props.tickets;
+    const ticketViews = tickets.map((ticket, i) => (
+      <Table.Row>
+        <Table.Cell>{ticket.ticketId}</Table.Cell>
+        <Table.Cell>{ticket.facultyId}</Table.Cell>
+        <Table.Cell>{ticket.applicantId}</Table.Cell>
+        <Table.Cell>{ticket.state}</Table.Cell>
+      </Table.Row>
+    ))
     return (
       <Table celled selectable>
         <Table.Header>
@@ -19,12 +35,7 @@ class TicketListContainer extends Component {
         </Table.Header>
 
         <Table.Body>
-          <Table.Row>
-            <Table.Cell>John</Table.Cell>
-            <Table.Cell>No Action</Table.Cell>
-            <Table.Cell>None</Table.Cell>
-            <Table.Cell>None</Table.Cell>
-          </Table.Row>
+          {ticketViews}
         </Table.Body>
       </Table>
     );
@@ -32,13 +43,14 @@ class TicketListContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  state: state
+  tickets: getTicketState(state)
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      redirectLogin: () => push("/login")
+      redirectLogin: () => push("/login"),
+      getAllTickets: getAllTicketsThunk
     },
     dispatch
   );
