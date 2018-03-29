@@ -69,13 +69,33 @@ const formatApplicant = applicant => {
  * @param faculty Faculty to add
  */
 export const addFacultyBackend = (faculty, callback) => {
-  const facultyDocument = new Faculty(faculty);
-  facultyDocument.save(err => {
-    if (err) {
-      callback(err, null);
+  const { facultyId, personalInfo, department } = faculty;
+  if (
+    personalInfo === "" ||
+    department === "" ||
+    personalInfo.firstName === "" ||
+    personalInfo.lastName === ""
+  ) {
+    logger.error("Invalid request body for addFacultyBackend");
+    callback(
+      {
+        message: "Invalid request body for addFacultyBackend",
+        status: grpc.status.INVALID_ARGUMENT
+      },
+      null
+    );
+  }
+  Faculty.findOneAndUpdate(
+    { facultyId: facultyId },
+    faculty,
+    { upsert: true },
+    err => {
+      if (err) {
+        callback({ message: err }, null);
+      }
+      callback(null, faculty);
     }
-    callback(null, formatFaculty(facultyDocument));
-  });
+  );
 };
 
 /**
@@ -84,7 +104,7 @@ export const addFacultyBackend = (faculty, callback) => {
 export const getFacultyBackend = (facultyRequest, callback) => {
   Faculty.findOne({ facultyId: facultyRequest.facultyId }, (err, faculty) => {
     if (err) {
-      callback(err, null);
+      callback({ message: err }, null);
     }
     callback(null, formatFaculty(faculty));
   });
@@ -96,7 +116,7 @@ export const getFacultyBackend = (facultyRequest, callback) => {
 export const getAllFacultyBackend = (empty, callback) => {
   Faculty.find({}, (err, faculty) => {
     if (err) {
-      callback(err, null);
+      callback({ message: err }, null);
     }
     callback(null, faculty.map(formatFaculty));
   });
@@ -106,13 +126,32 @@ export const getAllFacultyBackend = (empty, callback) => {
  * @param applicant Applicant to add
  */
 export const addApplicantBackend = (applicant, callback) => {
-  const applicantDocument = new Applicant(applicant);
-  applicantDocument.save(err => {
-    if (err) {
-      callback(err, null);
+  const { applicantId, personalInfo } = applicant;
+  if (
+    personalInfo === "" ||
+    personalInfo.firstName === "" ||
+    personalInfo.lastName === ""
+  ) {
+    logger.error("Invalid request body for addApplicantBackend");
+    callback(
+      {
+        message: "Invalid request body for addApplicantBackend",
+        status: grpc.status.INVALID_ARGUMENT
+      },
+      null
+    );
+  }
+  Applicant.findOneAndUpdate(
+    { applicantId: applicantId },
+    applicant,
+    { upsert: true },
+    err => {
+      if (err) {
+        callback({ message: err }, null);
+      }
+      callback(null, applicant);
     }
-    callback(null, formatApplicant(applicantDocument));
-  });
+  );
 };
 
 /**
@@ -123,7 +162,7 @@ export const getApplicantBackend = (applicantRequest, callback) => {
     { applicantId: applicantRequest.applicantId },
     (err, applicant) => {
       if (err) {
-        callback(err, null);
+        callback({ message: err }, null);
       }
       callback(null, formatApplicant(applicant));
     }
@@ -136,7 +175,7 @@ export const getApplicantBackend = (applicantRequest, callback) => {
 export const getAllApplicantsBackend = (empty, callback) => {
   Applicant.find({}, (err, applicants) => {
     if (err) {
-      callback(err, null);
+      callback({ message: err }, null);
     }
     callback(null, applicants.map(formatApplicant));
   });
