@@ -4,24 +4,15 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../constants/users";
 import { approveOfferProposalThunk } from "../actions/thunk/allTickets";
-import {loadTicketsThunk} from "../actions/thunk/allTickets";
+import { loadTicketsThunk } from "../actions/thunk/allTickets";
+import { getUserState } from "../reducers";
 
-//TODO: Move to seperate file
-
-
-class AllTicketsViewContainer extends React.Component{
-  render() {
-    return (
-      <TicketTable />
-    )
-  }
-}
 
 class TicketTable extends React.Component {
   constructor(props) {
     super(props)
-    this.props.USER_TICKET_ACTIONS = {
-      'FACULTY_USER': [
+    this.USER_TICKET_ACTIONS = {
+      'FACULTY': [
         {
           name: 'Assign Applicant',
           action: this.props.assignApplicant
@@ -71,7 +62,7 @@ class TicketTable extends React.Component {
         </Table.Header>
 
         <Table.Body>
-          {this.props.tickets.map((ticket, i) => <TicketTableRow actions={this.props.USER_TICKET_ACTIONS[this.props.userType]} ticket={ticket} />)}
+          {this.props.tickets.map((ticket, i) => <TicketTableRow key={i} actions={this.USER_TICKET_ACTIONS[this.props.userType]} ticket={ticket} />)}
         </Table.Body>
       </Table>
     )
@@ -81,10 +72,10 @@ class TicketTable extends React.Component {
 const TicketTableRow = (props) => {
   return (
     <Table.Row>
-      <Table.Cell>{props.ticket.ticketNumber}</Table.Cell>
+      <Table.Cell>{props.ticket.ticketId}</Table.Cell>
       <Table.Cell>{getTicketApplicantName(props.ticket.applicant)}</Table.Cell>
       <Table.Cell>
-        {props.actions.map((action, i) => <ActionButton name={action.name} func={action.function} ticket={props.ticket}/>)}
+        {props.actions.map((action, i) => <ActionButton key={i} name={action.name} func={action.action} ticket={props.ticket}/>)}
       </Table.Cell>
     </Table.Row>
   )
@@ -96,6 +87,7 @@ class ActionButton extends React.Component{
     this.executeAction = this.executeAction.bind(this)
   }
   executeAction(){
+    console.log(this.props.func)
     this.props.func(this.props.ticket)
   }
   render () {
@@ -114,7 +106,7 @@ const getTicketApplicantName = (app) => {
 
 const mapStateToProps = (state) => ({
   tickets: state.allTickets.tickets,
-  userType: state.user.type
+  userType: getUserState(state).user.type
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(

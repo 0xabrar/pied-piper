@@ -1,5 +1,5 @@
 import {USER_LOGIN, USER_LOGOUT, USER_LOGIN_FAILURE} from '../constants/actions';
-const defaultState={
+const defaultState = {
   token:'',
   user: {
     facultyId: 1,
@@ -8,14 +8,14 @@ const defaultState={
       lastName: 'Simpson',
     },
     department: 'Computer Scienct',
-    type: 'FACULTY',
+    type: 'ASSOCIATE_CHAIR',
     allotedTickets: 5,
     email: 'bartsimpon@net.com',
     password: 'abc'
   }
 };
 
-export default (state=defaultState, action) => {
+const user = (state = defaultState, action) => {
   switch(action.type){
     case USER_LOGIN:
       return {...state,
@@ -35,6 +35,7 @@ export default (state=defaultState, action) => {
       return state;
       
   }
-
 }
+
+export default user
 
