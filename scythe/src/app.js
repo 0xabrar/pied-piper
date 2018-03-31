@@ -5,6 +5,7 @@ import AllTicketsViewContainer from "./containers/allTicketsViewContainer";
 import Login from "./containers/login";
 import DashboardLayout from "./components/layouts/dashboardLayout";
 import TicketViewContainer from "./containers/ticketViewContainer";
+import Upload from "./containers/uploadScreen"
 
 const App = () => (
   <div>
@@ -18,6 +19,8 @@ const App = () => (
       />
       <DashboardLayout path="/applicants" component={TicketListContainer} />
       <DashboardLayout path="/gapf" component={GAPFListContainer} />
+      <DashboardLayout path="/upload" component={Upload} />
+      
     </main>
   </div>
 );
