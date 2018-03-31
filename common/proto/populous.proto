@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "empty.proto";
+
 package populous;
 
 // Exported interface for the Populous service.
@@ -7,22 +9,18 @@ service Populous {
   // Operations for creating, getting, and updating Faculty.
   rpc AddFaculty(Faculty) returns (Faculty) {}
   rpc GetFaculty(GetFacultyRequest) returns (Faculty) {}
-  rpc UpdateFaculty(Faculty) returns (Faculty) {}
+  rpc GetAllFaculty(Empty) returns (FacultyList) {}
 
   // Operations for creating, getting, and updating Applicants.
   rpc AddApplicant(Applicant) returns (Applicant) {}
   rpc GetApplicant(GetApplicantRequest) returns (Applicant) {}
-  rpc UpdateApplicant(Applicant) returns (Applicant) {}
+  rpc GetAllApplicants(Empty) returns (ApplicantList) {}
 }
 
 // Personal information about either an Applicant or Faculty.
 message PersonalInfo {
   string firstName = 1;
   string lastName = 2;
-  string phoneNumber = 3;
-  string email = 4;
-  string streetAddress = 5;
-  string country = 6;
 }
 
 // Information associated with a Faculty.
@@ -30,16 +28,12 @@ message Faculty {
   int32 facultyId = 1;
   PersonalInfo personalInfo = 2;
   string department = 3;
-  int32 allotedTickets = 4;
 }
 
 // Information associated with an Applicant.
 message Applicant {
   int32 applicantId = 1;
   PersonalInfo personalInfo = 2;
-  int32 gpa = 3;
-  map<string, string> researchPapers = 4;
-  map<string, string> recommendations = 5;
 }
 
 // Faculty to retrieve.
@@ -50,4 +44,14 @@ message GetFacultyRequest {
 // Applicant to retrieve.
 message GetApplicantRequest {
   int32 applicantId = 1;
+}
+
+// List of applicants
+message ApplicantList {
+  repeated Applicant applicants = 1;
+}
+
+// List of faculty
+message FacultyList {
+  repeated Faculty faculty = 1;
 }

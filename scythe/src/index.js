@@ -8,6 +8,7 @@ import { Route } from "react-router";
 import store, { history } from "./store";
 import App from './app'
 import dotenv from "dotenv";
+import UploadScreen from "./containers/uploadScreen";
 dotenv.load();
 
 const target = document.querySelector('#root')

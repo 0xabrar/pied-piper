@@ -6,7 +6,7 @@ import logger from "./logger";
 // $FlowFixMe
 import { loadSync } from "protobufjs";
 
-import { SERVICE_NAMES, SERVICE_PORTS } from "../common/config";
+import { SERVICE_NAMES, SERVICE_PORTS, MONGO_CONFIG } from "../common/config";
 import { GAPFApplication } from "./model/gapfApplication";
 import {
   createSubmitGAPFObject,
@@ -46,12 +46,7 @@ type CallbackType = {
 };
 
 // Make initial connection to Mongo Atlas on service startup
-var mongoURI =
-  `mongodb://admin:Y70TcYY3BVVKK7zp@cluster0-shard-00-00-sxvcc.mongodb.` +
-  `net:27017,cluster0-shard-00-01-sxvcc.mongodb.net:27017,cluster0-shard` +
-  `-00-02-sxvcc.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard` +
-  `-0&authSource=admin`;
-mongoose.connect(mongoURI);
+mongoose.connect(MONGO_CONFIG.HOST);
 
 /**
  * Call to Mongo client to store the given GAPF document and return the submitted document.
@@ -91,26 +86,40 @@ export const submitGAPFBackend = async (
  *
  * @param faculty the Faculty to retrieve information for
  */
-const retrieveGAPFInfo = faculty => ({
-  facultyId: faculty.facultyId,
-  budgetRequested: 0,
-  active: true
-});
+const retrieveGAPFInfo = async faculty => {
+  logger.info("Calling retrieveGAPFInfo with faculty: %j", faculty);
+  const { facultyId } = faculty;
+  try {
+    const gapf = await GAPFApplication.findByFacultyId(facultyId);
+    logger.info("DB response with data: %j", gapf);
+    const filteredGAPF = getSubmittedGAPF(gapf);
+    const payload = GAPF.create(filteredGAPF);
+    logger.info("Response payload data: %j", payload);
+    return { error: null, payload: payload };
+  } catch (error) {
+    logger.error("Error: %j", error.message);
+    return { error: error, payload: null };
+  }
+};
 
 /**
  * @returns all stored GAPF documents
  */
 const getAllGAPFStatus = async empty => {
-  const allGAPF = {
-    applications: [
-      {
-        facultyId: 10,
-        status: "SUBMITTED"
-      }
-    ]
-  };
-  const payload = GAPFList.create(allGAPF);
-  return { error: null, payload: payload };
+  logger.info("Calling getAllGAPFStatus endpoint");
+  try {
+    const allGAPF = await GAPFApplication.all();
+    logger.info("DB response with data: %j", allGAPF);
+    const allFilteredGAPF = allGAPF.map(gapf => getSubmittedGAPF(gapf));
+    logger.info("Filtered DB response with data: %j", allFilteredGAPF);
+    // TODO: using protobuf-js conversion fails for some reason. need to check later on
+    // const payload = GAPFList.create(allGAPF);
+    // logger.info("Response payload data: %j", payload);
+    return { error: null, payload: allFilteredGAPF };
+  } catch (error) {
+    logger.error("Error: %j", error.message);
+    return { error: error, payload: null };
+  }
 };
 
 // gRPC doesn't allow using promises of async/await on the server-side, so callbacks are used
@@ -120,8 +129,11 @@ const submitGAPF = (call, callback) => {
   });
 };
 
-const getGAPF = (call, callback) =>
-  callback(null, retrieveGAPFInfo(call.request));
+const getGAPF = (call, callback) => {
+  retrieveGAPFInfo(call.request).then(response => {
+    callback(response.error, response.payload);
+  });
+};
 
 const getAllGAPF = (call, callback) => {
   getAllGAPFStatus(call.request).then(response => {

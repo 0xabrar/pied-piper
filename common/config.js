@@ -29,6 +29,14 @@ const SERVICE_PORTS = {
   [SERVICE_NAMES.JAVELIN]: "50053"
 };
 
+const MONGO_CONFIG = {
+  HOST:
+    `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@` +
+    `cluster0-shard-00-00-sxvcc.mongodb.net:27017,cluster0-shard-00-01-` +
+    `sxvcc.mongodb.net:27017,cluster0-shard-00-02-sxvcc.mongodb.net:27017/` +
+    `test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin`
+};
+
 // If we're running Kubernetes, our host is the service name
 const getServiceHost = service => {
   if (SERVICE_CLUSTER_IP[service]) {
@@ -44,4 +52,5 @@ const getServiceHost = service => {
 
 module.exports.SERVICE_NAMES = SERVICE_NAMES;
 module.exports.SERVICE_PORTS = SERVICE_PORTS;
+module.exports.MONGO_CONFIG = MONGO_CONFIG;
 module.exports.getServiceHost = getServiceHost;

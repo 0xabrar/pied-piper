@@ -19,4 +19,9 @@ spec:
         image: localhost:5000/trident
         ports:
         - containerPort: 50051 
-        imagePullPolicy: IfNotPresent 
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MONGO_USER
+          value: "admin"
+        - name: MONGO_PASS
+          value: "Y70TcYY3BVVKK7zp"

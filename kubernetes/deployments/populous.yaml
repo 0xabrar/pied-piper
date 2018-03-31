@@ -20,3 +20,8 @@ spec:
         ports:
         - containerPort: 50052 
         imagePullPolicy: IfNotPresent
+        env:
+        - name: MONGO_USER
+          value: "admin"
+        - name: MONGO_PASS
+          value: "Y70TcYY3BVVKK7zp"

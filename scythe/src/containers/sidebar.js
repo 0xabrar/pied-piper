@@ -1,14 +1,20 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Menu, Header, Icon } from "semantic-ui-react";
+import { push } from "react-router-redux";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
 const dashboard = "dashboard";
 const tickets = "tickets";
 const applicants = "applicants";
-const notes = "notes";
+const gapf = "gapf";
 
-class Sidebar extends Component {
+class Sidebar extends PureComponent {
   state = { activeItem: "dashboard" };
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name });
+    this.props.viewPage(name);
+  };
 
   render() {
     const { activeItem } = this.state;
@@ -43,16 +49,27 @@ class Sidebar extends Component {
           Applicants
         </Menu.Item>
         <Menu.Item
-          name={notes}
-          active={activeItem === notes}
+          name={gapf}
+          active={activeItem === gapf}
           onClick={this.handleItemClick}
         >
           <Icon name="sticky note" />
-          Your Notes
+          GAPF
         </Menu.Item>
       </Menu>
     );
   }
 }
 
-export default Sidebar;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      redirectLogin: () => push("/login"),
+      viewPage: page => push(`/${page}`)
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
