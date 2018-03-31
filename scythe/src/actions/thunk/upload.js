@@ -1,17 +1,20 @@
 import { uploadSuccess, uploadFail } from "../actionCreator/upload";
 
-export const postFileThunk = file => {
-  return async dispatch => {
-    try {
+export const postFileThunk = file => (dispatch) => {
+  
       //TODO: put the correct endpoint in
-      await fetch(`endpoint`, {
-        method: "POST",
-        body: file
-      });
-      dispatch(uploadSuccess());
-    } catch (error) {
-      console.error(error);
-      dispatch(uploadFail);
-    }
-  };
+    return fetch(`endpoint`, {
+      method: "POST",
+      body: file})
+    .then((response) => {
+      if(response.status == 200){
+        dispatch(uploadSuccess())
+      } else {
+          console.log(response.statusText) 
+          dispatch((uploadFail()))         
+      }
+    }).catch((err) => {
+          console.log(err)
+          dispatch((uploadFail()))
+      })
 };

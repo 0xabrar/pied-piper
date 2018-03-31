@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import LoginForm from "../components/login";
+import { getUserState } from '../reducers/index';
+import { loginThunk } from '../actions/thunk/user';
 
 class Login extends Component {
   constructor(props) {
@@ -11,6 +13,7 @@ class Login extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
+    this.props.login(this.state)
   };
 
   changeEmail = new_email => {
@@ -34,9 +37,11 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  state: state // TODO: should map to something after
+  user: getUserState(state)
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  login: loginThunk,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
