@@ -23,3 +23,4 @@ export const confirmResolveNote = (index, note) => ({
   index,
   note,
 });
+

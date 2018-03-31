@@ -1,4 +1,3 @@
-
 import { enableNotes, disableNotes, confirmAddNote, confirmDeleteNote, confirmResolveNote } from '../../actions/actionCreators/notes';
 import { ouroborosEndpoint } from '../../constants/services';
 import { getResolvedNote } from '../../reducers/notes';

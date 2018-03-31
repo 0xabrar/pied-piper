@@ -4,23 +4,30 @@
         "react"
     ],
     "parserOptions": {
-        "ecmaVersion": 2017,
+        "ecmaVersion": 6,
         "sourceType": "module",
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
-            "jsx": true
+            "jsx": true,
+            "modules": true
         }
     },
     "env": {
         "es6":     true,
         "browser": true,
         "node":    true
-    },   
+    },
     "extends": [
-        "eslint:recommended", 
+        "eslint:recommended",
         "plugin:react/recommended"
-    ],    
+    ],
     "rules": {
         "strict": 0
+    },
+    "settings": {
+        "react": {
+            "pragma": "React",
+            "version": "16.2.0"
+        }
     }
 }
