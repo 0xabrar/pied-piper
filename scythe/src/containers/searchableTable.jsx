@@ -1,11 +1,10 @@
 import React from 'react'
-import { Table, Button, Header } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../constants/users";
-import { approveOfferProposalThunk } from "../actions/thunk/allTickets";
 import { loadTicketsThunk } from "../actions/thunk/allTickets";
 import { getUserState } from "../reducers";
+import TicketTable from './ticketTable'
 
 
 class SearchableTable extends React.Component {

@@ -6,12 +6,13 @@ import Login from "./containers/login";
 import DashboardLayout from "./components/layouts/dashboardLayout";
 import TicketViewContainer from "./containers/ticketViewContainer";
 import Upload from "./containers/uploadScreen"
+import UserDashboard from "./containers/UserDashboard";
 
 const App = () => (
   <div>
     <main>
       <Route path="/login" component={Login} />
-      <DashboardLayout path="/dashboard" component={AllTickets} />
+      <DashboardLayout path="/dashboard" component={UserDashboard} />
       <DashboardLayout exact path="/tickets" component={AllTickets} />
       <DashboardLayout
         path="/tickets/:number"

@@ -25,3 +25,4 @@ export const LOAD_TICKETS = 'LOAD_TICKETS';
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE';
+export const GET_FACULTY_GAPF = 'GET_FACULTY_GAPF';

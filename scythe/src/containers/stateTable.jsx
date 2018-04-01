@@ -6,6 +6,7 @@ import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../c
 import { approveOfferProposalThunk } from "../actions/thunk/allTickets";
 import { loadTicketsThunk } from "../actions/thunk/allTickets";
 import { getUserState } from "../reducers";
+import TicketTable from './ticketTable';
 
 
 class StateTable extends React.Component {

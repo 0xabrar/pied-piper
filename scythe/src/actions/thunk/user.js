@@ -1,7 +1,4 @@
-import{
-  loginSuccess,
-  loginFailure
-} from "../actionCreators/user";
+import{loginSuccess, loginFailure, getFaultyGAPF} from "../actionCreators/user";
 import { ouroborosEndpoint } from "../../constants/services";
 
 export const loginThunk = loginInfo => (dispatch) => {
@@ -17,4 +14,17 @@ export const loginThunk = loginInfo => (dispatch) => {
       console.log(err)
       dispatch(loginFailure())
     })
+}
+
+export const getFacultyGAPFThunk = (facultyId) => dispatch => {
+  return fetch(`${ouroborosEndpoint}/gapf/get/${facultyId}`).then((response) => {
+      if(response.status === 200){
+        dispatch(getFaultyGAPF(response.body))
+      } else {
+        console.log(response.statusText)
+      }
+    }
+  ).catch((err) => {
+    console.log(err)
+  })
 }

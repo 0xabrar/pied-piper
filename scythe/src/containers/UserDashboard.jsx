@@ -1,13 +1,15 @@
 import React from 'react'
-import {approveOfferProposalThunk, loadTicketsThunk} from "../actions/thunk/allTickets";
+import { Header } from 'semantic-ui-react'
 import {getUserState} from "../reducers/index";
-import {ASSOCIATE_CHAIR, BUDGET_DIRECTOR, FACULTY_USER} from "../constants/users";
+import {ASSOCIATE_CHAIR, BUDGET_DIRECTOR, FACULTY_USER, GRAD_STAFF} from "../constants/users";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import AssignedTicketOriginRatio from "../components/StateRatio";
 import {INITIAL_STATE, GRANTED_STATE, REQUESTED_STATE, ACCEPTED_STATE, PENDING_STATE} from "../constants/tickets";
 import StateCount from '../components/StateCount'
 import StateRatio from '../components/StateRatio'
+import StateTable from './stateTable'
+import TicketTable from './ticketTable'
+import {getFacultyGAPFThunk} from "../actions/thunk/user";
 
 const style = {
   rootDiv: {
@@ -18,7 +20,7 @@ const style = {
 
 class UserDashboard extends React.Component{
   render () {
-    switch (props.userType){
+    switch (this.props.user.user.userType){
       case BUDGET_DIRECTOR:
         return (
           <div style={style.rootDiv}>
@@ -30,9 +32,10 @@ class UserDashboard extends React.Component{
         )
 
       case FACULTY_USER:
+        getFacultyGAPFThunk(this.props.user)
         return (
           <div style={style.rootDiv}>
-            <GAPFStatus />
+            <GAPFStatus GAPFStatus={this.props.user.gapf}/>
             <StateTable state={GRANTED_STATE} />
             <StateTable state={REQUESTED_STATE} />
             <StateTable state={ACCEPTED_STATE} />
@@ -42,18 +45,48 @@ class UserDashboard extends React.Component{
       case ASSOCIATE_CHAIR:
         return (
           <div style={style.rootDiv}>
-            <StateTable state={REQUESTED_STATEgit } />
+            <StateTable state={REQUESTED_STATE} />
           </div>
         )
+
+      case GRAD_STAFF:
+        return (
+          <div style={style.rootDiv}>
+            <StateTable state={REQUESTED_STATE}/>
+            <StateTable state={PENDING_STATE}/>
+          </div>
+        )
+      default:
+        return(<Header as='h2'>Error loading dashboard.</Header>)
     }
   }
 }
 
+const GAPFStatus = (props) => {
+  if(Object.keys(props.gapf).length > 0){
+    return (
+      <div>
+        <Header as='h2'>GAPF Status: Completed</Header>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <Header as='h2'>GAPF Status: Incomplete</Header>
+      </div>
+    )
+  }
+
+}
+
 const mapStateToProps = (state) => ({
+  user: getUserState(state),
   tickets: state.tickets.tickets
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getFacultyGAPF: getFacultyGAPFThunk
+}, dispatch);
 
 
 export default connect(
