@@ -2,7 +2,7 @@ import {ouroborosEndpoint} from "../../constants/services";
 import {disableTickets, enableTickets, loadTickets} from "../actionCreators/allTickets";
 
 export const approveOfferProposalThunk = text => (dispatch) => {
-  // TODO: POST the correct data + endpoint
+  // TODO: Is this the correct method for approval etc?
   dispatch(disableTickets());
   return fetch(`${ouroborosEndpoint}/tickets/updateTicket`, { method: 'POST', body: text })
     .then((response) => {
@@ -18,8 +18,9 @@ export const approveOfferProposalThunk = text => (dispatch) => {
     });
 };
 
+
+
 // Fetch all tickets from backend
-// TODO: Add filtering to allow for modularity
 export const loadTicketsThunk = () => (dispatch) => {
   return fetch(`${ouroborosEndpoint}/tickets/allTickets`, { method: 'GET' })
     .then((response) => {

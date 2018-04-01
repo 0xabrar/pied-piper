@@ -1,10 +1,13 @@
 import React from 'react'
-import TicketTable from '../containers/ticketTable'
+import SearchableTable from '../containers/searchableTable'
 
 export default class AllTickets extends React.Component{
   render() {
     return (
-      <TicketTable />
+      <div>
+        <Header as='h2'>All Tickets</Header>
+        <SearchableTable />
+      </div>
     )
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button } from 'semantic-ui-react'
+import { Table, Button, Header } from 'semantic-ui-react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../constants/users";
@@ -11,6 +11,7 @@ import { getUserState } from "../reducers";
 class TicketTable extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {filterStr: ''}
     this.USER_TICKET_ACTIONS = {
       'FACULTY': [
         {
@@ -46,26 +47,27 @@ class TicketTable extends React.Component {
       ]
     }
   }
-  componentDidMount(){
-    // TODO: Uncomment
-    //this.props.loadTickets();
-  }
   render() {
-    return (
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Ticket #</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Actions</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+    if(this.props.tickets){
+      return (
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Ticket #</Table.HeaderCell>
+              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>Actions</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
 
-        <Table.Body>
-          {this.props.tickets.map((ticket, i) => <TicketTableRow key={i} actions={this.USER_TICKET_ACTIONS[this.props.userType]} ticket={ticket} />)}
-        </Table.Body>
-      </Table>
-    )
+          <Table.Body>
+            {this.props.tickets.map((ticket, i) => <TicketTableRow key={i} actions={this.USER_TICKET_ACTIONS[this.props.userType]} ticket={ticket} />)}
+          </Table.Body>
+        </Table>
+      )
+    }
+    else {
+     return <Header as='h2'> No tickets to show.</Header>
+    }
   }
 }
 
@@ -105,13 +107,11 @@ const getTicketApplicantName = (app) => {
 }
 
 const mapStateToProps = (state) => ({
-  tickets: state.allTickets.tickets,
   userType: getUserState(state).user.type
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
-    loadTickets: loadTicketsThunk,
     approveOfferProposal: approveOfferProposalThunk
   }
   , dispatch);

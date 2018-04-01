@@ -4,10 +4,10 @@ import {FACULTY_USER} from "../constants/users";
 const defaultState = {
   tickets: [
     {
-      ticketId: 12345,
+      ticketId: '12345',
       state: 'INITIAL',
-      applicantId: 121212,
-      facultyId: 232323,
+      applicantId: '121212',
+      facultyId: '232323',
       notes: [
         {
           text: 'Hello, world.',
