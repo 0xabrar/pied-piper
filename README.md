@@ -102,7 +102,7 @@ You'll also need to set a `.env` file inside of the `scythe` package.
 
 ```bash
 cd scythe
-touch .env()
+touch .env
 
 # insert into .env file
 REACT_APP_MINIKUBE_IP=<minikube_ip>
