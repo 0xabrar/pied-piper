@@ -7,14 +7,11 @@ package javelin;
 
 // Exported interface for the Javelin service.
 service Javelin {
-  // Retrieve all tickets in the Javelin system.
-  rpc GetAllTickets(Empty) returns (TicketList) {}
-
-  // Retrieve a specific ticket based on ticketId.
-  rpc GetTicket(GetTicketRequest) returns (Ticket) {}
+  // Retrieve a list of specific tickets based on ticketId or applicantId
+  rpc GetTickets(GetTicketRequest) returns (TicketList) {}
 
   // Create a ticket in INITIAL state for a faculty member.
-  rpc CreateTicket(CreateTicketRequest) returns (Ticket) {}
+  rpc CreateTicket(CreateTicketRequest) returns (TicketList) {}
 
   // Update a specific ticket to a new state.
   rpc UpdateTicket(ModifyTicketRequest) returns (Ticket) {}
@@ -76,11 +73,13 @@ message TicketList {
 // Faculty information for creating an initial ticket.
 message CreateTicketRequest {
   string facultyId = 1;
+  int64 allottedTickets = 2;
 }
 
 // Ticket to retrieve.
 message GetTicketRequest {
   string ticketId = 1;
+  string facultyId = 2;
 }
 
 // Ticket to retrieve.

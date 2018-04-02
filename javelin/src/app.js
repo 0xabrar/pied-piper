@@ -36,34 +36,24 @@ const formatTicket = (ticket) => {
 }
 
 /**
- * @returns all Tickets stored in the system
+ * @returns list of tickets that match getTicketRequest's attributes
  */
-export const getAllTicketsBackend = ((empty, callback) => { // eslint-disable-line no-unused-vars
-  logger.info("Enter getAllTicketsBackend");
-  Ticket.find().populate('notes').exec(function(err, tickets) {
+export const getTicketsBackend = ((getTicketRequest, callback) => { // eslint-disable-line no-unused-vars
+  logger.info("Enter getTicketsBackend");
+  let query = {};
+  if (getTicketRequest.ticketId){
+    query._id = getTicketRequest.ticketId;
+  }
+  if (getTicketRequest.facultyId){
+    query.facultyId = getTicketRequest.facultyId;
+  }
+  Ticket.find(query).populate('notes').exec(function(err, tickets) {
     if (err) { 
       logger.error("Error: %j", err);
       callback(err, null);
     }
     logger.info("DB response with data: %j", tickets);
     let payload = tickets.map(formatTicket);
-    logger.info("Response payload data: %j", payload);
-    callback(null, payload);
-  });
-});
-
-/**
- * @returns the Ticket associated with a specific GetTicketRequest
- */
-export const getTicketBackend = ((getTicketRequest, callback) => {
-  logger.info("Enter getTicketBackend with request body %j", getTicketRequest);
-  Ticket.findOne({_id: getTicketRequest.ticketId}).populate('notes').exec(function(err, ticket) {
-    if (err){
-      logger.error("Error: %j", err);
-      callback(err, null);
-    }
-    logger.info("DB response with data: %j", ticket);
-    let payload = formatTicket(ticket);
     logger.info("Response payload data: %j", payload);
     callback(null, payload);
   });
@@ -183,7 +173,7 @@ export const addNoteBackend = ((addNoteRequest, callback) => {
             logger.info("Response payload data: %j", payload);
             callback(null, payload);
       }
-    )};
+    )}
   });
 });
 
@@ -223,8 +213,7 @@ export const deleteNoteBackend = ((deleteNoteRequest, callback) => {
 });
 
 // gRPC doesn't allow using promises of async/await on the server-side, so callbacks are used
-const getAllTickets = (call, callback) => getAllTicketsBackend(call.request, callback);
-const getTicket = (call, callback) => getTicketBackend(call.request, callback);
+const getTickets = (call, callback) => getTicketsBackend(call.request, callback);
 const createTicket = (call, callback) => createTicketBackend(call.request, callback);
 const updateTicket = (call, callback) => updateTicketBackend(call.request, callback);
 const deleteTicket = (call, callback) => deleteTicketBackend(call.request, callback);
@@ -241,8 +230,7 @@ const deleteNote = (call, callback) => deleteNoteBackend(call.request, callback)
 function getServer() {
   const server = new grpc.Server();
   server.addService(javelin.Javelin.service, {
-    getAllTickets,
-    getTicket,
+    getTickets,
     createTicket,
     updateTicket,
     deleteTicket,
