@@ -2,7 +2,7 @@ import React from 'react'
 import { Header } from 'semantic-ui-react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { loadTicketsThunk } from "../actions/thunk/allTickets";
+import { getAllTicketsThunk } from "../actions/thunk/tickets";
 import { getUserState } from "../reducers";
 import TicketTable from './ticketTable'
 
@@ -13,8 +13,8 @@ class SearchableTable extends React.Component {
     this.state = {filterStr: ''}
   }
   componentDidMount(){
-    // TODO: Uncomment
-    //this.props.loadTickets();
+    console.log('Loading tickets...')
+    this.props.loadTickets();
   }
   render() {
     if(this.props.tickets){
@@ -34,20 +34,19 @@ class SearchableTable extends React.Component {
 }
 
 const searchTicket = (ticket, str) => {
-  console.log(ticket)
   return (ticket.ticketId.includes(str)
     || ticket.applicant.lastName.includes(str)
     || ticket.applicant.firstName.includes(str))
 }
 
 const mapStateToProps = (state) => ({
-  tickets: state.allTickets.tickets,
+  tickets: state.tickets,
   userType: getUserState(state).user.type
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
-    loadTickets: loadTicketsThunk,
+    loadTickets: getAllTicketsThunk,
   }
   , dispatch);
 

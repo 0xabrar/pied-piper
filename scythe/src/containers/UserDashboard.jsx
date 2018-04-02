@@ -1,6 +1,6 @@
 import React from 'react'
 import { Header } from 'semantic-ui-react'
-import {getUserState} from "../reducers/index";
+import {getUserState, getTicketState} from "../reducers/index";
 import {ASSOCIATE_CHAIR, BUDGET_DIRECTOR, FACULTY_USER, GRAD_STAFF} from "../constants/users";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -20,7 +20,10 @@ const style = {
 
 class UserDashboard extends React.Component{
   render () {
-    switch (this.props.user.user.userType){
+    if(!this.props.tickets){
+      return(<Header as='h2'>No data available.</Header>)
+    }
+    switch (this.props.user.user.type){
       case BUDGET_DIRECTOR:
         return (
           <div style={style.rootDiv}>
@@ -81,7 +84,7 @@ const GAPFStatus = (props) => {
 
 const mapStateToProps = (state) => ({
   user: getUserState(state),
-  tickets: state.tickets.tickets
+  tickets: getTicketState(state).tickets
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

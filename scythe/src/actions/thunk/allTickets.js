@@ -1,5 +1,6 @@
 import {ouroborosEndpoint} from "../../constants/services";
 import {disableTickets, enableTickets, loadTickets} from "../actionCreators/allTickets";
+import {getAllTicketsThunk} from "./tickets";
 
 export const approveOfferProposalThunk = text => (dispatch) => {
   // TODO: Is this the correct method for approval etc?
@@ -7,7 +8,7 @@ export const approveOfferProposalThunk = text => (dispatch) => {
   return fetch(`${ouroborosEndpoint}/tickets/updateTicket`, { method: 'POST', body: text })
     .then((response) => {
       if (response.status === 200) {
-        loadTicketsThunk();
+        getAllTicketsThunk()
       } else {
         console.log(response.statusText);
       }
@@ -16,20 +17,4 @@ export const approveOfferProposalThunk = text => (dispatch) => {
       console.log(err);
       dispatch(enableTickets());
     });
-};
-
-
-
-// Fetch all tickets from backend
-export const loadTicketsThunk = () => (dispatch) => {
-  return fetch(`${ouroborosEndpoint}/tickets/allTickets`, { method: 'GET' })
-    .then((response) => {
-      if(response.status === 200) {
-        dispatch(loadTickets(response.body))
-      } else {
-        console.log(response.statusText)
-      }
-    }).catch((err) => {
-      console.log(err);
-    })
 };

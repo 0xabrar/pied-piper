@@ -3,8 +3,10 @@ import { ouroborosEndpoint } from "../../constants/services";
 
 export const getAllTicketsThunk = () => async dispatch => {
   try {
+    console.log(`${ouroborosEndpoint}/tickets/`)
     const response = await fetch(`${ouroborosEndpoint}/tickets/`);
     const data = await response.json();
+    console.log('All tickets fetched')
     dispatch(getAllTicketsAction(data.tickets));
   } catch (error) {
     console.log(error);

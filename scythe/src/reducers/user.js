@@ -8,7 +8,7 @@ const defaultState = {
       lastName: 'Simpson',
     },
     department: 'Computer Scienct',
-    type: 'ASSOCIATE_CHAIR',
+    type: 'BUDGET_DIRECTOR',
     allotedTickets: 5,
     email: 'bartsimpon@net.com',
     password: 'abc'

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../constants/users";
 import { approveOfferProposalThunk } from "../actions/thunk/allTickets";
-import { loadTicketsThunk } from "../actions/thunk/allTickets";
+import { getAllTicketsThunk } from "../actions/thunk/tickets.js";
 import { getUserState } from "../reducers";
 import TicketTable from './ticketTable';
 
@@ -44,13 +44,13 @@ const getStateTitle = (state) => {
 }
 
 const mapStateToProps = (state) => ({
-  tickets: state.allTickets.tickets,
+  tickets: state.tickets,
   userType: getUserState(state).user.type
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
-    loadTickets: loadTicketsThunk,
+    loadTickets: getAllTicketsThunk,
   }
   , dispatch);
 
