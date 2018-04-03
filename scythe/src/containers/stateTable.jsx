@@ -7,6 +7,7 @@ import { approveOfferProposalThunk } from "../actions/thunk/allTickets";
 import { getAllTicketsThunk } from "../actions/thunk/tickets.js";
 import { getUserState } from "../reducers";
 import TicketTable from './ticketTable';
+import { stateToTitle } from '../constants/tickets'
 
 
 class StateTable extends React.Component {
@@ -21,7 +22,6 @@ class StateTable extends React.Component {
           <Header as='h2'>{getStateTitle(this.props.state)}</Header>
           <TicketTable tickets={this.props.tickets.filter((ticket) => ticket.state === this.props.state)} />
         </div>
-
       )
     }
     else {
@@ -30,14 +30,7 @@ class StateTable extends React.Component {
   }
 }
 
-const stateToTitle = {
-  INITIAL_STATE: 'Initial Tickets',
-  GRANTED_STATE: 'Granted Tickets',
-  REQUESTED_STATE: 'Requested Tickets',
-  PENDING_STATE: 'Pending Tickets',
-  REFUSED_STATE: 'Refused Tickets',
-  ACCEPTED_STATE: 'Accepted Tickets'
-}
+
 
 const getStateTitle = (state) => {
   return stateToTitle[state];

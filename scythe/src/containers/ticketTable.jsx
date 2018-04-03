@@ -6,6 +6,7 @@ import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../c
 import { approveOfferProposalThunk } from "../actions/thunk/allTickets";
 import { loadTicketsThunk } from "../actions/thunk/allTickets";
 import { getUserState } from "../reducers";
+import {stateToTitle} from "../constants/tickets";
 
 
 class TicketTable extends React.Component {
@@ -54,6 +55,8 @@ class TicketTable extends React.Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Ticket #</Table.HeaderCell>
+              <Table.HeaderCell>Faculty</Table.HeaderCell>
+              <Table.HeaderCell>Applicant</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Actions</Table.HeaderCell>
             </Table.Row>
@@ -75,7 +78,9 @@ const TicketTableRow = (props) => {
   return (
     <Table.Row>
       <Table.Cell>{props.ticket.ticketId}</Table.Cell>
+      <Table.Cell>{getTicketFacultyName(props.ticket.faculty)}</Table.Cell>
       <Table.Cell>{getTicketApplicantName(props.ticket.applicant)}</Table.Cell>
+      <Table.Cell>{stateToTitle[props.ticket.state]}</Table.Cell>
       <Table.Cell>
         {props.actions.map((action, i) => <ActionButton key={i} name={action.name} func={action.action} ticket={props.ticket}/>)}
       </Table.Cell>
@@ -102,6 +107,14 @@ class ActionButton extends React.Component{
 const getTicketApplicantName = (app) => {
   if(app) {
     return app.lastName + ', ' + app.firstName
+  }
+  return 'None'
+}
+
+
+const getTicketFacultyName = (faculty) => {
+  if(faculty) {
+    return faculty.lastName + ', ' + faculty.firstName
   }
   return 'None'
 }
