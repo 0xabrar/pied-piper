@@ -12,12 +12,16 @@ spec:
   template:
     metadata:
       labels:
-        name: ouroboros 
+        name: ouroboros
     spec:
       containers:
-      - name: ouroboros 
+      - name: ouroboros
         image: localhost:5000/ouroboros
         ports:
-        - containerPort: 31000 
+        - containerPort: 31000
         imagePullPolicy: IfNotPresent
-
+        env:
+        - name: MONGO_USER
+          value: "admin"
+        - name: MONGO_PASS
+          value: "Y70TcYY3BVVKK7zp"

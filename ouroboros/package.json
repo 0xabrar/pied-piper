@@ -29,6 +29,8 @@
     "express": "^4.16.2",
     "grpc": "^1.0.0",
     "grpc-promisify": "^0.1.0",
+    "jsonwebtoken": "^8.2.0",
+    "mongoose": "^5.0.9",
     "rimraf": "^2.6.2",
     "winston": "^3.0.0-rc3"
   },

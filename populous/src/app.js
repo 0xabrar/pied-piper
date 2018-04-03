@@ -39,6 +39,7 @@ process.on("SIGINT", () => {
 });
 
 const formatFaculty = faculty => {
+  // create a Faculty object
   if (faculty === null) {
     return {};
   }
@@ -48,7 +49,10 @@ const formatFaculty = faculty => {
       firstName: faculty.personalInfo.firstName,
       lastName: faculty.personalInfo.lastName
     },
-    department: faculty.department
+    department: faculty.department,
+    type: faculty.type,
+    allotedTickets: faculty.allotedTickets,
+    email: faculty.email
   };
 };
 
@@ -69,12 +73,25 @@ const formatApplicant = applicant => {
  * @param faculty Faculty to add
  */
 export const addFacultyBackend = (faculty, callback) => {
-  const { facultyId, personalInfo, department } = faculty;
+  logger.info("Entered addFacultyBackend ${faculty}");
+  // Populate the database with Faculty Users
+  const {
+    facultyId,
+    personalInfo,
+    department,
+    type,
+    allotedTickets,
+    email,
+    password
+  } = faculty;
   if (
     personalInfo === "" ||
     department === "" ||
     personalInfo.firstName === "" ||
-    personalInfo.lastName === ""
+    personalInfo.lastName === "" ||
+    email === "" ||
+    password === "" ||
+    type === ""
   ) {
     logger.error("Invalid request body for addFacultyBackend");
     callback(
@@ -85,6 +102,9 @@ export const addFacultyBackend = (faculty, callback) => {
       null
     );
   }
+  // hash password synchronously
+  //const hash = bcrypt.hashSync(password, 10);
+  //faculty.password = hash;
   Faculty.findOneAndUpdate(
     { facultyId: facultyId },
     faculty,

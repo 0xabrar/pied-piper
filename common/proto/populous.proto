@@ -28,6 +28,10 @@ message Faculty {
   int32 facultyId = 1;
   PersonalInfo personalInfo = 2;
   string department = 3;
+  string type = 4;
+  int32 allotedTickets = 5;
+  string email = 6;
+  string password = 7;
 }
 
 // Information associated with an Applicant.
