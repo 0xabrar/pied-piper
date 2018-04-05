@@ -5,9 +5,9 @@ import {
   GET_FACULTY_GAPF
 } from "../../constants/actions";
 
-export const loginSuccess = (request) => ({
+export const loginSuccess = (payload) => ({
   type: USER_LOGIN,
-  payload: request.decoded
+  payload: payload 
 })
 
 export const logoutUser = () => ({

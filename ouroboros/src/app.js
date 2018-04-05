@@ -16,6 +16,17 @@ const app = express();
 app.disable("x-powered-by");
 logger.info("Starting Ouroboros");
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 mongoose.connect(MONGO_CONFIG.HOST);
 
@@ -92,12 +103,13 @@ app.post("/authenticate", (req, res) => {
 
           // return the information including token as JSON
           res.cookie("auth", token);
+          res.status(200);
           res.json({
             success: true,
             message: "Enjoy your token!",
-            token
+            token,
+            ...payload
           });
-          res.status(200);
         }
       }
     }
@@ -110,15 +122,14 @@ app.post("/logout", (req, res) => {
 
 app.use((req, res, next) => {
   // check header or url parameters or post parameters for token
+  logger.info("Entering authentication header check.");
   var token =
-    req.body.token ||
-    req.query.token ||
-    req.headers["x-access-token"] ||
-    req.cookie.auth;
+    req.body.token || req.query.token || req.headers["x-access-token"];
   if (token) {
     //Decode the token
     jwt.verify(token, "grpc", (err, decod) => {
       if (err) {
+        logger.error("Wrong token %j", err);
         res.status(403).json({
           message: "Wrong Token"
         });
@@ -130,6 +141,7 @@ app.use((req, res, next) => {
       }
     });
   } else {
+    logger.error("No token found");
     res.status(403).json({
       message: "No Token"
     });
