@@ -7,16 +7,19 @@ import { push } from "react-router-redux";
 export const loginThunk = loginInfo => (dispatch) => {
   return fetch(`${ouroborosEndpoint}/authenticate`, {method: 'POST', body: loginInfo })
     .then((response) => {
-  if (response.status === 200){
-    dispatch(loginSuccess(response.body))
-    dispatch(push("tickets"))
-  } else{
-    console.log(response.statusText);
-    dispatch(loginFailure())
-  }
-  }).catch((err) => {
-    console.log(err)
-    dispatch(loginFailure())
+
+      if (response.status === 200){
+        if (response.body.success === false){
+          console.log(response.statusText);
+          dispatch(loginFailure())
+        }
+        dispatch(loginSuccess(response.decoded))
+        dispatch(push("Dashboard"))
+      } else{
+        console.log(response.statusText);
+        dispatch(loginFailure())
+      }
+
   })
 }
 

@@ -1,4 +1,5 @@
 import {USER_LOGIN, USER_LOGOUT, USER_LOGIN_FAILURE} from '../constants/actions';
+import { push } from "react-router-redux";
 const defaultState={
   user: {
     facultyId: 1,
