@@ -6,6 +6,8 @@ import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../c
 import { approveOfferProposalThunk } from "../actions/thunk/allTickets";
 import { loadTicketsThunk } from "../actions/thunk/allTickets";
 import { getUserState } from "../reducers";
+import {push} from 'react-router-redux'
+import { updateSelectedTicket } from "../actions/actionCreators/notes";
 
 
 class TicketTable extends React.Component {
@@ -62,7 +64,11 @@ class TicketTable extends React.Component {
           </Table.Header>
 
           <Table.Body>
-            {this.props.tickets.map((ticket, i) => <TicketTableRow key={i} actions={this.USER_TICKET_ACTIONS[this.props.userType]} ticket={ticket} />)}
+            {this.props.tickets.map((ticket, i) => <TicketTableRow key={i}
+                                                                   actions={this.USER_TICKET_ACTIONS[this.props.userType]}
+                                                                   ticket={ticket}
+                                                                   openTicket={this.props.openTicket}
+                                                                   updateSelectedTicket={this.props.updateSelectedTicket}/>)}
           </Table.Body>
         </Table>
       )
@@ -77,18 +83,28 @@ const stateToText = (st) => {
   return st[0] + st.toLowerCase().substring(1)
 }
 
-const TicketTableRow = (props) => {
-  return (
-    <Table.Row>
-      <Table.Cell>{props.ticket.ticketId}</Table.Cell>
-      <Table.Cell>{getTicketFacultyName(props.ticket.faculty)}</Table.Cell>
-      <Table.Cell>{getTicketApplicantName(props.ticket.applicant)}</Table.Cell>
-      <Table.Cell>{stateToText(props.ticket.state)}</Table.Cell>
-      <Table.Cell>
-        {props.actions.map((action, i) => <ActionButton key={i} name={action.name} func={action.action} ticket={props.ticket}/>)}
-      </Table.Cell>
-    </Table.Row>
-  )
+class TicketTableRow extends React.Component {
+  constructor(props){
+    super(props)
+    this.handleClick = this.handleClick.bind(this)
+  }
+  handleClick (e) {
+    this.props.updateSelectedTicket(this.props.ticket)
+    this.props.openTicket(this.props.ticket.ticketId)
+  }
+  render () {
+    return (
+      <Table.Row>
+        <Table.Cell><Button onClick={this.handleClick}>{this.props.ticket.ticketId}</Button></Table.Cell>
+        <Table.Cell>{getTicketFacultyName(this.props.ticket.faculty)}</Table.Cell>
+        <Table.Cell>{getTicketApplicantName(this.props.ticket.applicant)}</Table.Cell>
+        <Table.Cell>{stateToText(this.props.ticket.state)}</Table.Cell>
+        <Table.Cell>
+          {this.props.actions.map((action, i) => <ActionButton key={i} name={action.name} func={action.action} ticket={this.props.ticket}/>)}
+        </Table.Cell>
+      </Table.Row>
+    )
+  }
 }
 
 class ActionButton extends React.Component{
@@ -128,7 +144,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
-    approveOfferProposal: approveOfferProposalThunk
+    approveOfferProposal: approveOfferProposalThunk,
+    openTicket:  (number) => push("/tickets/" + number),
+    updateSelectedTicket: updateSelectedTicket
   }
   , dispatch);
 

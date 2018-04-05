@@ -35,7 +35,6 @@ class SearchableTable extends React.Component {
 
 const searchTicket = (ticket, str) => {
   let s = str.toLowerCase()
-  console.log(ticket)
   if(ticket.applicant){
     if(ticket.applicant.firstName.toLowerCase().includes(s)
       || ticket.applicant.lastName.toLowerCase().includes(s)
