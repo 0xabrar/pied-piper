@@ -1,5 +1,5 @@
 import {USER_LOGIN, USER_LOGOUT, USER_LOGIN_FAILURE} from '../constants/actions';
-const defaultState={
+/*const defaultState={
   user: {
     facultyId: 1,
     department: 'Computer Science',
@@ -7,7 +7,8 @@ const defaultState={
     email: 'bartsimpon@net.com'
   },
   status: ''
-};
+};*/
+const defaultState = {}
 
 export default (state=defaultState, action) => {
   switch(action.type){
