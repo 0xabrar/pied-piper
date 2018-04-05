@@ -11,6 +11,7 @@ import UserDashboard from "./containers/UserDashboard";
 const App = () => (
   <div>
     <main>
+      <Redirect from="/" to="dashboard" />
       <Route path="/login" component={Login} />
 
       <DashboardLayout path="/dashboard" component={UserDashboard} />
@@ -22,7 +23,6 @@ const App = () => (
       <DashboardLayout path="/applicants" component={AllTickets} />
       <DashboardLayout path="/gapf" component={GAPFListContainer} />
       <DashboardLayout path="/upload" component={Upload} />
-      
     </main>
   </div>
 );
