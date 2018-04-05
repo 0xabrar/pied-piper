@@ -9,3 +9,5 @@ mongoimport --host $HOST --ssl --username $USERNAME --password $PASSWORD --authe
 mongoimport --host $HOST --ssl --username $USERNAME --password $PASSWORD --authenticationDatabase $AUTHDB --db $DB --collection Applicants --drop --type json --file ./APPLICANT_DATA.json
 
 mongoimport --host $HOST --ssl --username $USERNAME --password $PASSWORD --authenticationDatabase $AUTHDB --db $DB --collection Tickets --drop --type json --file ./TICKET_DATA.json
+
+mongoimport --host $HOST --ssl --username $USERNAME --password $PASSWORD --authenticationDatabase $AUTHDB --db $DB --collection GAPFApplications --drop --type json --file ./GAPF_DATA.json
