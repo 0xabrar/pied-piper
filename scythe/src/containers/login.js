@@ -15,7 +15,7 @@ class Login extends Component {
   onFormSubmit = event => {
     event.preventDefault();
     this.props.login(this.state)
-    
+
   };
 
   changeEmail = new_email => {
@@ -29,7 +29,7 @@ class Login extends Component {
 
   showLabel = () => {
     const message = "Login Failed";
-    if (this.props.user.status === false) {
+    if (this.props.status === false) {
       return <Label>{message}</Label>;
     } else {
       return null;

@@ -13,7 +13,7 @@ export const loginThunk = loginInfo => (dispatch) => {
           console.log(response.statusText);
           dispatch(loginFailure())
         }
-        dispatch(loginSuccess(response.decoded))
+        dispatch(loginSuccess(response))
         dispatch(push("Dashboard"))
       } else{
         console.log(response.statusText);
