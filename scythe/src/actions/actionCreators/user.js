@@ -7,7 +7,7 @@ import {
 
 export const loginSuccess = (request) => ({
   type: USER_LOGIN,
-  payload: request
+  payload: request.decoded
 })
 
 export const logoutUser = () => ({

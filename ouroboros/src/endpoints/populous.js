@@ -78,4 +78,53 @@ routes.get("/:userType", async (request, result) => {
   }
 });
 
+routes.post("/faculty/:facultyId/tickets/domestic", async (request, result) => {
+  logger.info(
+    "Received POST call to /faculty/:facultyId/tickets/domestic endpoint"
+  );
+  const { facultyId } = request.params;
+
+  const domesticTicketsRequest = {
+    facultyId: parseInt(facultyId),
+    ...request.body
+  };
+  try {
+    let response = await populousClient.UpdateFacultyDomesticTickets(
+      domesticTicketsRequest
+    );
+    result.status(200);
+    result.json(response);
+  } catch (err) {
+    logger.error(`[User Service] ${err.message}`);
+    result.status(400);
+    result.json({ error: err.message });
+  }
+});
+
+routes.post(
+  "/faculty/:facultyId/tickets/international",
+  async (request, result) => {
+    logger.info(
+      "Received POST call to /faculty/:facultyId/tickets/international endpoint"
+    );
+    const { facultyId } = request.params;
+
+    const domesticTicketsRequest = {
+      facultyId: parseInt(facultyId),
+      ...request.body
+    };
+    try {
+      let response = await populousClient.UpdateFacultyInternationalTickets(
+        domesticTicketsRequest
+      );
+      result.status(200);
+      result.json(response);
+    } catch (err) {
+      logger.error(`[User Service] ${err.message}`);
+      result.status(400);
+      result.json({ error: err.message });
+    }
+  }
+);
+
 export default routes;

@@ -7,7 +7,9 @@ import {
   getAllFacultyBackend,
   getAllApplicantsBackend,
   getFacultyBackend,
-  getApplicantBackend
+  getApplicantBackend,
+  updateFacultyDomesticTicketsBackend,
+  updateFacultyInternationalTicketsBackend
 } from "../app";
 
 describe("endpoints test", () => {
@@ -27,12 +29,18 @@ describe("endpoints test", () => {
         mockingoose.Faculty.toReturn(
           {
             _id: 123,
-            ...facultyRequest
+            ...facultyRequest,
+            domesticTickets: 0,
+            internationalTickets: 0
           },
-          "save"
+          "findOneAndUpdate"
         );
         function callback(err, data) {
-          expect(data).toEqual(facultyRequest);
+          expect(data).toEqual({
+            ...facultyRequest,
+            domesticTickets: 0,
+            internationalTickets: 0
+          });
           done();
         }
         addFacultyBackend(facultyRequest, callback);
@@ -49,12 +57,16 @@ describe("endpoints test", () => {
           {
             facultyId: 1,
             personalInfo: { firstName: "Tim", lastName: "Doe" },
-            department: "math"
+            department: "math",
+            domesticTickets: 3,
+            internationalTickets: 2
           },
           {
             facultyId: 2,
             personalInfo: { firstName: "Jane", lastName: "Jo" },
-            department: "cs"
+            department: "cs",
+            domesticTickets: 5,
+            internationalTickets: 1
           }
         ];
         mockingoose.Faculty.toReturn(facultyList, "find");
@@ -75,14 +87,66 @@ describe("endpoints test", () => {
         const faculty = {
           facultyId: 1,
           personalInfo: { firstName: "Tim", lastName: "Doe" },
-          department: "math"
+          department: "math",
+          domesticTickets: 3,
+          internationalTickets: 2
         };
-        mockingoose.Faculty.toReturn(faculty, "findOne");
+        mockingoose.Faculty.toReturn({ _id: "abc123", ...faculty }, "findOne");
         function callback(err, data) {
           expect(data).toEqual(faculty);
           done();
         }
         getFacultyBackend({}, callback);
+      });
+
+      // it("errors because of malformed request", () => {
+
+      // });
+    });
+
+    describe("updateFacultyDomesticTicketsBackend", () => {
+      it("returns Faculty grPC response given valid request", done => {
+        const faculty = {
+          facultyId: 1,
+          personalInfo: { firstName: "Tim", lastName: "Doe" },
+          department: "math",
+          domesticTickets: 3,
+          internationalTickets: 2
+        };
+        mockingoose.Faculty.toReturn(faculty, "findOneAndUpdate");
+        function callback(err, data) {
+          expect(data).toEqual(faculty);
+          done();
+        }
+        updateFacultyDomesticTicketsBackend(
+          { facultyId: 1, domesticTickets: 3 },
+          callback
+        );
+      });
+
+      // it("errors because of malformed request", () => {
+
+      // });
+    });
+
+    describe("updateFacultyInternationalTicketsBackend", () => {
+      it("returns Faculty grPC response given valid request", done => {
+        const faculty = {
+          facultyId: 1,
+          personalInfo: { firstName: "Tim", lastName: "Doe" },
+          department: "math",
+          domesticTickets: 3,
+          internationalTickets: 5
+        };
+        mockingoose.Faculty.toReturn(faculty, "findOneAndUpdate");
+        function callback(err, data) {
+          expect(data).toEqual(faculty);
+          done();
+        }
+        updateFacultyInternationalTicketsBackend(
+          { facultyId: 1, internationalTickets: 5 },
+          callback
+        );
       });
 
       // it("errors because of malformed request", () => {

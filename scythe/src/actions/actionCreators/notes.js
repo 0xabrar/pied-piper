@@ -4,7 +4,8 @@ import {
   CONFIRM_ADD_NOTE,
   CONFIRM_DELETE_NOTE,
   CONFIRM_RESOLVE_NOTE,
-  UPDATE_SELECTED_TICKET
+  UPDATE_SELECTED_TICKET,
+  CONFIRM_EDIT_NOTE
 } from "../../constants/actions";
 
 export const enableNotes = () => ({
@@ -34,5 +35,12 @@ export const confirmResolveNote = (index, note) => ({
 export const updateSelectedTicket = (ticket) => ({
   type: UPDATE_SELECTED_TICKET,
   ticket
+})
+
+export const confirmEditedNote = (index, note, text) => ({
+  type: CONFIRM_EDIT_NOTE,
+  index,
+  note,
+  text
 })
 

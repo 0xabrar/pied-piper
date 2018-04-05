@@ -2,55 +2,71 @@ import { Router } from "express";
  import logger from "../logger";
 
 const javelinClient = require("../client/javelin_client");
+const populousClient = require("../client/populous_client");
 
 const routes = Router();
+
+const getUserInfo = async (ticket) =>{
+    const facultyObject = await populousClient.GetFaculty({ facultyId: ticket.facultyId });
+    const applicantObject = await populousClient.GetApplicant({ applicantId: ticket.applicantId });
+    return {
+        ticketId: ticket.ticketId,
+        state: ticket.state,
+        type: ticket.type,
+        faculty: facultyObject,
+        applicant: applicantObject,
+        created: ticket.created,
+        lastModified: ticket.lastModified,
+        notes: ticket.notes
+    }
+}
 
 /**
  * GET /tickets
  *
- * Gets a list of all tickets
+ * Gets a list of all tickets that match query params
  */
 routes.get('/', async (request, result) => {
     try{
-      const response = await javelinClient.GetAllTickets();
-      result.status(200);
-      result.json(response)
+        let facultyId = (request.query.facultyId) != null ? parseInt(request.query.facultyId) : -1 ;
+        let getTicketRequest = { ticketId: request.query.ticketId, facultyId: facultyId, type: request.query.type, state: request.query.state };
+        const response = await javelinClient.GetTickets(getTicketRequest);
+        const tickets = await response.tickets.map(getUserInfo);
+        Promise.all(tickets).then(function(results) {
+            result.status(200);
+            result.json({ tickets: results });
+        });
+
     }
     catch (err){
-      logger.error(`[Ticket Service] ${err.message}`);
-      result.status(400);
-      result.json({error: err.message});
+        logger.error(`[Ticket Service] ${err.message}`);
+        result.status(400);
+        result.json({error: err.message});
     }
 });
 
 /**
  * POST /tickets
  *
- * Create allottedTickets new tickets in INITIAL state with given facultyId
+ * Create  new tickets in INITIAL state with given facultyId
  */
 routes.post('/', async (request, result) => {
-    let body = request.body;
-    if (body && body.facultyId && body.allottedTickets){
-        let createTicketRequest = {facultyId: body.facultyId, allottedTickets: body.allottedTickets};
-        const response = await javelinClient.CreateTicket(createTicketRequest);
-        result.status(200);
-        result.json(response);
-    } else{
+    try{
+        let body = request.body;
+        if (body && body.facultyId && body.domestic && body.international){
+            let createTicketRequest = {facultyId: body.facultyId, domesticTickets: body.domestic, internationalTickets: body.international};
+            const response = await javelinClient.CreateTicket(createTicketRequest);
+            result.status(200);
+            result.json(response);
+        } else{
+            result.status(400);
+            result.json({ error: 'Request body is invalid'});
+        }
+    } catch (err){
+        logger.error(`[Ticket Service] ${err.message}`);
         result.status(400);
-        result.json({ error: 'Request body is invalid'});
+        result.json({error: err.message});
     }
-});
-
-/**
- * GET /tickets/:ticketId
- *
- * Gets a ticket with ticketId
- */
-routes.get('/:ticketId', async (request, result) => {
-    let getTicketRequest = {ticketId: request.params.ticketId};
-    const response = await javelinClient.GetTicket(getTicketRequest);
-    result.status(200);
-    result.json(response);
 });
 
 /**
@@ -59,36 +75,42 @@ routes.get('/:ticketId', async (request, result) => {
  * Update state, applicant or note of ticket with ticketId
  */
 routes.put('/:ticketId', async (request, result) => {
-    let body = request.body;
-    if (body){
-        let modifyTicketRequest = {ticketId: request.params.ticketId};
-        if (body.state){
-            modifyTicketRequest.state = body.state;
-            const response = await javelinClient.UpdateTicket(modifyTicketRequest);
-            result.status(200);
-            result.json(response);
-        }
-        else if (body.applicantId){
-            modifyTicketRequest.applicantId = body.applicantId;
-            const response = await javelinClient.AssignApplicant(modifyTicketRequest);
-            result.status(200);
-            result.json(response);
-        }
-        else if (body.note){
-            let addNoteRequest = {
-                ticketId: request.params.ticketId,
-                text: body.note
-            };
-            const response = await javelinClient.AddNote(addNoteRequest);
-            result.status(200);
-            result.json(response);
-        } else {
+    try{
+        let body = request.body;
+        if (body){
+            let modifyTicketRequest = {ticketId: request.params.ticketId};
+            if (body.state){
+                modifyTicketRequest.state = body.state;
+                const response = await javelinClient.UpdateTicket(modifyTicketRequest);
+                result.status(200);
+                result.json(response);
+            }
+            else if (body.applicantId){
+                modifyTicketRequest.applicantId = parseInt(body.applicantId);
+                const response = await javelinClient.AssignApplicant(modifyTicketRequest);
+                result.status(200);
+                result.json(response);
+            }
+            else if (body.note){
+                let addNoteRequest = {
+                    ticketId: request.params.ticketId,
+                    text: body.note
+                };
+                const response = await javelinClient.AddNote(addNoteRequest);
+                result.status(200);
+                result.json(response);
+            } else {
+                result.status(400);
+                result.json({ error: 'Request body is invalid'});
+            }
+        } else{
             result.status(400);
             result.json({ error: 'Request body is invalid'});
         }
-    } else{
+    } catch (err){
+        logger.error(`[Ticket Service] ${err.message}`);
         result.status(400);
-        result.json({ error: 'Request body is invalid'});
+        result.json({error: err.message});
     }
 });
 
@@ -98,11 +120,17 @@ routes.put('/:ticketId', async (request, result) => {
  * Delete ticket with ticketId
  */
 routes.delete('/:ticketId', async (request, result) => {
-    let deleteTicketRequest = {ticketId: request.params.ticketId}
-    console.log(deleteTicketRequest);
-    const response = await javelinClient.DeleteTicket(deleteTicketRequest);
-    result.status(200);
-    result.json(response);
+    try{
+        let deleteTicketRequest = {ticketId: request.params.ticketId}
+        console.log(deleteTicketRequest);
+        const response = await javelinClient.DeleteTicket(deleteTicketRequest);
+        result.status(200);
+        result.json(response);
+    } catch (err){
+        logger.error(`[Ticket Service] ${err.message}`);
+        result.status(400);
+        result.json({error: err.message});
+    }
 });
 
 /**
@@ -111,15 +139,21 @@ routes.delete('/:ticketId', async (request, result) => {
  * Modify a note with noteId that belongs to a ticket with ticketId
  */
 routes.put('/:ticketId/notes/:noteId', async (request, result) => {
-    let body = request.body;
-    if (body && (body.resolved != null)){
-        let updateNoteRequest = {ticketId: request.params.ticketId, noteId: request.params.noteId, resolved: body.resolved};
-        const response = await javelinClient.UpdateNote(updateNoteRequest);
-        result.status(200);
-        result.json(response);
-    } else{
+    try{
+        let body = request.body;
+        if (body && (body.resolved != null)){
+            let updateNoteRequest = {ticketId: request.params.ticketId, noteId: request.params.noteId, resolved: body.resolved};
+            const response = await javelinClient.UpdateNote(updateNoteRequest);
+            result.status(200);
+            result.json(response);
+        } else{
+            result.status(400);
+            result.json({ error: 'Request body is invalid'});
+        }
+    } catch (err){
+        logger.error(`[Ticket Service] ${err.message}`);
         result.status(400);
-        result.json({ error: 'Request body is invalid'});
+        result.json({error: err.message});
     }
 });
 
@@ -129,10 +163,16 @@ routes.put('/:ticketId/notes/:noteId', async (request, result) => {
  * Delete a note with noteId that belongs to a ticket with ticketId
  */
 routes.delete('/:ticketId/notes/:noteId', async (request, result) => {
-    let deleteNoteRequest = {ticketId: request.params.ticketId, noteId: request.params.noteId};
-    const response = await javelinClient.DeleteNote(deleteNoteRequest);
-    result.status(200);
-    result.json(response);
+    try{
+        let deleteNoteRequest = {ticketId: request.params.ticketId, noteId: request.params.noteId};
+        const response = await javelinClient.DeleteNote(deleteNoteRequest);
+        result.status(200);
+        result.json(response);
+    } catch (err){
+        logger.error(`[Ticket Service] ${err.message}`);
+        result.status(400);
+        result.json({error: err.message});
+    }
 });
 
 export default routes;

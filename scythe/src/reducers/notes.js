@@ -5,30 +5,34 @@ import {
   ENABLE_NOTES,
   DISABLE_NOTES,
   CONFIRM_ADD_NOTE,
-  CONFIRM_RESOLVE_NOTE, UPDATE_SELECTED_TICKET
+  CONFIRM_RESOLVE_NOTE,
+  CONFIRM_EDIT_NOTE,
+  UPDATE_SELECTED_TICKET
 } from "../constants/actions";
 
 const defaultState = {
+  ticketNumber: 12345,
+  status: "PENDING",
   applicant: {
     applicantId: 12345,
     personalInfo: {
-      firstName: 'Homer',
-      lastName: 'Simpson',
-      phoneNumber: '6045558008',
-      email: 'homerjsimpson@net.com',
-      streetAddress: '101 Evergreen Teresse',
-      country: 'USA'
+      firstName: "Homer",
+      lastName: "Simpson",
+      phoneNumber: "6045558008",
+      email: "homerjsimpson@net.com",
+      streetAddress: "101 Evergreen Teresse",
+      country: "USA"
     },
-    gpa: 4
+    gpa: 4.0
   },
-  notes: [],
-  UIEnabled: true,
-  ticketId: '5ac30cd80065ed0041f52ed5',
-  state: 'INITIAL',
-  applicantId: '-1',
-  facultyId: '1',
-  created: '1522732249',
-  lastModified: '1522732249'
+  notes: [
+    {
+      text: "Hello, world.",
+      resolved: false,
+      created: new Date().toLocaleString()
+    }
+  ],
+  UIEnabled: true
 };
 
 const selectedTicket = (state = defaultState, action) => {
@@ -68,6 +72,15 @@ const selectedTicket = (state = defaultState, action) => {
       };
     }
 
+    case CONFIRM_EDIT_NOTE: {
+      return {
+        ...state,
+        notes: [
+          ...state.notes.filter((note, i) => i !== action.index),
+          getUpdatedNote(action.text, action.note)
+        ]
+      }
+    }
     case UPDATE_SELECTED_TICKET: {
       return {
         ...state,
@@ -90,5 +103,11 @@ export const getResolvedNote = note => ({
   ...note,
   resolved: true
 });
+
+export const getUpdatedNote = (text, note) => ({
+  ...note,
+  text,
+  lastModified: new Date().toLocaleString()
+})
 
 export default selectedTicket;

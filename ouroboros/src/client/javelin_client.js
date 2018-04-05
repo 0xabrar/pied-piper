@@ -21,13 +21,8 @@ const client = new javelin.Javelin(
 );
 promisify(client);
 
-const getAllTickets = async () => {
-  const response = await client.GetAllTickets({});
-  return response;
-};
-
-const getTicket = async getTicketRequest => {
-  const response = await client.GetTicket(getTicketRequest);
+const getTickets = async getTicketRequest => {
+  const response = await client.GetTickets(getTicketRequest);
   return response;
 };
 
@@ -66,8 +61,7 @@ const deleteNote = async (deleteNoteRequest) => {
   return response;
 };
 
-exports.GetAllTickets = getAllTickets;
-exports.GetTicket = getTicket;
+exports.GetTickets = getTickets;
 exports.CreateTicket = createTicket;
 exports.UpdateTicket = updateTicket;
 exports.DeleteTicket = deleteTicket

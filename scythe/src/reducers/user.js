@@ -1,48 +1,34 @@
-import {USER_LOGIN, USER_LOGOUT, USER_LOGIN_FAILURE, GET_FACULTY_GAPF} from '../constants/actions';
-import {GRAD_STAFF} from "../constants/users";
-const defaultState = {
-  token:'',
+import {USER_LOGIN, USER_LOGOUT, USER_LOGIN_FAILURE} from '../constants/actions';
+const defaultState={
   user: {
     facultyId: 1,
-    personalInfo: {
-      firstName: 'Bart',
-      lastName: 'Simpson',
-    },
-    department: 'Computer Scienct',
-    type: 'GRAD_STAFF',
-    allotedTickets: 5,
-    email: 'bartsimpon@net.com',
-    password: 'abc'
+    department: 'Computer Science',
+    type: 'FACULTY',
+    email: 'bartsimpon@net.com'
   },
-  gapf: {}
+  status: ''
 };
 
-export default (state = defaultState, action) => {
+export default (state=defaultState, action) => {
   switch(action.type){
     case USER_LOGIN:
       return {...state,
-        token: action.token,
-        user: action.user
-      }
-    case USER_LOGOUT:
-      return {
-        token: '',
-        user: {},
-        gapf: {}
-    }
-    case USER_LOGIN_FAILURE:
-      return {
-        ...state
-      }
-    case GET_FACULTY_GAPF:
-      return {
-        ...state,
-        gapf: action.gapf
-      }
-    default:
-      return state;
-      
+        user: action.payload,
+      status: true
   }
+case USER_LOGOUT:
+    return {...state,
+      token: '',
+    user: {},
+  status: ''
+}
+case USER_LOGIN_FAILURE:
+    return {
+      ...state,
+      status: false
+}
+default:
+  return state;
 }
 
-
+}

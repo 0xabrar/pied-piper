@@ -15,7 +15,7 @@ var Faculty = new Schema({
   email: { type: String, index: true },
   password: String,
   internationalTickets: { type: Number, default: 0 },
-  domesticTickets: { type: Number, default: 0 }
+  domesticTickets: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model("Faculty", Faculty, "Faculty");

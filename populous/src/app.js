@@ -39,6 +39,7 @@ process.on("SIGINT", () => {
 });
 
 const formatFaculty = faculty => {
+  // create a Faculty object
   if (faculty === null) {
     return {};
   }
@@ -48,7 +49,11 @@ const formatFaculty = faculty => {
       firstName: faculty.personalInfo.firstName,
       lastName: faculty.personalInfo.lastName
     },
-    department: faculty.department
+    department: faculty.department,
+    domesticTickets: faculty.domesticTickets,
+    internationalTickets: faculty.internationalTickets,
+    type: faculty.type,
+    email: faculty.email
   };
 };
 
@@ -69,12 +74,24 @@ const formatApplicant = applicant => {
  * @param faculty Faculty to add
  */
 export const addFacultyBackend = (faculty, callback) => {
-  const { facultyId, personalInfo, department } = faculty;
+  logger.info("Entered addFacultyBackend ${faculty}");
+  // Populate the database with Faculty Users
+  const {
+    facultyId,
+    personalInfo,
+    department,
+    type,
+    email,
+    password
+  } = faculty;
   if (
     personalInfo === "" ||
     department === "" ||
     personalInfo.firstName === "" ||
-    personalInfo.lastName === ""
+    personalInfo.lastName === "" ||
+    email === "" ||
+    password === "" ||
+    type === ""
   ) {
     logger.error("Invalid request body for addFacultyBackend");
     callback(
@@ -85,15 +102,18 @@ export const addFacultyBackend = (faculty, callback) => {
       null
     );
   }
+  // hash password synchronously
+  //const hash = bcrypt.hashSync(password, 10);
+  //faculty.password = hash;
   Faculty.findOneAndUpdate(
     { facultyId: facultyId },
     faculty,
-    { upsert: true },
-    err => {
+    { upsert: true, new: true },
+    (err, facultyDoc) => {
       if (err) {
         callback({ message: err }, null);
       }
-      callback(null, faculty);
+      callback(null, formatFaculty(facultyDoc));
     }
   );
 };
@@ -123,6 +143,49 @@ export const getAllFacultyBackend = (empty, callback) => {
 };
 
 /**
+ * @param domesticTicketsRequest Tickets to update for given Faculty
+ */
+export const updateFacultyDomesticTicketsBackend = (
+  ticketRequest,
+  callback
+) => {
+  const { facultyId, domesticTickets } = ticketRequest;
+  Faculty.findOneAndUpdate(
+    { facultyId: facultyId },
+    { $set: { domesticTickets: domesticTickets } },
+    { new: true },
+    (err, faculty) => {
+      if (err) {
+        callback({ message: err }, null);
+      }
+      logger.info(faculty);
+      callback(null, formatFaculty(faculty));
+    }
+  );
+};
+
+/**
+ * @param internationalTicketsRequest Tickets to update for given Faculty
+ */
+export const updateFacultyInternationalTicketsBackend = (
+  ticketRequest,
+  callback
+) => {
+  const { facultyId, internationalTickets } = ticketRequest;
+  Faculty.findOneAndUpdate(
+    { facultyId: facultyId },
+    { $set: { internationalTickets: internationalTickets } },
+    { new: true },
+    (err, faculty) => {
+      if (err) {
+        callback({ message: err }, null);
+      }
+      callback(null, formatFaculty(faculty));
+    }
+  );
+};
+
+/**
  * @param applicant Applicant to add
  */
 export const addApplicantBackend = (applicant, callback) => {
@@ -144,7 +207,7 @@ export const addApplicantBackend = (applicant, callback) => {
   Applicant.findOneAndUpdate(
     { applicantId: applicantId },
     applicant,
-    { upsert: true },
+    { upsert: true, new: true },
     err => {
       if (err) {
         callback({ message: err }, null);
@@ -188,6 +251,10 @@ const getFaculty = (call, callback) =>
   getFacultyBackend(call.request, callback);
 const getAllFaculty = (call, callback) =>
   getAllFacultyBackend(call.request, callback);
+const updateFacultyDomesticTickets = (call, callback) =>
+  updateFacultyDomesticTicketsBackend(call.request, callback);
+const updateFacultyInternationalTickets = (call, callback) =>
+  updateFacultyInternationalTicketsBackend(call.request, callback);
 
 const addApplicant = (call, callback) =>
   addApplicantBackend(call.request, callback);
@@ -207,6 +274,8 @@ function getServer() {
     addFaculty,
     getFaculty,
     getAllFaculty,
+    updateFacultyDomesticTickets,
+    updateFacultyInternationalTickets,
 
     addApplicant,
     getApplicant,

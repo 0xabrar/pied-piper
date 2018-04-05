@@ -6,6 +6,6 @@ COPY scythe/package*.json ./
 RUN npm install
 
 COPY scythe .
-COPY common src/common/
+COPY src/common src/common/
 
 CMD ["npm", "start", "-s"]

@@ -9,8 +9,12 @@ var Ticket = new Schema({
         type: String,
         enum: ['INITIAL', 'GRANTED', 'REQUESTED', 'PENDING', 'REFUSED', 'ACCEPTED']
     },
-    applicantId: String,
-    facultyId: String,
+    type: {
+        type: String,
+        enum: ['DOMESTIC', 'INTERNATIONAL']
+    },
+    applicantId: Number,
+    facultyId: Number,
     created: Date,
     lastModified: Date,
     notes: [{ type: Schema.ObjectId, ref: 'Note' }]
