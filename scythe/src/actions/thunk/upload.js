@@ -1,9 +1,10 @@
 import { uploadSuccess, uploadFail } from "../actionCreator/upload";
+import {ouroborosEndpoint} from "../../constants/services";
 
 export const postFileThunk = file => (dispatch) => {
   
       //TODO: put the correct endpoint in
-    return fetch(`endpoint`, {
+    return fetch(`${ouroborosEndpoint}/gapf/submit`, {
       method: "POST",
       body: file})
     .then((response) => {
