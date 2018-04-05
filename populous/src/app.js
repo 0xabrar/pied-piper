@@ -50,8 +50,9 @@ const formatFaculty = faculty => {
       lastName: faculty.personalInfo.lastName
     },
     department: faculty.department,
+    domesticTickets: faculty.domesticTickets,
+    internationalTickets: faculty.internationalTickets,
     type: faculty.type,
-    allotedTickets: faculty.allotedTickets,
     email: faculty.email
   };
 };
@@ -80,7 +81,6 @@ export const addFacultyBackend = (faculty, callback) => {
     personalInfo,
     department,
     type,
-    allotedTickets,
     email,
     password
   } = faculty;
@@ -108,12 +108,12 @@ export const addFacultyBackend = (faculty, callback) => {
   Faculty.findOneAndUpdate(
     { facultyId: facultyId },
     faculty,
-    { upsert: true },
-    err => {
+    { upsert: true, new: true },
+    (err, facultyDoc) => {
       if (err) {
         callback({ message: err }, null);
       }
-      callback(null, faculty);
+      callback(null, formatFaculty(facultyDoc));
     }
   );
 };
@@ -143,6 +143,49 @@ export const getAllFacultyBackend = (empty, callback) => {
 };
 
 /**
+ * @param domesticTicketsRequest Tickets to update for given Faculty
+ */
+export const updateFacultyDomesticTicketsBackend = (
+  ticketRequest,
+  callback
+) => {
+  const { facultyId, domesticTickets } = ticketRequest;
+  Faculty.findOneAndUpdate(
+    { facultyId: facultyId },
+    { $set: { domesticTickets: domesticTickets } },
+    { new: true },
+    (err, faculty) => {
+      if (err) {
+        callback({ message: err }, null);
+      }
+      logger.info(faculty);
+      callback(null, formatFaculty(faculty));
+    }
+  );
+};
+
+/**
+ * @param internationalTicketsRequest Tickets to update for given Faculty
+ */
+export const updateFacultyInternationalTicketsBackend = (
+  ticketRequest,
+  callback
+) => {
+  const { facultyId, internationalTickets } = ticketRequest;
+  Faculty.findOneAndUpdate(
+    { facultyId: facultyId },
+    { $set: { internationalTickets: internationalTickets } },
+    { new: true },
+    (err, faculty) => {
+      if (err) {
+        callback({ message: err }, null);
+      }
+      callback(null, formatFaculty(faculty));
+    }
+  );
+};
+
+/**
  * @param applicant Applicant to add
  */
 export const addApplicantBackend = (applicant, callback) => {
@@ -164,7 +207,7 @@ export const addApplicantBackend = (applicant, callback) => {
   Applicant.findOneAndUpdate(
     { applicantId: applicantId },
     applicant,
-    { upsert: true },
+    { upsert: true, new: true },
     err => {
       if (err) {
         callback({ message: err }, null);
@@ -208,6 +251,10 @@ const getFaculty = (call, callback) =>
   getFacultyBackend(call.request, callback);
 const getAllFaculty = (call, callback) =>
   getAllFacultyBackend(call.request, callback);
+const updateFacultyDomesticTickets = (call, callback) =>
+  updateFacultyDomesticTicketsBackend(call.request, callback);
+const updateFacultyInternationalTickets = (call, callback) =>
+  updateFacultyInternationalTicketsBackend(call.request, callback);
 
 const addApplicant = (call, callback) =>
   addApplicantBackend(call.request, callback);
@@ -227,6 +274,8 @@ function getServer() {
     addFaculty,
     getFaculty,
     getAllFaculty,
+    updateFacultyDomesticTickets,
+    updateFacultyInternationalTickets,
 
     addApplicant,
     getApplicant,

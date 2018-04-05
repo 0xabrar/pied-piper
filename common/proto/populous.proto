@@ -7,9 +7,11 @@ package populous;
 // Exported interface for the Populous service.
 service Populous {
   // Operations for creating, getting, and updating Faculty.
-  rpc AddFaculty(Faculty) returns (Faculty) {}
+  rpc AddFaculty(FacultyCreation) returns (Faculty) {}
   rpc GetFaculty(GetFacultyRequest) returns (Faculty) {}
   rpc GetAllFaculty(Empty) returns (FacultyList) {}
+  rpc UpdateFacultyDomesticTickets(DomesticTicketsRequest) returns (Faculty) {}
+  rpc UpdateFacultyInternationalTickets(InternationalTicketsRequest) returns (Faculty) {}
 
   // Operations for creating, getting, and updating Applicants.
   rpc AddApplicant(Applicant) returns (Applicant) {}
@@ -23,15 +25,37 @@ message PersonalInfo {
   string lastName = 2;
 }
 
-// Information associated with a Faculty.
+// Information associated with a Faculty response
 message Faculty {
   int32 facultyId = 1;
   PersonalInfo personalInfo = 2;
   string department = 3;
   string type = 4;
-  int32 allotedTickets = 5;
-  string email = 6;
-  string password = 7;
+  string email = 5;
+  int32 domesticTickets = 6;
+  int32 internationalTickets = 7;
+}
+
+// Information associated with creating a Faculty
+message FacultyCreation {
+  int32 facultyId = 1;
+  PersonalInfo personalInfo = 2;
+  string department = 3;
+  string type = 4;
+  string email = 5;
+  string password = 6;
+}
+
+// Information associated with domestic ticket allocation for Faculty
+message DomesticTicketsRequest {
+  int32 facultyId = 1;
+  int32 domesticTickets = 2;
+}
+
+// Information associated with international ticket allocation for Faculty
+message InternationalTicketsRequest {
+  int32 facultyId = 1;
+  int32 internationalTickets = 2;
 }
 
 // Information associated with an Applicant.

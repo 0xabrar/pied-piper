@@ -12,9 +12,10 @@ var Faculty = new Schema({
   },
   department: String,
   type: String,
-  allotedTickets: Number,
   email: { type: String, index: true },
-  password: String
+  password: String,
+  internationalTickets: { type: Number, default: 0 },
+  domesticTickets: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model("Faculty", Faculty, "Faculty");

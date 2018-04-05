@@ -27,6 +27,7 @@ const formatTicket = (ticket) => {
   return {
     ticketId: ticket._id.toString(),
     state: ticket.state,
+    type: ticket.type,
     facultyId: ticket.facultyId,
     applicantId: ticket.applicantId,
     created: ticket.created.getTime(),
@@ -39,13 +40,19 @@ const formatTicket = (ticket) => {
  * @returns list of tickets that match getTicketRequest's attributes
  */
 export const getTicketsBackend = ((getTicketRequest, callback) => { // eslint-disable-line no-unused-vars
-  logger.info("Enter getTicketsBackend");
+  logger.info("Enter getTicketsBackend with query params %j", getTicketRequest);
   let query = {};
   if (getTicketRequest.ticketId){
     query._id = getTicketRequest.ticketId;
   }
-  if (getTicketRequest.facultyId){
+  if (getTicketRequest.facultyId >= 0){
     query.facultyId = getTicketRequest.facultyId;
+  }
+  if (getTicketRequest.state){
+    query.state = getTicketRequest.state;
+  }
+  if (getTicketRequest.type){
+    query.type = getTicketRequest.type;
   }
   Ticket.find(query).populate('notes').exec(function(err, tickets) {
     if (err) { 
@@ -66,11 +73,23 @@ export const createTicketBackend = ((createTicketRequest, callback) => {
   logger.info("Enter createTicketBackend with request body %j", createTicketRequest);
   let now = Math.round((new Date()).getTime()/1000);
   let tickets = [];
-  for (let i = 0; i < createTicketRequest.allottedTickets; i++){
+  for (let i = 0; i < createTicketRequest.domesticTickets; i++){
     tickets.push(new Ticket({
       state: 'INITIAL',
+      type: 'DOMESTIC',
       facultyId: createTicketRequest.facultyId,
-      applicantId: "",
+      applicantId: -1,
+      created: now,
+      lastModified: now,
+      notes: []
+    }));
+  }
+  for (let i = 0; i < createTicketRequest.internationalTickets; i++){
+    tickets.push(new Ticket({
+      state: 'INITIAL',
+      type: 'INTERNATIONAL',
+      facultyId: createTicketRequest.facultyId,
+      applicantId: -1,
       created: now,
       lastModified: now,
       notes: []

@@ -39,6 +39,18 @@ const getAllFaculty = async () => {
   return response;
 };
 
+const updateFacultyDomesticTickets = async domesticTicketsRequest => {
+  const response = client.UpdateFacultyDomesticTickets(domesticTicketsRequest);
+  return response;
+};
+
+const updateFacultyInternationalTickets = async internationalTicketsRequest => {
+  const response = client.UpdateFacultyInternationalTickets(
+    internationalTicketsRequest
+  );
+  return response;
+};
+
 const addApplicant = async applicant => {
   const response = client.AddApplicant(applicant);
   return response;
@@ -57,6 +69,8 @@ const getAllApplicants = async () => {
 exports.AddFaculty = addFaculty;
 exports.GetFaculty = getFaculty;
 exports.GetAllFaculty = getAllFaculty;
+exports.UpdateFacultyDomesticTickets = updateFacultyDomesticTickets;
+exports.UpdateFacultyInternationalTickets = updateFacultyInternationalTickets;
 
 exports.AddApplicant = addApplicant;
 exports.GetApplicant = getApplicant;

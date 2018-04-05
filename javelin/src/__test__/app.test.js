@@ -18,7 +18,7 @@ describe("endpoints test", () => {
   describe("ticket endpoints", () => {
     // Get ticket by ticketId
     describe("getTicketsBackend", () => {
-      it("returns TicketList grPC response with matching ticketId", done => {
+      it("returns TicketList grPC response with filter by ticketId", done => {
         let now = Math.round((new Date()).getTime()/1000);
         const getTicketRequest = {
           ticketId: "5aacca76da666f0038139694"
@@ -28,8 +28,9 @@ describe("endpoints test", () => {
             _id: ObjectId("5aacca76da666f0038139694"),
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "5",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: 5,
             created: now,
             lastModified: now
           },
@@ -39,8 +40,9 @@ describe("endpoints test", () => {
             ticketId: "5aacca76da666f0038139694",
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "5",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: 5,
             created: now,
             lastModified: now
           },           
@@ -53,18 +55,19 @@ describe("endpoints test", () => {
         getTicketsBackend(getTicketRequest, callback);
       });
 
-      it("returns TicketList grPC response with matching facultyId", done => {
+      it("returns TicketList grPC response with filter by facultyId", done => {
         let now = Math.round((new Date()).getTime()/1000);
         const getTicketRequest = {
-          facultytId: "2"
+          facultytId: 2
         }
         const mockData = [          
           {   
             _id: ObjectId("5aacca76da666f0038139694"),
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "5",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: 5,
             created: now,
             lastModified: now
           },
@@ -72,8 +75,9 @@ describe("endpoints test", () => {
             _id: ObjectId("5ab0bb8362ad170044122ca1"),
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: -1,
             created: now,
             lastModified: now
           }
@@ -83,8 +87,9 @@ describe("endpoints test", () => {
             ticketId: "5aacca76da666f0038139694",
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "5",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: 5,
             created: now,
             lastModified: now
           },
@@ -92,8 +97,9 @@ describe("endpoints test", () => {
             ticketId: "5ab0bb8362ad170044122ca1",
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: -1,
             created: now,
             lastModified: now
           }       
@@ -106,27 +112,19 @@ describe("endpoints test", () => {
         getTicketsBackend(getTicketRequest, callback);
       });
 
-      it("returns TicketList grPC response with all tickets", done => {
+      it("returns TicketList grPC response with filter by state", done => {
         let now = Math.round((new Date()).getTime()/1000);
         const getTicketRequest = {
-          facultytId: "2"
+          state: "GRANTED"
         }
-        const mockData = [
-          {
-            _id: ObjectId("5aacc08313fc8b00371ae110"),
-            notes: [],
-            state: "INITIAL",
-            facultyId: "1",
-            applicantId: "",
-            created: now,
-            lastModified: now
-          },           
+        const mockData = [        
           {   
             _id: ObjectId("5aacca76da666f0038139694"),
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "5",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: 5,
             created: now,
             lastModified: now
           },
@@ -134,8 +132,133 @@ describe("endpoints test", () => {
             _id: ObjectId("5ab0bb8362ad170044122ca1"),
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: -1,
+            created: now,
+            lastModified: now
+          }
+        ];
+        const expected = [
+          {   
+            ticketId: "5aacca76da666f0038139694",
+            notes: [],
+            state: "GRANTED",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: 5,
+            created: now,
+            lastModified: now
+          },
+          {
+            ticketId: "5ab0bb8362ad170044122ca1",
+            notes: [],
+            state: "GRANTED",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: -1,
+            created: now,
+            lastModified: now
+          }   
+      ];
+        mockingoose.Ticket.toReturn(mockData, "find");
+        function callback(err, data) {
+          expect(data).toEqual(expected);
+          done();
+        }
+        getTicketsBackend(getTicketRequest, callback);
+      });
+
+      it("returns TicketList grPC response with filter by type", done => {
+        let now = Math.round((new Date()).getTime()/1000);
+        const getTicketRequest = {
+          type: "INTERNATIONAL"
+        }
+        const mockData = [
+          {
+            _id: ObjectId("5aacc08313fc8b00371ae110"),
+            notes: [],
+            state: "INITIAL",
+            type: "INTERNATIONAL",
+            facultyId: 1,
+            applicantId: -1,
+            created: now,
+            lastModified: now
+          },           
+          {   
+            _id: ObjectId("5aacca76da666f0038139694"),
+            notes: [],
+            state: "GRANTED",
+            type: "INTERNATIONAL",
+            facultyId: 2,
+            applicantId: 5,
+            created: now,
+            lastModified: now
+          },
+        ];
+        const expected = [
+          {
+            ticketId: "5aacc08313fc8b00371ae110",
+            notes: [],
+            state: "INITIAL",
+            type: "INTERNATIONAL",
+            facultyId: 1,
+            applicantId: -1,
+            created: now,
+            lastModified: now
+          },           
+          {   
+            ticketId: "5aacca76da666f0038139694",
+            notes: [],
+            state: "GRANTED",
+            type: "INTERNATIONAL",
+            facultyId: 2,
+            applicantId: 5,
+            created: now,
+            lastModified: now
+          },
+      ];
+        mockingoose.Ticket.toReturn(mockData, "find");
+        function callback(err, data) {
+          expect(data).toEqual(expected);
+          done();
+        }
+        getTicketsBackend(getTicketRequest, callback);
+      });
+
+      it("returns TicketList grPC response with all tickets", done => {
+        let now = Math.round((new Date()).getTime()/1000);
+        const getTicketRequest = {
+          facultytId: 2
+        }
+        const mockData = [
+          {
+            _id: ObjectId("5aacc08313fc8b00371ae110"),
+            notes: [],
+            state: "INITIAL",
+            type: "DOMESTIC",
+            facultyId: 1,
+            applicantId: -1,
+            created: now,
+            lastModified: now
+          },           
+          {   
+            _id: ObjectId("5aacca76da666f0038139694"),
+            notes: [],
+            state: "GRANTED",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: 5,
+            created: now,
+            lastModified: now
+          },
+          {
+            _id: ObjectId("5ab0bb8362ad170044122ca1"),
+            notes: [],
+            state: "GRANTED",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: -1,
             created: now,
             lastModified: now
           }
@@ -145,8 +268,9 @@ describe("endpoints test", () => {
             ticketId: "5aacc08313fc8b00371ae110",
             notes: [],
             state: "INITIAL",
-            facultyId: "1",
-            applicantId: "",
+            type: "DOMESTIC",
+            facultyId: 1,
+            applicantId: -1,
             created: now,
             lastModified: now
           },       
@@ -154,8 +278,9 @@ describe("endpoints test", () => {
             ticketId: "5aacca76da666f0038139694",
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "5",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: 5,
             created: now,
             lastModified: now
           },
@@ -163,8 +288,9 @@ describe("endpoints test", () => {
             ticketId: "5ab0bb8362ad170044122ca1",
             notes: [],
             state: "GRANTED",
-            facultyId: "2",
-            applicantId: "",
+            type: "DOMESTIC",
+            facultyId: 2,
+            applicantId: -1,
             created: now,
             lastModified: now
           }       
@@ -229,8 +355,8 @@ describe("endpoints test", () => {
           _id: ObjectId("5aacca76da666f0038139694"),
           notes: [],
           state: updateTicketRequest.state,
-          facultyId: "2",
-          applicantId: "",
+          facultyId: 2,
+          applicantId: -1,
           created: now,
           lastModified: now
         };
@@ -238,8 +364,8 @@ describe("endpoints test", () => {
           ticketId: "5aacca76da666f0038139694",
           notes: [],
           state: updateTicketRequest.state,
-          facultyId: "2",
-          applicantId: "",
+          facultyId: 2,
+          applicantId: -1,
           created: now,
           lastModified: now
         };
@@ -280,8 +406,9 @@ describe("endpoints test", () => {
             lastModified: now
           })],
           state: addNoteRequest.state,
-          facultyId: "2",
-          applicantId: "",
+          type: "DOMESTIC",
+          facultyId: 2,
+          applicantId: -1,
           created: now,
           lastModified: now
         };
@@ -295,8 +422,9 @@ describe("endpoints test", () => {
             lastModified: now
           }],
           state: addNoteRequest.state,
-          facultyId: "2",
-          applicantId: "",
+          type: "DOMESTIC",
+          facultyId: 2,
+          applicantId: -1,
           created: now,
           lastModified: now
         };

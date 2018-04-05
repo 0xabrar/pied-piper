@@ -2,8 +2,24 @@ import { Router } from "express";
  import logger from "../logger";
 
 const javelinClient = require("../client/javelin_client");
+const populousClient = require("../client/populous_client");
 
 const routes = Router();
+
+const getUserInfo = async (ticket) =>{
+    const facultyObject = await populousClient.GetFaculty({ facultyId: ticket.facultyId });
+    const applicantObject = await populousClient.GetApplicant({ applicantId: ticket.applicantId });
+    return {
+        ticketId: ticket.ticketId,
+        state: ticket.state,
+        type: ticket.type,
+        faculty: facultyObject,
+        applicant: applicantObject,
+        created: ticket.created,
+        lastModified: ticket.lastModified,
+        notes: ticket.notes
+    }
+}
 
 /**
  * GET /tickets
@@ -12,28 +28,33 @@ const routes = Router();
  */
 routes.get('/', async (request, result) => {
     try{
-      let getTicketRequest = { ticketId: request.query.ticketId, facultyId: request.query.facultyId }
-      const response = await javelinClient.GetTickets(getTicketRequest);
-      result.status(200);
-      result.json(response)
+        let facultyId = (request.query.facultyId) != null ? parseInt(request.query.facultyId) : -1 ;
+        let getTicketRequest = { ticketId: request.query.ticketId, facultyId: facultyId, type: request.query.type, state: request.query.state };
+        const response = await javelinClient.GetTickets(getTicketRequest);
+        const tickets = await response.tickets.map(getUserInfo);
+        Promise.all(tickets).then(function(results) {
+            result.status(200);
+            result.json({ tickets: results });
+        });
+
     }
     catch (err){
-      logger.error(`[Ticket Service] ${err.message}`);
-      result.status(400);
-      result.json({error: err.message});
+        logger.error(`[Ticket Service] ${err.message}`);
+        result.status(400);
+        result.json({error: err.message});
     }
 });
 
 /**
  * POST /tickets
  *
- * Create allottedTickets new tickets in INITIAL state with given facultyId
+ * Create  new tickets in INITIAL state with given facultyId
  */
 routes.post('/', async (request, result) => {
     try{
         let body = request.body;
-        if (body && body.facultyId && body.allottedTickets){
-            let createTicketRequest = {facultyId: body.facultyId, allottedTickets: body.allottedTickets};
+        if (body && body.facultyId && body.domestic && body.international){
+            let createTicketRequest = {facultyId: body.facultyId, domesticTickets: body.domestic, internationalTickets: body.international};
             const response = await javelinClient.CreateTicket(createTicketRequest);
             result.status(200);
             result.json(response);
@@ -65,7 +86,7 @@ routes.put('/:ticketId', async (request, result) => {
                 result.json(response);
             }
             else if (body.applicantId){
-                modifyTicketRequest.applicantId = body.applicantId;
+                modifyTicketRequest.applicantId = parseInt(body.applicantId);
                 const response = await javelinClient.AssignApplicant(modifyTicketRequest);
                 result.status(200);
                 result.json(response);
