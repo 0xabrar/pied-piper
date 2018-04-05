@@ -19,9 +19,6 @@ service Javelin {
   // Delete a specific ticket
   rpc DeleteTicket(DeleteTicketRequest) returns (DeleteMessage) {}
 
-  // Associate a specific applicant with a Ticket.
-  rpc AssignApplicant(ModifyTicketRequest) returns (Ticket) {}
-
   // Add a Note to a Ticket.
   rpc AddNote(AddNoteRequest) returns (Ticket) {}
 
@@ -117,11 +114,8 @@ message DeleteNoteRequest {
 // ModifyTicketRequest used for all requests related to changing ticket state.
 message ModifyTicketRequest {
   string ticketId = 1;
-  oneof change {
-    Ticket.State state = 2;
-    int32 applicantId = 3;
-    Note note = 4;
-    UpdateNoteRequest noteRequest = 5;
-    string noteId = 6;
-  }
+  Ticket.State state = 2;
+  int32 applicantId = 3;
+  int32 facultyId = 4;
+  UpdateNoteRequest noteRequest = 5;
 }

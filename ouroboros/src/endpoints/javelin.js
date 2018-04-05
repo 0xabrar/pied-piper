@@ -79,15 +79,17 @@ routes.put('/:ticketId', async (request, result) => {
         let body = request.body;
         if (body){
             let modifyTicketRequest = {ticketId: request.params.ticketId};
-            if (body.state){
-                modifyTicketRequest.state = body.state;
+            if (body.state || body.applicantId || body.facultyId){
+                if (body.state){
+                    modifyTicketRequest.state = body.state;
+                }
+                if (body.applicantId){
+                    modifyTicketRequest.applicantId = body.applicantId;
+                }
+                if (body.facultyId){
+                    modifyTicketRequest.facultyId = body.facultyId;
+                }
                 const response = await javelinClient.UpdateTicket(modifyTicketRequest);
-                result.status(200);
-                result.json(response);
-            }
-            else if (body.applicantId){
-                modifyTicketRequest.applicantId = parseInt(body.applicantId);
-                const response = await javelinClient.AssignApplicant(modifyTicketRequest);
                 result.status(200);
                 result.json(response);
             }
@@ -122,7 +124,6 @@ routes.put('/:ticketId', async (request, result) => {
 routes.delete('/:ticketId', async (request, result) => {
     try{
         let deleteTicketRequest = {ticketId: request.params.ticketId}
-        console.log(deleteTicketRequest);
         const response = await javelinClient.DeleteTicket(deleteTicketRequest);
         result.status(200);
         result.json(response);

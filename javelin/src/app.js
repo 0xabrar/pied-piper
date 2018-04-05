@@ -60,6 +60,10 @@ export const getTicketsBackend = ((getTicketRequest, callback) => { // eslint-di
       callback(err, null);
     }
     logger.info("DB response with data: %j", tickets);
+    // Limit large responses to 50 tickets
+    if (tickets.length > 50){
+      tickets = tickets.splice(0, 50);
+    }
     let payload = tickets.map(formatTicket);
     logger.info("Response payload data: %j", payload);
     callback(null, payload);
@@ -114,8 +118,18 @@ export const createTicketBackend = ((createTicketRequest, callback) => {
 export const updateTicketBackend = ((modifyTicketRequest, callback) => {
   logger.info("Enter updateTicketBackend with request body %j", modifyTicketRequest);
   let now = Math.round((new Date()).getTime()/1000);
+  let query = {lastModified: now};
+  if (modifyTicketRequest.state){
+    query.state = modifyTicketRequest.state;
+  }
+  if (modifyTicketRequest.applicantId){
+    query.applicantId = modifyTicketRequest.applicantId;
+  }
+  if (modifyTicketRequest.facultyId){
+    query.facultyId = modifyTicketRequest.facultyId;
+  }
   Ticket.findOneAndUpdate({_id: modifyTicketRequest.ticketId}, 
-    {state: modifyTicketRequest.state, lastModified: now}, {new: true}).populate('notes').exec(function(err, ticket) {
+    query, {new: true}).populate('notes').exec(function(err, ticket) {
       if (err){
         logger.error("Error: %j", err);
         callback(err, null);
@@ -140,25 +154,6 @@ export const deleteTicketBackend = ((deleteTicketRequest, callback) => {
     let payload = {message: ("Ticket " + deleteTicketRequest.ticketId + " successfully removed")};
     logger.info("Response payload data: %j", payload);
     callback(null, payload);
-  });
-});
-
-/**
- * @returns the Ticket associated with a specific modifyTicketRequest
- */
-export const assignApplicantBackend = ((modifyTicketRequest, callback) => {
-  logger.info("Enter assignApplicantBackend with request body %j", modifyTicketRequest);
-  let now = Math.round((new Date()).getTime()/1000);
-  Ticket.findOneAndUpdate({_id: modifyTicketRequest.ticketId}, 
-      {applicantId: modifyTicketRequest.applicantId, lastModified: now}, {new: true}).populate('notes').exec(function(err, ticket) {
-        if (err){
-          logger.error("Error: %j", err);
-          callback(err, null);
-        }
-        logger.info("DB response with data: %j", ticket);
-        let payload = formatTicket(ticket);
-        logger.info("Response payload data: %j", payload);
-        callback(null, payload);
   });
 });
 
@@ -236,7 +231,6 @@ const getTickets = (call, callback) => getTicketsBackend(call.request, callback)
 const createTicket = (call, callback) => createTicketBackend(call.request, callback);
 const updateTicket = (call, callback) => updateTicketBackend(call.request, callback);
 const deleteTicket = (call, callback) => deleteTicketBackend(call.request, callback);
-const assignApplicant = (call, callback) => assignApplicantBackend(call.request, callback);
 const addNote = (call, callback) => addNoteBackend(call.request, callback);
 const updateNote = (call, callback) => updateNoteBackend(call.request, callback);
 const deleteNote = (call, callback) => deleteNoteBackend(call.request, callback);
@@ -253,7 +247,6 @@ function getServer() {
     createTicket,
     updateTicket,
     deleteTicket,
-    assignApplicant,
     addNote,
     updateNote,
     deleteNote,

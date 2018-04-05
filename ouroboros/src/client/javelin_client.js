@@ -41,11 +41,6 @@ const deleteTicket = async (deleteTicketRequest) => {
   return response;
 };
 
-const assignApplicant = async (modifyTicketRequest) => {
-  const response = await client.AssignApplicant(modifyTicketRequest);
-  return response;
-};
-
 const addNote = async modifyTicketRequest => {
   const response = await client.AddNote(modifyTicketRequest);
   return response;
@@ -64,8 +59,7 @@ const deleteNote = async (deleteNoteRequest) => {
 exports.GetTickets = getTickets;
 exports.CreateTicket = createTicket;
 exports.UpdateTicket = updateTicket;
-exports.DeleteTicket = deleteTicket
-exports.AssignApplicant = assignApplicant;
+exports.DeleteTicket = deleteTicket;
 exports.AddNote = addNote;
 exports.UpdateNote = updateNote;
 exports.DeleteNote = deleteNote;
