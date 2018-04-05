@@ -48,6 +48,7 @@ class LoginForm extends Component {
                   Login
                 </Button>
               </Segment>
+              {this.props.showLabel()}
             </Form>
           </Grid.Column>
         </Grid>

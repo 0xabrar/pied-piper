@@ -5,7 +5,8 @@ import {
   ENABLE_NOTES,
   DISABLE_NOTES,
   CONFIRM_ADD_NOTE,
-  CONFIRM_RESOLVE_NOTE
+  CONFIRM_RESOLVE_NOTE,
+  CONFIRM_EDIT_NOTE
 } from "../constants/actions";
 
 const defaultState = {
@@ -70,6 +71,16 @@ const selectedTicket = (state = defaultState, action) => {
       };
     }
 
+    case CONFIRM_EDIT_NOTE: {
+      return {
+        ...state,
+        notes: [
+          ...state.notes.filter((note, i) => i !== action.index),
+          getUpdatedNote(action.text, action.note)
+        ]
+      }
+    }
+
     default:
       return state;
   }
@@ -85,5 +96,11 @@ export const getResolvedNote = note => ({
   ...note,
   resolved: true
 });
+
+export const getUpdatedNote = (text, note) => ({
+  ...note,
+  text,
+  lastModified: new Date().toLocaleString()
+})
 
 export default selectedTicket;

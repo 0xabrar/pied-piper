@@ -15,7 +15,6 @@ class UploadScreen extends Component {
   showLabel = () => {
     const message = this.props.upload.printingmessage;
     if (message !== "") {
-      console.log();
       return <Label>{this.props.upload.printingmessage}</Label>;
     } else {
       return null;

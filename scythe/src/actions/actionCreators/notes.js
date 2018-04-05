@@ -3,7 +3,8 @@ import {
   DISABLE_NOTES,
   CONFIRM_ADD_NOTE,
   CONFIRM_DELETE_NOTE,
-  CONFIRM_RESOLVE_NOTE
+  CONFIRM_RESOLVE_NOTE,
+  CONFIRM_EDIT_NOTE
 } from "../../constants/actions";
 
 export const enableNotes = () => ({
@@ -29,3 +30,10 @@ export const confirmResolveNote = (index, note) => ({
   index,
   note
 });
+
+export const confirmEditedNote = (index, note, text) => ({
+  type: CONFIRM_EDIT_NOTE,
+  index,
+  note,
+  text
+})

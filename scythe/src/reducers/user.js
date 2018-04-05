@@ -1,40 +1,39 @@
 import {USER_LOGIN, USER_LOGOUT, USER_LOGIN_FAILURE} from '../constants/actions';
 const defaultState={
-  token:'',
   user: {
     facultyId: 1,
-    personalInfo: {
-      firstName: 'Bart',
-      lastName: 'Simpson',
-    },
-    department: 'Computer Scienct',
+    department: 'Computer Science',
     type: 'FACULTY',
-    allotedTickets: 5,
     email: 'bartsimpon@net.com',
-    password: 'abc'
-  }
+  },
+  status: ''
 };
 
 export default (state=defaultState, action) => {
   switch(action.type){
     case USER_LOGIN:
       return {...state,
-        token: action.token,
-        user: action.user
+        user: action.payload,
+        status: true
       }
     case USER_LOGOUT:
-      return {
+      return {...state,
         token: '',
-        user: {}
+        user: {},
+        status: ''
     }
     case USER_LOGIN_FAILURE:
       return {
-        ...state
+        ...state,
+        status: false
       }
     default:
       return state;
-      
   }
 
 }
+
+
+
+
 

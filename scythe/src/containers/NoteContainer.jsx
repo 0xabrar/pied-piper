@@ -1,18 +1,24 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Input, Button, List, Header, Icon } from "semantic-ui-react";
+import { Input, Button, List, Header, Icon, Modal, Form } from "semantic-ui-react";
 import {
   deleteNoteThunk,
   resolveNoteThunk,
-  addNoteThunk
+  addNoteThunk,
+  editNoteThunk
 } from "../actions/thunk/notes";
 
 const style = {
   disabledNote: {
     color: "grey"
   },
-  enabledNote: {}
+  enabledNote: {},
+  modal : {
+    marginTop: '0px !important',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  }
 };
 
 const NoteContainer = props => {
@@ -29,6 +35,7 @@ const NoteContainer = props => {
             ticket={props.ticket}
             resolveNoteFunc={props.resolveNote}
             deleteNoteFunc={props.deleteNote}
+            editNoteFunc={props.editNote}
             disabled={note.resolved || !props.UIEnabled}
           />
         );
@@ -67,6 +74,55 @@ class AddNote extends React.Component {
   }
 }
 
+class EditNote extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {noteText: ""}
+  }
+  handleTextChange =(e) => {
+    this.setState({noteText: e.target.value })
+  }
+  handleSubmit = (e) => {
+    e.preventDefault()
+    this.props.editNoteFunc(
+      this.props.index, 
+      this.props.note, 
+      this.props.ticket, 
+      this.state.noteText)
+  }
+ render() {
+  return (
+    <Modal trigger={<Button
+      icon
+      size="tiny"
+      data-tooltip="Edit"
+      ><Icon name="pencil" />
+      </Button>}
+      style={style.modal}>
+      <Modal.Header>Edit Note</Modal.Header>
+      <Modal.Content>
+        <Modal.Description>
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Input
+              label="Text"
+              fluid
+              iconPosition="left"
+              placeholder= {this.props.note.text}
+              onChange = {this.handleTextChange}
+            />
+            <Button size="small" color="green" >
+              Update Note
+            </Button>
+          </Form>
+        </Modal.Description>
+      </Modal.Content>
+  </Modal>
+    
+  )}
+
+
+}
+
 class Note extends React.Component {
   constructor(props) {
     super(props);
@@ -92,7 +148,7 @@ class Note extends React.Component {
     return (
       <List.Item>
         <List.Content floated="right">
-          <Button
+          {/* <Button
             icon
             size="tiny"
             data-tooltip="Edit"
@@ -100,7 +156,12 @@ class Note extends React.Component {
             disabled={this.props.disabled}
           >
             <Icon name="pencil" />
-          </Button>
+          </Button> */}
+          <EditNote 
+            note={this.props.note} 
+            index={this.props.index} 
+            ticket={this.props.ticket}
+            editNoteFunc={this.props.editNoteFunc}/>
           <Button
             icon
             size="tiny"
@@ -145,7 +206,8 @@ const mapDispatchToProps = dispatch =>
     {
       addNote: addNoteThunk,
       resolveNote: resolveNoteThunk,
-      deleteNote: deleteNoteThunk
+      deleteNote: deleteNoteThunk,
+      editNote: editNoteThunk
     },
     dispatch
   );
