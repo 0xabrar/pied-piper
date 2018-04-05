@@ -4,7 +4,7 @@ const defaultState={
   user: {
     facultyId: 1,
     department: 'Computer Science',
-    type: 'FACULTY',
+    type: 'BUDGET_DIRECTOR',
     email: 'bartsimpon@net.com'
   },
   status: ''

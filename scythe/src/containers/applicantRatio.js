@@ -28,7 +28,7 @@ const createDataObj = (labels, data) => {
 }
 
 const countIntl = (tickets) => {
-  return tickets.filter((ticket) => ticket.type === INTERNATIONAL).length;
+  return tickets.filter((ticket) => ticket.type.trim() === INTERNATIONAL).length;
 };
 
 const stateToTitle = {
@@ -41,7 +41,6 @@ const stateToTitle = {
 }
 
 const getStateTitle = (state) => {
-  console.log(`State result: ${stateToTitle[state]}`)
   return stateToTitle[state];
 }
 
@@ -56,6 +55,7 @@ class ApplicantRatio extends React.Component {
     var domCount = 0;
     if(this.props.state){
       let filteredTickets = this.props.tickets.filter((ticket) => ticket.state === this.props.state);
+      console.log(`State: ${this.props.state} Count: ${filteredTickets.length}`)
       intlCount = countIntl(filteredTickets)
       domCount = filteredTickets.length - intlCount
     }
@@ -63,7 +63,6 @@ class ApplicantRatio extends React.Component {
       intlCount = countIntl(this.props.tickets)
       domCount = this.props.tickets.length - intlCount
     }
-    console.log(`State: ${this.props.state}`)
     return createDataObj(['International', 'Domestic'], [intlCount, domCount])
   }
   render() {

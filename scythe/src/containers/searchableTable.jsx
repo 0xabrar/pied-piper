@@ -13,8 +13,8 @@ class SearchableTable extends React.Component {
     this.state = {filterStr: ''}
   }
   componentDidMount(){
-    console.log('Loading tickets...')
-    this.props.loadTickets();
+    console.log(`Loading tickets for user ${this.props.userId}...`)
+    this.props.loadTickets(this.props.userId);
   }
   render() {
     if(this.props.tickets && this.props.tickets){
@@ -36,8 +36,8 @@ class SearchableTable extends React.Component {
 const searchTicket = (ticket, str) => {
   let s = str.toLowerCase()
   if(ticket.applicant && ticket.applicant.personalInfo){
-    if(ticket.applicant.firstName.toLowerCase().includes(s)
-      || ticket.applicant.lastName.toLowerCase().includes(s)
+    if(ticket.applicant.personalInfo.firstName.toLowerCase().includes(s)
+      || ticket.applicant.personalInfo.lastName.toLowerCase().includes(s)
       || ticket.applicant.faculty.toLowerCase().includes(s)){
       return true;
     }
@@ -48,7 +48,8 @@ const searchTicket = (ticket, str) => {
 
 const mapStateToProps = (state) => ({
   tickets: state.tickets,
-  userType: getUserState(state).user.type
+  userType: getUserState(state).user.type,
+  userId: getUserState(state).user.facultyId
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(

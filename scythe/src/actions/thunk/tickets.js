@@ -1,10 +1,10 @@
 import { getAllTicketsAction, addTicketsAction, getTicketAction, updateTicketAction, deleteTicketAction} from "../tickets";
 import { ouroborosEndpoint } from "../../constants/services";
 
-export const getAllTicketsThunk = () => async dispatch => {
+export const getAllTicketsThunk = (id) => async dispatch => {
   try {
     console.log(`${ouroborosEndpoint}/tickets/`)
-    const response = await fetch(`${ouroborosEndpoint}/tickets/`);
+    const response = await fetch(`${ouroborosEndpoint}/tickets?facultyId=${id}`);
     const data = await response.json();
     console.log('All tickets fetched')
     dispatch(getAllTicketsAction(data.tickets));

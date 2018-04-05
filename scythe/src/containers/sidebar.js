@@ -3,11 +3,28 @@ import { Menu, Header, Icon } from "semantic-ui-react";
 import { push } from "react-router-redux";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import {getUserState} from "../reducers";
 
 const dashboard = "dashboard";
 const tickets = "tickets";
 const applicants = "applicants";
 const gapf = "gapf";
+
+const getType = (user) => {
+  switch(user) {
+    case 'BUDGET_DIRECTOR':
+      return 'Budget Director View'
+    case 'FACULTY':
+      return 'Faculty View'
+    case 'ASSOCIATE_CHAIR':
+      return 'Associate Chair View'
+    case 'GRAD_STAFF':
+      return 'Grad Office Staff View'
+    default:
+      return 'Menu'
+  }
+
+}
 
 class Sidebar extends PureComponent {
   state = { activeItem: "dashboard" };
@@ -19,12 +36,11 @@ class Sidebar extends PureComponent {
 
   render() {
     const { activeItem } = this.state;
-
     return (
       <Menu secondary vertical fluid>
         <Header as="h5" block>
           { /* TODO: Update this */ }
-          Faculty Views
+          {getType(this.props.user)}
         </Header>
         <Menu.Item
           name={dashboard}
@@ -64,7 +80,8 @@ class Sidebar extends PureComponent {
 }
 
 const mapStateToProps = (state, router) => ({
-  url: router.location
+  url: router.location,
+  user: getUserState(state).user.type
 });
 
 const mapDispatchToProps = dispatch =>

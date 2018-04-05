@@ -23,8 +23,9 @@ const style = {
 
 class UserDashboard extends React.Component{
   componentDidMount() {
-    console.log('Loading tickets...')
-    this.props.loadTickets();
+    console.log(`Loading tickets for user ${this.props.user.user.facultyId}...`)
+    this.props.loadTickets(this.props.user.user.facultyId);
+    this.render()
   }
   render () {
     if(!this.props.tickets){
