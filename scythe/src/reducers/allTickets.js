@@ -1,4 +1,4 @@
-import {DISABLE_TICKETS, ENABLE_TICKETS, LOAD_TICKETS} from "../constants/actions";
+import {DISABLE_TICKETS, ENABLE_TICKETS, LOAD_TICKETS, UPDATE_SELECTED_TICKET} from "../constants/actions";
 import {FACULTY_USER} from "../constants/users";
 
 const defaultState = {
@@ -19,7 +19,8 @@ const defaultState = {
       lastModified: new Date().toLocaleString()
     }
   ],
-  UIEnabled: true
+  UIEnabled: true,
+  selectedTicket: {}
 };
 
 // TODO: Is this a logical name?
@@ -39,6 +40,11 @@ const allTickets = (state = defaultState, action) => {
       return {
         ...state,
         tickets: action.tickets
+      }
+    case UPDATE_SELECTED_TICKET:
+      return {
+        ...state,
+        selectedTicket: action.ticket
       }
     default:
       return state;

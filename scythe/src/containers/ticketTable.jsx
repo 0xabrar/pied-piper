@@ -10,7 +10,7 @@ import {
 import { loadTicketsThunk } from "../actions/thunk/allTickets";
 import { getUserState } from "../reducers";
 import {push} from 'react-router-redux'
-import { updateSelectedTicket } from "../actions/actionCreators/notes";
+import { updateSelectedTicket } from "../actions/actionCreators/allTickets";
 import ActionModal from "../components/actionModal";
 
 

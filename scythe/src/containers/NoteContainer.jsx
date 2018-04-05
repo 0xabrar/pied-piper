@@ -3,11 +3,12 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Input, Button, List, Header, Icon, Modal, Form } from "semantic-ui-react";
 import {
-  deleteNoteThunk,
-  resolveNoteThunk,
-  addNoteThunk,
-  editNoteThunk
-} from "../actions/thunk/notes";
+  updateTicketThunk
+}from "../actions/thunk/tickets";
+import {
+  updateNoteSafeThunk,
+  deleteNoteSafeThunk,
+} from "../actions/thunk/selectedTicket";
 
 const style = {
   disabledNote: {
@@ -25,7 +26,10 @@ const NoteContainer = props => {
   return (
     <List divided relaxed verticalAlign="middle">
       <Header as="h2">Notes</Header>
-      <AddNote addNoteFunc={props.addNote} />
+      <AddNote 
+        ticket={props.ticket}
+        addNoteFunc={props.addNote}
+        />
       {props.ticket.notes.map((note, i) => {
         return (
           <Note
@@ -55,7 +59,12 @@ class AddNote extends React.Component {
     this.setState({ inputText: e.target.value });
   }
   handleSubmit(e) {
-    this.props.addNoteFunc(this.state.inputText);
+    this.props.addNoteFunc(this.props.ticket.ticketId,
+      {note:{
+        ticketId: this.props.ticket.ticketId,
+        text: this.state.inputText
+      }}
+    );
     this.setState({ inputText: "" });
   }
   render() {
@@ -197,17 +206,17 @@ class Note extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  ticket: state.selectedTicket,
+  ticket: state.selectedTicket.ticket,
   UIEnabled: state.selectedTicket.UIEnabled
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      addNote: addNoteThunk,
-      resolveNote: resolveNoteThunk,
-      deleteNote: deleteNoteThunk,
-      editNote: editNoteThunk
+      addNote: updateTicketThunk,
+      resolveNote: updateNoteSafeThunk,
+      deleteNote: deleteNoteSafeThunk,
+      editNote: updateNoteSafeThunk
     },
     dispatch
   );

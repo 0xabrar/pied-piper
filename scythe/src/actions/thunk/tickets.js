@@ -1,4 +1,4 @@
-import { getAllTicketsAction, addTicketsAction, getTicketAction, updateTicketAction, deleteTicketAction} from "../tickets";
+import { getAllTicketsAction, addTicketsAction, getTicketAction, updateTicketAction, deleteTicketAction, updateNoteAction, deleteNoteAction} from "../tickets";
 import { ouroborosEndpoint } from "../../constants/services";
 
 export const getAllTicketsThunk = (id) => async dispatch => {
@@ -57,6 +57,34 @@ export const deleteTicketThunk = ticketId => async dispatch => {
     });
     const data = await response.json();
     dispatch(deleteTicketAction(data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+
+export const updateNoteThunk = (ticketId, noteId, resolved) => async dispatch => {
+  try {
+    const response = await fetch(`${ouroborosEndpoint}/tickets/${ticketId}/node/${noteId}`, {
+      method: "PUT",
+      body: {"resolved": resolved}
+    });
+    const data = await response.json();
+    dispatch(updateNoteAction(data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteNoteThunk = (ticketId, noteId) => async dispatch => {
+  try {
+    const response = await fetch(`${ouroborosEndpoint}/tickets/${ticketId}/node/${noteId}`, {
+      method: "DELETE"
+    });
+    const data = await response.json();
+    dispatch(deleteNoteAction(data));
   } catch (error) {
     console.log(error);
   }
