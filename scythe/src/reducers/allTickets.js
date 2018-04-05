@@ -4,23 +4,61 @@ import {FACULTY_USER} from "../constants/users";
 const defaultState = {
   tickets: [
     {
-      ticketId: '12345',
-      state: 'INITIAL',
-      applicantId: '121212',
-      facultyId: '232323',
-      notes: [
-        {
-          text: 'Hello, world.',
-          resolved: false,
-          created: new Date().toLocaleString(),
+      ticketId:"5ac5cb9c3d838afb2da67cc7",
+      state:"GRANTED",
+      type:"DOMESTIC",
+      faculty:{
+        facultyId:1,
+        personalInfo:{
+          firstName:"Karine",
+          lastName:"Casier"
         },
-      ],
-      created: new Date().toLocaleString(),
-      lastModified: new Date().toLocaleString()
+        department:"Computer Science",
+        type:"GRAD_STAFF",
+        email:"kcasier0@themeforest.net",
+        domesticTickets:0,
+        internationalTickets:0
+      },
+      applicant:{
+        applicantId:1,
+        personalInfo:{
+          firstName:"Saidee",
+          lastName:"Bufton"
+        }
+      },
+      created:266896808,
+      lastModified:1522913891,
+      notes:[]
     }
   ],
   UIEnabled: true,
-  selectedTicket: {}
+  selectedTicket: {
+    ticketId:"5ac5cb9c3d838afb2da67cc7",
+    state:"GRANTED",
+    type:"DOMESTIC",
+    faculty:{
+      facultyId:1,
+      personalInfo:{
+        firstName:"Karine",
+        lastName:"Casier"
+      },
+      department:"Computer Science",
+      type:"GRAD_STAFF",
+      email:"kcasier0@themeforest.net",
+      domesticTickets:0,
+      internationalTickets:0
+    },
+    applicant:{
+      applicantId:1,
+      personalInfo:{
+        firstName:"Saidee",
+        lastName:"Bufton"
+      }
+    },
+    created:266896808,
+    lastModified:1522913891,
+    notes:[]
+  }
 };
 
 // TODO: Is this a logical name?
