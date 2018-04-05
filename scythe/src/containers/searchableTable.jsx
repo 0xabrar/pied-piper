@@ -36,11 +36,12 @@ class SearchableTable extends React.Component {
 const searchTicket = (ticket, str) => {
   let s = str.toLowerCase()
   if(ticket.applicant && ticket.applicant.personalInfo){
-    if(ticket.applicant.personalInfo.firstName.toLowerCase().includes(s)
+
+    /*if(ticket.applicant.personalInfo.firstName.toLowerCase().includes(s)
       || ticket.applicant.personalInfo.lastName.toLowerCase().includes(s)
       || ticket.applicant.faculty.toLowerCase().includes(s)){
       return true;
-    }
+    }*/
   }
   return (ticket.ticketId.includes(s)
     || ticket.state.toLowerCase().includes(s))

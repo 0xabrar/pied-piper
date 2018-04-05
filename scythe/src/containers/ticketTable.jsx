@@ -12,7 +12,7 @@ import { getUserState } from "../reducers";
 import {push} from 'react-router-redux'
 import { updateSelectedTicket } from "../actions/actionCreators/allTickets";
 import ActionModal from "../components/actionModal";
-
+import {getAllTicketsThunk} from "../actions/thunk/tickets";
 
 class TicketTable extends React.Component {
   constructor(props) {
@@ -86,7 +86,9 @@ class TicketTable extends React.Component {
                                                                      actions={this.USER_TICKET_ACTIONS[this.props.userType]}
                                                                      ticket={ticket}
                                                                      openTicket={this.props.openTicket}
-                                                                     updateSelectedTicket={this.props.updateSelectedTicket}/>)}
+                                                                     updateSelectedTicket={this.props.updateSelectedTicket}
+              getAllTickets={this.props.getAllTickets}
+              fId={this.props.facultyId}/>)}
             </Table.Body>
           </Table>
           <ActionModal open={this.state.appModal} close={this.closeAppModal} title={'Choose Applicant'} action={this.props.assignApplicant} options={[{name: "david", applicantId: 5}]} headers={['ID', 'Name']}/>
@@ -121,7 +123,7 @@ class TicketTableRow extends React.Component {
         <Table.Cell>{getTicketApplicantName(this.props.ticket.applicant.personalInfo)}</Table.Cell>
         <Table.Cell>{stateToText(this.props.ticket.state)}</Table.Cell>
         <Table.Cell>
-          {this.props.actions.map((action, i) => <ActionButton key={i} name={action.name} func={action.action} ticket={this.props.ticket}/>)}
+          {this.props.actions.map((action, i) => <ActionButton key={i} name={action.name} func={action.action} ticket={this.props.ticket} getAllTickets={this.props.getAllTickets} fId={this.props.fId}/>)}
         </Table.Cell>
       </Table.Row>
     )
@@ -134,8 +136,8 @@ class ActionButton extends React.Component{
     this.executeAction = this.executeAction.bind(this)
   }
   executeAction(){
-    console.log(this.props.func)
     this.props.func(this.props.ticket)
+    this.props.getAllTickets(this.props.fId)
   }
   render () {
     return (
@@ -160,7 +162,8 @@ const getTicketFacultyName = (faculty) => {
 }
 
 const mapStateToProps = (state) => ({
-  userType: getUserState(state).user.type
+  userType: getUserState(state).user.type,
+  facultyId: getUserState(state).user.facultyId
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
@@ -172,7 +175,8 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     confirmAcceptance: confirmAcceptanceThunk,
     confirmDecline: confirmDeclineThunk,
     openTicket:  (number) => push("/tickets/" + number),
-    updateSelectedTicket: updateSelectedTicket
+    updateSelectedTicket: updateSelectedTicket,
+    getAllTickets: getAllTicketsThunk
   }
   , dispatch);
 
