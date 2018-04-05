@@ -1,5 +1,5 @@
 import React from 'react'
-import {GRANTED_STATE, REQUESTED_STATE, PENDING_STATE, ACCEPTED_STATE, INITIAL_STATE, REFUSED_STATE} from "../constants/tickets";
+import {GRANTED_STATE, REQUESTED_STATE, PENDING_STATE, ACCEPTED_STATE} from "../constants/tickets";
 import {getTicketState} from "../reducers/index";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -14,7 +14,7 @@ const style = {
   },
   statsDiv: {
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr',
+    gridTemplateColumns: '1fr 1fr',
     gridTemplateRows: '1fr 1fr'
   }
 }
@@ -28,35 +28,29 @@ const createDataObj = (labels, data) => {
         '#ff7f00',
         '#ffd700',
         '#20b2ad',
-        '#800080',
-        '#000066',
-        '#cd0000'
+        '#800080'
       ],
       hoverBackgroundColor: [
         '#ff7f00',
         '#ffd700',
         '#20b2ad',
-        '#800080',
-        '#000066',
-        '#cd0000'
+        '#800080'
       ]
     }]
   }
 }
 
 // NOTE: this does not include 'INITIAL', 'REJECTED' tickets
-class AllTicketsRatio extends React.Component{
+class FacultyTicketsRatio extends React.Component{
   constructor(props) {
     super(props)
     this.getData = this.getData.bind(this)
   }
   getData() {
-    this.initial = this.props.tickets.filter((ticket) => ticket.state === INITIAL_STATE).length;
     this.granted = this.props.tickets.filter((ticket) => ticket.state === GRANTED_STATE).length;
     this.offerRequest = this.props.tickets.filter((ticket) => ticket.state === REQUESTED_STATE).length;
     this.offerPending = this.props.tickets.filter((ticket) => ticket.state === PENDING_STATE).length;
     this.offerAccepted = this.props.tickets.filter((ticket) => ticket.state === ACCEPTED_STATE).length;
-    this.offerRefused = this.props.tickets.filter((ticket) => ticket.state === REFUSED_STATE).length;
 
     return createDataObj(['Granted', 'Offer Requested', 'Offer Pending', 'Accepted'], [this.granted, this.offerRequest, this.offerPending, this.offerAccepted])
   }
@@ -68,10 +62,6 @@ class AllTicketsRatio extends React.Component{
         </div>
 
         <div style={style.statsDiv}>
-          <Statistic>
-            <Statistic.Value>{this.initial}</Statistic.Value>
-            <Statistic.Label>Initial Tickets</Statistic.Label>
-          </Statistic>
           <Statistic>
             <Statistic.Value>{this.granted}</Statistic.Value>
             <Statistic.Label>Granted Tickets</Statistic.Label>
@@ -87,10 +77,6 @@ class AllTicketsRatio extends React.Component{
           <Statistic>
             <Statistic.Value>{this.offerAccepted}</Statistic.Value>
             <Statistic.Label>Accepted Tickets</Statistic.Label>
-          </Statistic>
-          <Statistic>
-            <Statistic.Value>{this.offerRefused}</Statistic.Value>
-            <Statistic.Label>Refused Tickets</Statistic.Label>
           </Statistic>
         </div>
       </div>
@@ -109,4 +95,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AllTicketsRatio)
+)(FacultyTicketsRatio)

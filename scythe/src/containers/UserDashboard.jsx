@@ -12,6 +12,7 @@ import ApplicantRatio from './applicantRatio'
 import {getFacultyGAPFThunk} from "../actions/thunk/user";
 import {getAllTicketsThunk} from "../actions/thunk/tickets";
 import BudgetDirectorRatios from "../components/budgetDirectorRatios";
+import FacultyTicketsRatio from './facultyTicketsRatio'
 import AllTicketsRatio from './allTicketsRatio'
 
 const style = {
@@ -42,7 +43,7 @@ class UserDashboard extends React.Component{
         return (
           <div style={style.rootDiv}>
             <GAPFStatus GAPFStatus={this.props.user.gapf}/>
-            <AllTicketsRatio />
+            <FacultyTicketsRatio />
             <StateTable state={GRANTED_STATE} />
             <StateTable state={REQUESTED_STATE} />
             <StateTable state={ACCEPTED_STATE} />
@@ -53,12 +54,14 @@ class UserDashboard extends React.Component{
         return (
           <div style={style.rootDiv}>
             <StateTable state={REQUESTED_STATE} />
+            <StateTable state={PENDING_STATE} />
           </div>
         )
 
       case GRAD_STAFF:
         return (
           <div style={style.rootDiv}>
+            <AllTicketsRatio />
             <StateTable state={REQUESTED_STATE}/>
             <StateTable state={PENDING_STATE}/>
           </div>

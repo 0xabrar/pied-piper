@@ -17,7 +17,7 @@ class SearchableTable extends React.Component {
     this.props.loadTickets();
   }
   render() {
-    if(this.props.tickets){
+    if(this.props.tickets && this.props.tickets){
       return (
         <div>
           <div className="ui input focus fluid">
@@ -34,9 +34,17 @@ class SearchableTable extends React.Component {
 }
 
 const searchTicket = (ticket, str) => {
-  return (ticket.ticketId.includes(str)
-    || ticket.applicant.lastName.includes(str)
-    || ticket.applicant.firstName.includes(str))
+  let s = str.toLowerCase()
+  console.log(ticket)
+  if(ticket.applicant){
+    if(ticket.applicant.firstName.toLowerCase().includes(s)
+      || ticket.applicant.lastName.toLowerCase().includes(s)
+      || ticket.applicant.faculty.toLowerCase().includes(s)){
+      return true;
+    }
+  }
+  return (ticket.ticketId.includes(s)
+    || ticket.state.toLowerCase().includes(s))
 }
 
 const mapStateToProps = (state) => ({

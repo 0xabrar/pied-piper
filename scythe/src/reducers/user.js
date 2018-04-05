@@ -1,4 +1,5 @@
 import {USER_LOGIN, USER_LOGOUT, USER_LOGIN_FAILURE, GET_FACULTY_GAPF} from '../constants/actions';
+import {GRAD_STAFF} from "../constants/users";
 const defaultState = {
   token:'',
   user: {
@@ -8,7 +9,7 @@ const defaultState = {
       lastName: 'Simpson',
     },
     department: 'Computer Scienct',
-    type: 'FACULTY',
+    type: 'GRAD_STAFF',
     allotedTickets: 5,
     email: 'bartsimpon@net.com',
     password: 'abc'
