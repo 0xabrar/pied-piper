@@ -15,21 +15,21 @@ export default (state=defaultState, action) => {
     case USER_LOGIN:
       return {...state,
         user: action.payload,
-      status: true
+        status: true
+      }
+    case USER_LOGOUT:
+      return {...state,
+        token: '',
+        user: {},
+        status: ''
+      }
+    case USER_LOGIN_FAILURE:
+      return {
+        ...state,
+        status: false
+      }
+    default:
+      return state;
   }
-case USER_LOGOUT:
-    return {...state,
-      token: '',
-    user: {},
-  status: ''
-}
-case USER_LOGIN_FAILURE:
-    return {
-      ...state,
-      status: false
-}
-default:
-  return state;
-}
 
 }
