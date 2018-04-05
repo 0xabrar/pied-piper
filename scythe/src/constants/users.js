@@ -1,0 +1,7 @@
+export const FACULTY_USER = 'FACULTY';
+export const GRAD_STAFF = 'GRAD_STAFF';
+export const BUDGET_DIRECTOR = 'BUDGET_DIRECTOR';
+export const ASSOCIATE_CHAIR = 'ASSOCIATE_CHAIR';
+
+export const INTERNATIONAL = 'INTERNATIONAL';
+export const DOMESTIC = 'DOMESTIC'

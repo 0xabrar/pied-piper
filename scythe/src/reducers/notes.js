@@ -6,7 +6,8 @@ import {
   DISABLE_NOTES,
   CONFIRM_ADD_NOTE,
   CONFIRM_RESOLVE_NOTE,
-  CONFIRM_EDIT_NOTE
+  CONFIRM_EDIT_NOTE,
+  UPDATE_SELECTED_TICKET
 } from "../constants/actions";
 
 const defaultState = {
@@ -78,6 +79,12 @@ const selectedTicket = (state = defaultState, action) => {
           ...state.notes.filter((note, i) => i !== action.index),
           getUpdatedNote(action.text, action.note)
         ]
+      }
+    }
+    case UPDATE_SELECTED_TICKET: {
+      return {
+        ...state,
+        ...action.ticket
       }
     }
 

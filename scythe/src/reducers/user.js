@@ -4,7 +4,7 @@ const defaultState={
     facultyId: 1,
     department: 'Computer Science',
     type: 'FACULTY',
-    email: 'bartsimpon@net.com',
+    email: 'bartsimpon@net.com'
   },
   status: ''
 };
@@ -14,26 +14,21 @@ export default (state=defaultState, action) => {
     case USER_LOGIN:
       return {...state,
         user: action.payload,
-        status: true
-      }
-    case USER_LOGOUT:
-      return {...state,
-        token: '',
-        user: {},
-        status: ''
-    }
-    case USER_LOGIN_FAILURE:
-      return {
-        ...state,
-        status: false
-      }
-    default:
-      return state;
+      status: true
   }
-
+case USER_LOGOUT:
+    return {...state,
+      token: '',
+    user: {},
+  status: ''
+}
+case USER_LOGIN_FAILURE:
+    return {
+      ...state,
+      status: false
+}
+default:
+  return state;
 }
 
-
-
-
-
+}

@@ -25,7 +25,7 @@ class TicketViewContainer extends React.Component {
     return (
       <div style={style.root}>
         <TicketHeader
-          ticketNumber={this.props.ticket.ticketNumber}
+          ticketNumber={this.props.ticket.ticketId}
           status={this.props.ticket.status}
         />
         <ApplicantInfo
