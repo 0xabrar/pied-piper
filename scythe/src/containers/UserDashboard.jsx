@@ -8,17 +8,23 @@ import {INITIAL_STATE, GRANTED_STATE, REQUESTED_STATE, ACCEPTED_STATE, PENDING_S
 import StateCount from '../components/StateCount'
 import StateRatio from '../components/StateRatio'
 import StateTable from './stateTable'
-import TicketTable from './ticketTable'
+import ApplicantRatio from './applicantRatio'
 import {getFacultyGAPFThunk} from "../actions/thunk/user";
+import {getAllTicketsThunk} from "../actions/thunk/tickets";
+import BudgetDirectorRatios from "../components/budgetDirectorRatios";
+import AllTicketsRatio from './allTicketsRatio'
 
 const style = {
   rootDiv: {
-    display: "grid",
-    gridTemplateRows: "1fr 1fr 1fr"
+
   }
 }
 
 class UserDashboard extends React.Component{
+  componentDidMount() {
+    console.log('Loading tickets...')
+    this.props.loadTickets();
+  }
   render () {
     if(!this.props.tickets){
       return(<Header as='h2'>No data available.</Header>)
@@ -27,10 +33,7 @@ class UserDashboard extends React.Component{
       case BUDGET_DIRECTOR:
         return (
           <div style={style.rootDiv}>
-            <StateCount tickets={this.props.tickets} state={INITIAL_STATE} />
-            <StateRatio tickets={this.props.tickets} state={GRANTED_STATE}/>
-            {/* TODO: Filter table */}
-            <TicketTable />
+            <BudgetDirectorRatios />
           </div>
         )
 
@@ -39,6 +42,7 @@ class UserDashboard extends React.Component{
         return (
           <div style={style.rootDiv}>
             <GAPFStatus GAPFStatus={this.props.user.gapf}/>
+            <AllTicketsRatio />
             <StateTable state={GRANTED_STATE} />
             <StateTable state={REQUESTED_STATE} />
             <StateTable state={ACCEPTED_STATE} />
@@ -66,16 +70,16 @@ class UserDashboard extends React.Component{
 }
 
 const GAPFStatus = (props) => {
-  if(Object.keys(props.gapf).length > 0){
+  if(props.gapf && Object.keys(props.gapf).length > 0){
     return (
       <div>
-        <Header as='h2'>GAPF Status: Completed</Header>
+        <Header as='h2'>GAPF Status: <span style={{color: '#1ae0a1'}}>Completed</span></Header>
       </div>
     )
   } else {
     return (
       <div>
-        <Header as='h2'>GAPF Status: Incomplete</Header>
+        <Header as='h2'>GAPF Status: <span style={{color: '#f44242'}}>Incomplete</span></Header>
       </div>
     )
   }
@@ -84,11 +88,12 @@ const GAPFStatus = (props) => {
 
 const mapStateToProps = (state) => ({
   user: getUserState(state),
-  tickets: getTicketState(state).tickets
+  tickets: getTicketState(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getFacultyGAPF: getFacultyGAPFThunk
+  getFacultyGAPF: getFacultyGAPFThunk,
+  loadTickets: getAllTicketsThunk
 }, dispatch);
 
 

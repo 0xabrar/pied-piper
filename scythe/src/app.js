@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, Redirect } from "react-router-dom";
 import GAPFListContainer from "./containers/gapfList";
 import AllTickets from './components/AllTickets'
 import Login from "./containers/login";
@@ -12,6 +12,7 @@ const App = () => (
   <div>
     <main>
       <Route path="/login" component={Login} />
+
       <DashboardLayout path="/dashboard" component={UserDashboard} />
       <DashboardLayout exact path="/tickets" component={AllTickets} />
       <DashboardLayout

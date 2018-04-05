@@ -14,6 +14,7 @@ class Sidebar extends PureComponent {
   handleItemClick = (e, { name }) => {
     this.setState({ activeItem: name });
     this.props.viewPage(name);
+    console.log(this.props.url)
   };
 
   render() {
@@ -22,6 +23,7 @@ class Sidebar extends PureComponent {
     return (
       <Menu secondary vertical fluid>
         <Header as="h5" block>
+          { /* TODO: Update this */ }
           Faculty Views
         </Header>
         <Menu.Item
@@ -61,7 +63,9 @@ class Sidebar extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = (state, router) => ({
+  url: router.location
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
