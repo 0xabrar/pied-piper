@@ -1,73 +1,87 @@
-import React from 'react'
-import { Table, Button, Header } from 'semantic-ui-react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../constants/users";
+import React from "react";
+import { Table, Button, Header } from "semantic-ui-react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import {
-  approveApplicantThunk, approveOfferProposalThunk, assignApplicantThunk, confirmAcceptanceThunk, confirmDeclineThunk,
+  FACULTY_USER,
+  ASSOCIATE_CHAIR,
+  GRAD_STAFF,
+  BUDGET_DIRECTOR
+} from "../constants/users";
+import {
+  approveApplicantThunk,
+  approveOfferProposalThunk,
+  assignApplicantThunk,
+  confirmAcceptanceThunk,
+  confirmDeclineThunk,
   grantTicketThunk
 } from "../actions/thunk/allTickets";
 import { loadTicketsThunk } from "../actions/thunk/allTickets";
 import { getUserState } from "../reducers";
-import {push} from 'react-router-redux'
+import { push } from "react-router-redux";
 import { updateSelectedTicket } from "../actions/actionCreators/allTickets";
 import ActionModal from "../components/actionModal";
-import {getAllTicketsThunk} from "../actions/thunk/tickets";
+import { getAllTicketsThunk } from "../actions/thunk/tickets";
 
 class TicketTable extends React.Component {
   constructor(props) {
-    super(props)
-    this.openGrantModal = this.openGrantModal.bind(this)
-    this.state = {filterStr: '', grantModal: false, selected: {}, appModal: false}
+    super(props);
+    this.openGrantModal = this.openGrantModal.bind(this);
+    this.state = {
+      filterStr: "",
+      grantModal: false,
+      selected: {},
+      appModal: false
+    };
     this.USER_TICKET_ACTIONS = {
-      'FACULTY': [
+      FACULTY: [
         {
-          name: 'Assign Applicant',
+          name: "Assign Applicant",
           action: this.openAppModal
         }
       ],
-      'ASSOCIATE_CHAIR': [
+      ASSOCIATE_CHAIR: [
         {
-          name: 'Approve Offer Proposal',
+          name: "Approve Offer Proposal",
           action: this.props.approveOfferProposal
         }
       ],
-      'GRAD_STAFF': [
+      GRAD_STAFF: [
         {
-          name: 'Approve Applicant',
+          name: "Approve Applicant",
           action: this.props.approveApplicant
         },
         {
-          name: 'Confirm Acceptance',
+          name: "Confirm Acceptance",
           action: this.props.confirmAcceptance
         },
         {
-          name: 'Confirm Rejection',
+          name: "Confirm Rejection",
           action: this.props.confirmDecline
         }
       ],
-      'BUDGET_DIRECTOR': [
+      BUDGET_DIRECTOR: [
         {
-          name: 'Grant ticket',
+          name: "Grant ticket",
           action: this.openGrantModal
         }
       ]
-    }
+    };
   }
-  openGrantModal(ticket){
-    this.setState({grantModal: true, selected: ticket})
+  openGrantModal(ticket) {
+    this.setState({ grantModal: true, selected: ticket });
   }
-  closeGrantModal(){
-    this.setState({grantModal: false, selected: {}})
+  closeGrantModal() {
+    this.setState({ grantModal: false, selected: {} });
   }
-  openAppModal(ticket){
-    this.setState({appModal: true, selected: ticket})
+  openAppModal(ticket) {
+    this.setState({ appModal: true, selected: ticket });
   }
-  closeAppModal(){
-    this.setState({appModal: false, selected: {}})
+  closeAppModal() {
+    this.setState({ appModal: false, selected: {} });
   }
   render() {
-    if(this.props.tickets){
+    if (this.props.tickets) {
       return (
         <div>
           <Table celled>
@@ -82,103 +96,136 @@ class TicketTable extends React.Component {
             </Table.Header>
 
             <Table.Body>
-              {this.props.tickets.map((ticket, i) => <TicketTableRow key={i}
-                                                                     actions={this.USER_TICKET_ACTIONS[this.props.userType]}
-                                                                     ticket={ticket}
-                                                                     openTicket={this.props.openTicket}
-                                                                     updateSelectedTicket={this.props.updateSelectedTicket}
-              getAllTickets={this.props.getAllTickets}
-              fId={this.props.facultyId}/>)}
+              {this.props.tickets.map((ticket, i) => (
+                <TicketTableRow
+                  key={i}
+                  actions={this.USER_TICKET_ACTIONS[this.props.userType]}
+                  ticket={ticket}
+                  openTicket={this.props.openTicket}
+                  updateSelectedTicket={this.props.updateSelectedTicket}
+                  getAllTickets={this.props.getAllTickets}
+                  fId={this.props.facultyId}
+                />
+              ))}
             </Table.Body>
           </Table>
-          <ActionModal open={this.state.appModal} close={this.closeAppModal} title={'Choose Applicant'} action={this.props.assignApplicant} options={[{name: "david", applicantId: 5}]} headers={['ID', 'Name']}/>
-          <ActionModal open={this.state.grantModal} close={this.closeGrantModal} title={'Grant Ticket'} action={this.props.grantTicket} options={[{name: "david", facultyId: 5}]} headers={['ID', 'Name']}/>
+          <ActionModal
+            open={this.state.appModal}
+            close={this.closeAppModal}
+            title={"Choose Applicant"}
+            action={this.props.assignApplicant}
+            options={[{ name: "david", applicantId: 5 }]}
+            headers={["ID", "Name"]}
+          />
+          <ActionModal
+            open={this.state.grantModal}
+            close={this.closeGrantModal}
+            title={"Grant Ticket"}
+            action={this.props.grantTicket}
+            options={[{ name: "david", facultyId: 5 }]}
+            headers={["ID", "Name"]}
+          />
         </div>
-      )
-    }
-    else {
-     return <Header as='h2'> No tickets to show.</Header>
+      );
+    } else {
+      return <Header as="h2"> No tickets to show.</Header>;
     }
   }
 }
 
-const stateToText = (st) => {
-  return st[0] + st.toLowerCase().substring(1)
-}
+const stateToText = st => {
+  return st[0] + st.toLowerCase().substring(1);
+};
 
 class TicketTableRow extends React.Component {
-  constructor(props){
-    super(props)
-    this.handleClick = this.handleClick.bind(this)
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
   }
-  handleClick (e) {
-    this.props.updateSelectedTicket(this.props.ticket)
-    this.props.openTicket(this.props.ticket.ticketId)
+  handleClick(e) {
+    this.props.updateSelectedTicket(this.props.ticket);
+    this.props.openTicket(this.props.ticket.ticketId);
   }
-  render () {
+  render() {
     return (
       <Table.Row>
-        <Table.Cell><Button onClick={this.handleClick}>{this.props.ticket.ticketId}</Button></Table.Cell>
-        <Table.Cell>{getTicketFacultyName(this.props.ticket.faculty.personalInfo)}</Table.Cell>
-        <Table.Cell>{getTicketApplicantName(this.props.ticket.applicant.personalInfo)}</Table.Cell>
+        <Table.Cell>
+          <Button onClick={this.handleClick}>
+            {this.props.ticket.ticketId}
+          </Button>
+        </Table.Cell>
+        <Table.Cell>
+          {getTicketFacultyName(this.props.ticket.faculty.personalInfo)}
+        </Table.Cell>
+        <Table.Cell>
+          {getTicketApplicantName(this.props.ticket.applicant.personalInfo)}
+        </Table.Cell>
         <Table.Cell>{stateToText(this.props.ticket.state)}</Table.Cell>
         <Table.Cell>
-          {this.props.actions.map((action, i) => <ActionButton key={i} name={action.name} func={action.action} ticket={this.props.ticket} getAllTickets={this.props.getAllTickets} fId={this.props.fId}/>)}
+          {this.props.actions.map((action, i) => (
+            <ActionButton
+              key={i}
+              name={action.name}
+              func={action.action}
+              ticket={this.props.ticket}
+              getAllTickets={this.props.getAllTickets}
+              fId={this.props.fId}
+            />
+          ))}
         </Table.Cell>
       </Table.Row>
-    )
+    );
   }
 }
 
-class ActionButton extends React.Component{
-  constructor(props){
-    super(props)
-    this.executeAction = this.executeAction.bind(this)
+class ActionButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.executeAction = this.executeAction.bind(this);
   }
-  executeAction(){
-    this.props.func(this.props.ticket)
-    this.props.getAllTickets(this.props.fId)
+  executeAction() {
+    this.props.func(this.props.ticket);
+    this.props.getAllTickets(this.props.fId);
   }
-  render () {
-    return (
-      <Button onClick={this.executeAction}>{this.props.name}</Button>
-    )
+  render() {
+    return <Button onClick={this.executeAction}>{this.props.name}</Button>;
   }
 }
 
-const getTicketApplicantName = (app) => {
-  if(app) {
-    return app.lastName + ', ' + app.firstName
+const getTicketApplicantName = app => {
+  if (app) {
+    return app.lastName + ", " + app.firstName;
   }
-  return 'None'
-}
+  return "None";
+};
 
-
-const getTicketFacultyName = (faculty) => {
-  if(faculty) {
-    return faculty.lastName + ', ' + faculty.firstName
+const getTicketFacultyName = faculty => {
+  if (faculty) {
+    return faculty.lastName + ", " + faculty.firstName;
   }
-  return 'None'
-}
+  return "None";
+};
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   userType: getUserState(state).user.type,
   facultyId: getUserState(state).user.facultyId
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(
-  {
-    grantTicket: grantTicketThunk,
-    approveOfferProposal: approveOfferProposalThunk,
-    assignApplicant: assignApplicantThunk,
-    approveApplicant: approveApplicantThunk,
-    confirmAcceptance: confirmAcceptanceThunk,
-    confirmDecline: confirmDeclineThunk,
-    openTicket:  (number) => push("/tickets/" + number),
-    updateSelectedTicket: updateSelectedTicket,
-    getAllTickets: getAllTicketsThunk
-  }
-  , dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      grantTicket: grantTicketThunk,
+      approveOfferProposal: approveOfferProposalThunk,
+      assignApplicant: assignApplicantThunk,
+      approveApplicant: approveApplicantThunk,
+      confirmAcceptance: confirmAcceptanceThunk,
+      confirmDecline: confirmDeclineThunk,
+      openTicket: number => push("/tickets/" + number),
+      updateSelectedTicket: updateSelectedTicket,
+      getAllTickets: getAllTicketsThunk
+    },
+    dispatch
+  );
 
 /**
  *  loadTickets: loadTicketsThunk,
@@ -190,7 +237,4 @@ const mapDispatchToProps = dispatch => bindActionCreators(
  *  grantTicket: grantTicketThunk
  */
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TicketTable)
+export default connect(mapStateToProps, mapDispatchToProps)(TicketTable);

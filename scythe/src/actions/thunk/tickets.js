@@ -9,10 +9,12 @@ import {
 } from "../tickets";
 import { ouroborosEndpoint } from "../../constants/services";
 
-export const getAllTicketsThunk = (id) => async dispatch => {
+export const getAllTicketsThunk = id => async dispatch => {
   try {
-    console.log(`${ouroborosEndpoint}/tickets/`)
-    const response = await fetch(`${ouroborosEndpoint}/tickets?facultyId=${id}`);
+    console.log(`${ouroborosEndpoint}/tickets/`);
+    const response = await fetch(
+      `${ouroborosEndpoint}/tickets?facultyId=${id}`
+    );
     const data = await response.json();
     console.log("All tickets fetched");
     dispatch(getAllTicketsAction(data.tickets));
@@ -69,15 +71,19 @@ export const deleteTicketThunk = ticketId => async dispatch => {
   }
 };
 
-
-
-
-export const updateNoteThunk = (ticketId, noteId, resolved) => async dispatch => {
+export const updateNoteThunk = (
+  ticketId,
+  noteId,
+  resolved
+) => async dispatch => {
   try {
-    const response = await fetch(`${ouroborosEndpoint}/tickets/${ticketId}/node/${noteId}`, {
-      method: "PUT",
-      body: {"resolved": resolved}
-    });
+    const response = await fetch(
+      `${ouroborosEndpoint}/tickets/${ticketId}/node/${noteId}`,
+      {
+        method: "PUT",
+        body: { resolved: resolved }
+      }
+    );
     const data = await response.json();
     dispatch(updateNoteAction(data));
   } catch (error) {
@@ -87,9 +93,12 @@ export const updateNoteThunk = (ticketId, noteId, resolved) => async dispatch =>
 
 export const deleteNoteThunk = (ticketId, noteId) => async dispatch => {
   try {
-    const response = await fetch(`${ouroborosEndpoint}/tickets/${ticketId}/node/${noteId}`, {
-      method: "DELETE"
-    });
+    const response = await fetch(
+      `${ouroborosEndpoint}/tickets/${ticketId}/node/${noteId}`,
+      {
+        method: "DELETE"
+      }
+    );
     const data = await response.json();
     dispatch(deleteNoteAction(data));
   } catch (error) {

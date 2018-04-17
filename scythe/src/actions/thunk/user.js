@@ -6,16 +6,15 @@ import {
 import { ouroborosEndpoint } from "../../constants/services";
 import { push } from "react-router-redux";
 
-
-function JSON_to_URLEncoded(element,key,list){
+function JSON_to_URLEncoded(element, key, list) {
   var list = list || [];
-  if(typeof(element)=='object'){
+  if (typeof element == "object") {
     for (var idx in element)
-      JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
+      JSON_to_URLEncoded(element[idx], key ? key + "[" + idx + "]" : idx, list);
   } else {
-    list.push(key+'='+encodeURIComponent(element));
+    list.push(key + "=" + encodeURIComponent(element));
   }
-  return list.join('&');
+  return list.join("&");
 }
 
 export const loginThunk = loginInfo => async dispatch => {
@@ -24,10 +23,10 @@ export const loginThunk = loginInfo => async dispatch => {
     const response = await fetch(`${ouroborosEndpoint}/authenticate`, {
       method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded"
       },
-      body: JSON_to_URLEncoded(loginInfo) 
+      body: JSON_to_URLEncoded(loginInfo)
     });
     const data = await response.json();
     console.log(data);

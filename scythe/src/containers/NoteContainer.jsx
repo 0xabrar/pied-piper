@@ -1,13 +1,19 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Input, Button, List, Header, Icon, Modal, Form } from "semantic-ui-react";
 import {
-  updateTicketThunk
-}from "../actions/thunk/tickets";
+  Input,
+  Button,
+  List,
+  Header,
+  Icon,
+  Modal,
+  Form
+} from "semantic-ui-react";
+import { updateTicketThunk } from "../actions/thunk/tickets";
 import {
   updateNoteSafeThunk,
-  deleteNoteSafeThunk,
+  deleteNoteSafeThunk
 } from "../actions/thunk/selectedTicket";
 
 const style = {
@@ -15,10 +21,10 @@ const style = {
     color: "grey"
   },
   enabledNote: {},
-  modal : {
-    marginTop: '0px !important',
-    marginLeft: 'auto',
-    marginRight: 'auto'
+  modal: {
+    marginTop: "0px !important",
+    marginLeft: "auto",
+    marginRight: "auto"
   }
 };
 
@@ -26,10 +32,7 @@ const NoteContainer = props => {
   return (
     <List divided relaxed verticalAlign="middle">
       <Header as="h2">Notes</Header>
-      <AddNote 
-        ticket={props.ticket}
-        addNoteFunc={props.addNote}
-        />
+      <AddNote ticket={props.ticket} addNoteFunc={props.addNote} />
       {props.ticket.notes.map((note, i) => {
         return (
           <Note
@@ -59,12 +62,12 @@ class AddNote extends React.Component {
     this.setState({ inputText: e.target.value });
   }
   handleSubmit(e) {
-    this.props.addNoteFunc(this.props.ticket.ticketId,
-      {note:{
+    this.props.addNoteFunc(this.props.ticket.ticketId, {
+      note: {
         ticketId: this.props.ticket.ticketId,
         text: this.state.inputText
-      }}
-    );
+      }
+    });
     this.setState({ inputText: "" });
   }
   render() {
@@ -83,53 +86,53 @@ class AddNote extends React.Component {
   }
 }
 
-class EditNote extends React.Component{
+class EditNote extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {noteText: ""}
+    this.state = { noteText: "" };
   }
-  handleTextChange =(e) => {
-    this.setState({noteText: e.target.value })
-  }
-  handleSubmit = (e) => {
-    e.preventDefault()
+  handleTextChange = e => {
+    this.setState({ noteText: e.target.value });
+  };
+  handleSubmit = e => {
+    e.preventDefault();
     this.props.editNoteFunc(
-      this.props.index, 
-      this.props.note, 
-      this.props.ticket, 
-      this.state.noteText)
+      this.props.index,
+      this.props.note,
+      this.props.ticket,
+      this.state.noteText
+    );
+  };
+  render() {
+    return (
+      <Modal
+        trigger={
+          <Button icon size="tiny" data-tooltip="Edit">
+            <Icon name="pencil" />
+          </Button>
+        }
+        style={style.modal}
+      >
+        <Modal.Header>Edit Note</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Input
+                label="Text"
+                fluid
+                iconPosition="left"
+                placeholder={this.props.note.text}
+                onChange={this.handleTextChange}
+              />
+              <Button size="small" color="green">
+                Update Note
+              </Button>
+            </Form>
+          </Modal.Description>
+        </Modal.Content>
+      </Modal>
+    );
   }
- render() {
-  return (
-    <Modal trigger={<Button
-      icon
-      size="tiny"
-      data-tooltip="Edit"
-      ><Icon name="pencil" />
-      </Button>}
-      style={style.modal}>
-      <Modal.Header>Edit Note</Modal.Header>
-      <Modal.Content>
-        <Modal.Description>
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Input
-              label="Text"
-              fluid
-              iconPosition="left"
-              placeholder= {this.props.note.text}
-              onChange = {this.handleTextChange}
-            />
-            <Button size="small" color="green" >
-              Update Note
-            </Button>
-          </Form>
-        </Modal.Description>
-      </Modal.Content>
-  </Modal>
-    
-  )}
-
-
 }
 
 class Note extends React.Component {
@@ -166,11 +169,12 @@ class Note extends React.Component {
           >
             <Icon name="pencil" />
           </Button> */}
-          <EditNote 
-            note={this.props.note} 
-            index={this.props.index} 
+          <EditNote
+            note={this.props.note}
+            index={this.props.index}
             ticket={this.props.ticket}
-            editNoteFunc={this.props.editNoteFunc}/>
+            editNoteFunc={this.props.editNoteFunc}
+          />
           <Button
             icon
             size="tiny"

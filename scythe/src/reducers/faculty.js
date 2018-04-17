@@ -5,10 +5,7 @@ const initialState = [];
 export default (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_FACULTY:
-      const result = [
-        ...action.faculty
-      ];
-      return result;
+      return [...action.faculty];
 
     default:
       return state;

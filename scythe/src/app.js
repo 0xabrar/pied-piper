@@ -1,14 +1,14 @@
 import React from "react";
 import { Route, Link, Redirect } from "react-router-dom";
 import GAPFListContainer from "./containers/gapfList";
-import AllTickets from './components/AllTickets'
+import AllTickets from "./components/AllTickets";
 import Login from "./containers/login";
 import DashboardLayout from "./components/layouts/dashboardLayout";
 import TicketViewContainer from "./containers/ticketViewContainer";
-import Upload from "./containers/uploadScreen"
+import Upload from "./containers/uploadScreen";
 import UserDashboard from "./containers/UserDashboard";
-import FacultyTable from './containers/facultyTable'
-import ApplicantTable from './containers/applicantTable'
+import FacultyTable from "./containers/facultyTable";
+import ApplicantTable from "./containers/applicantTable";
 
 const App = () => (
   <div>
@@ -25,8 +25,6 @@ const App = () => (
       />
       <DashboardLayout exact path="/gapf" component={GAPFListContainer} />
       <DashboardLayout exact path="/upload" component={Upload} />
-
-
     </main>
   </div>
 );

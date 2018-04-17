@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import LoginForm from "../components/login";
-import { getUserState } from '../reducers/index';
-import { loginThunk } from '../actions/thunk/user';
+import { getUserState } from "../reducers/index";
+import { loginThunk } from "../actions/thunk/user";
 import { Label } from "semantic-ui-react";
 
 class Login extends Component {
@@ -14,8 +14,7 @@ class Login extends Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    this.props.login(this.state)
-
+    this.props.login(this.state);
   };
 
   changeEmail = new_email => {
@@ -26,7 +25,6 @@ class Login extends Component {
     this.setState({ password: new_password });
   };
 
-
   showLabel = () => {
     const message = "Login Failed";
     if (this.props.status === false) {
@@ -34,7 +32,6 @@ class Login extends Component {
     } else {
       return null;
     }
-
   };
 
   render() {
@@ -54,8 +51,12 @@ const mapStateToProps = state => ({
   user: getUserState(state)
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  login: loginThunk,
-}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      login: loginThunk
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

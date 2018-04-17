@@ -1,31 +1,39 @@
-import React from 'react'
-import { Table, Button, Header } from 'semantic-ui-react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { FACULTY_USER, ASSOCIATE_CHAIR, GRAD_STAFF, BUDGET_DIRECTOR } from "../constants/users";
+import React from "react";
+import { Table, Button, Header } from "semantic-ui-react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import {
-  approveApplicantThunk, approveOfferProposalThunk, assignApplicantThunk, confirmAcceptanceThunk, confirmDeclineThunk,
+  FACULTY_USER,
+  ASSOCIATE_CHAIR,
+  GRAD_STAFF,
+  BUDGET_DIRECTOR
+} from "../constants/users";
+import {
+  approveApplicantThunk,
+  approveOfferProposalThunk,
+  assignApplicantThunk,
+  confirmAcceptanceThunk,
+  confirmDeclineThunk,
   grantTicketThunk
 } from "../actions/thunk/allTickets";
 import { loadTicketsThunk } from "../actions/thunk/allTickets";
 import { getUserState } from "../reducers";
-import {push} from 'react-router-redux'
-import {getAllFacultyThunk} from "../actions/thunk/faculty";
-
+import { push } from "react-router-redux";
+import { getAllFacultyThunk } from "../actions/thunk/faculty";
 
 class FacultyTable extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = {filterStr: ''}
+    super(props);
+    this.state = { filterStr: "" };
   }
-  componentDidMount(){
-    this.props.loadFaculty()
+  componentDidMount() {
+    this.props.loadFaculty();
   }
   render() {
-    if(this.props.faculty){
+    if (this.props.faculty) {
       return (
         <div>
-          <Header as='h2'>Faculty</Header>
+          <Header as="h2">Faculty</Header>
           <Table celled>
             <Table.Header>
               <Table.Row>
@@ -37,51 +45,53 @@ class FacultyTable extends React.Component {
             </Table.Header>
 
             <Table.Body>
-              {this.props.faculty.map((f, i) => <FacultyTableRow key={i} f={f}/>)}
+              {this.props.faculty.map((f, i) => (
+                <FacultyTableRow key={i} f={f} />
+              ))}
             </Table.Body>
           </Table>
         </div>
-      )
-    }
-    else {
-      return <Header as='h2'> No faculty to show.</Header>
+      );
+    } else {
+      return <Header as="h2"> No faculty to show.</Header>;
     }
   }
 }
 
 class FacultyTableRow extends React.Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
   }
-  render () {
+  render() {
     return (
       <Table.Row>
         <Table.Cell>{this.props.f.facultyId}</Table.Cell>
-        <Table.Cell>{getTicketFacultyName(this.props.f.personalInfo)}</Table.Cell>
+        <Table.Cell>
+          {getTicketFacultyName(this.props.f.personalInfo)}
+        </Table.Cell>
         <Table.Cell>{this.props.f.department}</Table.Cell>
         <Table.Cell>{this.props.f.email}</Table.Cell>
       </Table.Row>
-    )
+    );
   }
 }
 
-const getTicketFacultyName = (faculty) => {
-  if(faculty) {
-    return faculty.lastName + ', ' + faculty.firstName
+const getTicketFacultyName = faculty => {
+  if (faculty) {
+    return faculty.lastName + ", " + faculty.firstName;
   }
-  return 'None'
-}
+  return "None";
+};
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   faculty: state.faculty
 });
-const mapDispatchToProps = dispatch => bindActionCreators(
-  {
-    loadFaculty: getAllFacultyThunk
-  }
-  , dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      loadFaculty: getAllFacultyThunk
+    },
+    dispatch
+  );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FacultyTable)
+export default connect(mapStateToProps, mapDispatchToProps)(FacultyTable);

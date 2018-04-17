@@ -1,55 +1,62 @@
-import React from 'react'
-import { Header } from 'semantic-ui-react'
-import {getUserState, getTicketState} from "../reducers/index";
-import {ASSOCIATE_CHAIR, BUDGET_DIRECTOR, FACULTY_USER, GRAD_STAFF} from "../constants/users";
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import {INITIAL_STATE, GRANTED_STATE, REQUESTED_STATE, ACCEPTED_STATE, PENDING_STATE} from "../constants/tickets";
-import StateCount from '../components/StateCount'
-import StateRatio from '../components/StateRatio'
-import StateTable from './stateTable'
-import ApplicantRatio from './applicantRatio'
-import {getFacultyGAPFThunk} from "../actions/thunk/user";
-import {getAllTicketsThunk} from "../actions/thunk/tickets";
+import React from "react";
+import { Header } from "semantic-ui-react";
+import { getUserState, getTicketState } from "../reducers/index";
+import {
+  ASSOCIATE_CHAIR,
+  BUDGET_DIRECTOR,
+  FACULTY_USER,
+  GRAD_STAFF
+} from "../constants/users";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import {
+  GRANTED_STATE,
+  REQUESTED_STATE,
+  ACCEPTED_STATE,
+  PENDING_STATE
+} from "../constants/tickets";
+import StateTable from "./stateTable";
+import { getFacultyGAPFThunk } from "../actions/thunk/user";
+import { getAllTicketsThunk } from "../actions/thunk/tickets";
 import BudgetDirectorRatios from "../components/budgetDirectorRatios";
-import FacultyTicketsRatio from './facultyTicketsRatio'
-import AllTicketsRatio from './allTicketsRatio'
+import FacultyTicketsRatio from "./facultyTicketsRatio";
+import AllTicketsRatio from "./allTicketsRatio";
 
 const style = {
-  rootDiv: {
+  rootDiv: {}
+};
 
-  }
-}
-
-class UserDashboard extends React.Component{
+class UserDashboard extends React.Component {
   componentDidMount() {
-    console.log(`Loading tickets for user ${this.props.user.user.facultyId}...`)
+    console.log(
+      `Loading tickets for user ${this.props.user.user.facultyId}...`
+    );
     this.props.loadTickets(this.props.user.user.facultyId);
-    this.render()
+    this.render();
   }
-  render () {
-    if(!this.props.tickets){
-      return(<Header as='h2'>No data available.</Header>)
+  render() {
+    if (!this.props.tickets) {
+      return <Header as="h2">No data available.</Header>;
     }
-    switch (this.props.user.user.type){
+    switch (this.props.user.user.type) {
       case BUDGET_DIRECTOR:
         return (
           <div style={style.rootDiv}>
             <BudgetDirectorRatios />
           </div>
-        )
+        );
 
       case FACULTY_USER:
-        getFacultyGAPFThunk(this.props.user)
+        getFacultyGAPFThunk(this.props.user);
         return (
           <div style={style.rootDiv}>
-            <GAPFStatus GAPFStatus={this.props.user.gapf}/>
+            <GAPFStatus GAPFStatus={this.props.user.gapf} />
             <FacultyTicketsRatio />
             <StateTable state={GRANTED_STATE} />
             <StateTable state={REQUESTED_STATE} />
             <StateTable state={ACCEPTED_STATE} />
           </div>
-        )
+        );
 
       case ASSOCIATE_CHAIR:
         return (
@@ -57,52 +64,54 @@ class UserDashboard extends React.Component{
             <StateTable state={REQUESTED_STATE} />
             <StateTable state={PENDING_STATE} />
           </div>
-        )
+        );
 
       case GRAD_STAFF:
         return (
           <div style={style.rootDiv}>
             <AllTicketsRatio />
-            <StateTable state={REQUESTED_STATE}/>
-            <StateTable state={PENDING_STATE}/>
+            <StateTable state={REQUESTED_STATE} />
+            <StateTable state={PENDING_STATE} />
           </div>
-        )
+        );
       default:
-        return(<Header as='h2'>Error loading dashboard.</Header>)
+        return <Header as="h2">Error loading dashboard.</Header>;
     }
   }
 }
 
-const GAPFStatus = (props) => {
-  if(props.gapf && Object.keys(props.gapf).length > 0){
+const GAPFStatus = props => {
+  if (props.gapf && Object.keys(props.gapf).length > 0) {
     return (
       <div>
-        <Header as='h2'>GAPF Status: <span style={{color: '#1ae0a1'}}>Completed</span></Header>
+        <Header as="h2">
+          GAPF Status: <span style={{ color: "#1ae0a1" }}>Completed</span>
+        </Header>
       </div>
-    )
+    );
   } else {
     return (
       <div>
-        <Header as='h2'>GAPF Status: <span style={{color: '#f44242'}}>Incomplete</span></Header>
+        <Header as="h2">
+          GAPF Status: <span style={{ color: "#f44242" }}>Incomplete</span>
+        </Header>
       </div>
-    )
+    );
   }
+};
 
-}
-
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   user: getUserState(state),
   tickets: getTicketState(state)
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  getFacultyGAPF: getFacultyGAPFThunk,
-  loadTickets: getAllTicketsThunk
-}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      getFacultyGAPF: getFacultyGAPFThunk,
+      loadTickets: getAllTicketsThunk
+    },
+    dispatch
+  );
 
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserDashboard)
-
+export default connect(mapStateToProps, mapDispatchToProps)(UserDashboard);

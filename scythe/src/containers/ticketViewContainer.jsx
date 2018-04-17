@@ -22,7 +22,7 @@ const style = {
 
 class TicketViewContainer extends React.Component {
   render() {
-    console.log(this.props.ticket)
+    console.log(this.props.ticket);
     return (
       <div style={style.root}>
         <TicketHeader

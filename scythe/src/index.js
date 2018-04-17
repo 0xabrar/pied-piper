@@ -6,13 +6,12 @@ import { Provider } from "react-redux";
 import { ConnectedRouter } from "react-router-redux";
 import { Route } from "react-router";
 import store, { history } from "./store";
-import App from './app'
+import App from "./app";
 import dotenv from "dotenv";
 import UploadScreen from "./containers/uploadScreen";
 dotenv.load();
 
-const target = document.querySelector('#root')
-
+const target = document.querySelector("#root");
 
 render(
   <Provider store={store}>
